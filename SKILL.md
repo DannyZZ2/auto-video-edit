@@ -1,11 +1,11 @@
 ---
-name: video-packaging-remotion-gsap
+name: video-auto-edit
 description: Use when the user wants a reusable workflow for video editing decisions, subtitle-aligned visual packaging, keyword HUD/card animations, Remotion Studio preview, and final export using Remotion plus GSAP.
 ---
 
-# Video Packaging Remotion GSAP
+# video-auto-edit
 
-# 视频包装 Remotion GSAP 工作流
+# 视频自动剪辑包装工作流
 
 ## Core Rule / 核心规则
 
