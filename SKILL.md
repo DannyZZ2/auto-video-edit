@@ -15,13 +15,39 @@ Run this as a confirmation-gated workflow. Do not edit, package, render, or expo
 
 Required companion skills:
 
-- Use the installed `$video-use` skill for video analysis, transcription, cutting, SRT, and packaging-plan design. If `$video-use` is not installed or cannot be loaded, stop and ask the user to install it before continuing.
+- Use the installed `$video-use` skill for video analysis, transcription, cutting, SRT, and packaging-plan design. If `$video-use` is not installed or cannot be loaded, bootstrap it automatically before continuing.
 - Use Remotion + GSAP for the animation implementation after the user approves the packaging design.
 
 必要关联技能：
 
-- 使用已安装的 `$video-use` skill 做视频分析、转写、剪辑、SRT 和包装方案设计。如果 `$video-use` 未安装或无法加载，先停止并让用户安装后再继续。
+- 使用已安装的 `$video-use` skill 做视频分析、转写、剪辑、SRT 和包装方案设计。如果 `$video-use` 未安装或无法加载，先自动自举安装后再继续。
 - 用户确认包装设计后，用 Remotion + GSAP 实现动画包装。
+
+## Dependency Bootstrap / 依赖自举
+
+At the start of the workflow, check whether `$video-use` is available. If it is missing, reduce user setup friction by installing it automatically from its upstream repository:
+
+流程开始时先检查 `$video-use` 是否可用。如果缺失，为降低用户使用成本，自动从上游仓库安装：
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --repo browser-use/video-use --path . --name video-use
+```
+
+After installation:
+
+安装后：
+
+- Read the installed `video-use/install.md` and complete only the required first-use setup for the current task.
+- Install or request only hard requirements that cannot be skipped, such as `ffmpeg`, `ffprobe`, Python dependencies, and the ElevenLabs API key when transcription is needed.
+- Do not echo or log API keys. Never commit `.env`.
+- If the current Codex session cannot dynamically load the newly installed skill, read the installed `video-use/SKILL.md` directly for this session and tell the user to restart Codex after the current workflow to pick up the skill normally.
+- If GitHub access, network, package manager permissions, or API-key setup fails, explain the exact missing requirement and ask the user only for that one unblocker.
+
+- 读取已安装的 `video-use/install.md`，只完成当前任务必需的首次配置。
+- 只安装或索取不能跳过的硬依赖，例如 `ffmpeg`、`ffprobe`、Python 依赖，以及需要转写时的 ElevenLabs API key。
+- 不回显、不记录 API key；不要提交 `.env`。
+- 如果当前 Codex 会话不能动态加载新安装的 skill，本轮直接读取已安装的 `video-use/SKILL.md` 使用，并提醒用户当前流程结束后重启 Codex，以便后续正常识别。
+- 如果 GitHub 访问、网络、包管理器权限或 API key 配置失败，只说明当前缺少的具体条件，并只向用户索取这一项阻塞信息。
 
 ## Workflow / 流程
 
