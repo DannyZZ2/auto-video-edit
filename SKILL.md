@@ -16,13 +16,13 @@ Run this as a confirmation-gated workflow. Do not edit, package, render, or expo
 Required companion skills:
 
 - Use the installed `$video-use` skill for video analysis, cutting, SRT handling, and packaging-plan design. If `$video-use` is not installed or cannot be loaded, bootstrap it automatically before continuing.
-- Use Whisper-compatible local transcription for transcript and SRT generation. Do not use ElevenLabs Scribe in this workflow.
+- Ask the user whether to use ElevenLabs for transcription. Use ElevenLabs only after the user chooses it and provides an API key; otherwise use Whisper-compatible local transcription.
 - Use Remotion + GSAP for the animation implementation after the user approves the packaging design.
 
 必要关联技能：
 
 - 使用已安装的 `$video-use` skill 做视频分析、剪辑、SRT 处理和包装方案设计。如果 `$video-use` 未安装或无法加载，先自动自举安装后再继续。
-- 转写和 SRT 生成使用 Whisper 兼容的本地转写方案。本工作流不使用 ElevenLabs Scribe。
+- 先询问用户是否使用 ElevenLabs 进行转写。只有用户选择 ElevenLabs 并提供 API key 后才使用；否则使用 Whisper 兼容的本地转写方案。
 - 用户确认包装设计后，用 Remotion + GSAP 实现动画包装。
 
 ## Dependency Bootstrap / 依赖自举
@@ -39,27 +39,41 @@ After installation:
 
 安装后：
 
-- Read the installed `video-use/install.md` only for general setup, but skip its ElevenLabs/Scribe API-key step for this workflow.
-- Install or request only hard requirements that cannot be skipped, such as `ffmpeg`, `ffprobe`, Python dependencies, and a Whisper-compatible transcription tool.
-- Do not ask for, echo, store, or log ElevenLabs API keys. Never commit `.env`.
+- Read the installed `video-use/install.md` only for general setup and the transcription option selected by the user.
+- Install or request only hard requirements that cannot be skipped, such as `ffmpeg`, `ffprobe`, Python dependencies, a Whisper-compatible transcription tool, or an ElevenLabs API key when the user chooses ElevenLabs.
+- Do not echo or log ElevenLabs API keys. Never commit `.env`.
 - If the current Codex session cannot dynamically load the newly installed skill, read the installed `video-use/SKILL.md` directly for this session and tell the user to restart Codex after the current workflow to pick up the skill normally.
-- If GitHub access, network, package manager permissions, or Whisper setup fails, explain the exact missing requirement and ask the user only for that one unblocker.
+- If GitHub access, network, package manager permissions, Whisper setup, or ElevenLabs key validation fails, explain the exact missing requirement and ask the user only for that one unblocker.
 
-- 读取已安装的 `video-use/install.md` 时，只参考通用安装步骤；本工作流跳过 ElevenLabs/Scribe API key 配置。
-- 只安装或索取不能跳过的硬依赖，例如 `ffmpeg`、`ffprobe`、Python 依赖和 Whisper 兼容转写工具。
-- 不索取、不回显、不保存、不记录 ElevenLabs API key；不要提交 `.env`。
+- 读取已安装的 `video-use/install.md` 时，只参考通用安装步骤和用户选择的转写方案。
+- 只安装或索取不能跳过的硬依赖，例如 `ffmpeg`、`ffprobe`、Python 依赖、Whisper 兼容转写工具，或用户选择 ElevenLabs 时需要的 API key。
+- 不回显、不记录 ElevenLabs API key；不要提交 `.env`。
 - 如果当前 Codex 会话不能动态加载新安装的 skill，本轮直接读取已安装的 `video-use/SKILL.md` 使用，并提醒用户当前流程结束后重启 Codex，以便后续正常识别。
-- 如果 GitHub 访问、网络、包管理器权限或 Whisper 安装失败，只说明当前缺少的具体条件，并只向用户索取这一项阻塞信息。
+- 如果 GitHub 访问、网络、包管理器权限、Whisper 安装或 ElevenLabs key 校验失败，只说明当前缺少的具体条件，并只向用户索取这一项阻塞信息。
 
-## Transcription Rule / 转写规则
+## Transcription Choice / 转写选择
 
-All transcription in this workflow must use Whisper or a Whisper-compatible local tool. Do not ask for `ELEVENLABS_API_KEY`, do not configure ElevenLabs, and do not call Scribe-only `video-use` helpers when they require an API key.
+Before any transcription, editing analysis, SRT generation, or packaging timing work, ask the user whether to use ElevenLabs.
 
-本工作流所有转写必须使用 Whisper 或 Whisper 兼容的本地工具。不要索取 `ELEVENLABS_API_KEY`，不要配置 ElevenLabs，也不要调用需要 API key 的 Scribe 专用 `video-use` helper。
+在任何转写、剪辑分析、SRT 生成或包装时间轴设计之前，先询问用户是否使用 ElevenLabs。
 
-Preferred order:
+If the user chooses ElevenLabs:
 
-优先顺序：
+如果用户选择 ElevenLabs：
+
+1. Ask the user to provide an ElevenLabs API key or confirm that `ELEVENLABS_API_KEY` is already available in the environment.
+2. Use ElevenLabs/Scribe transcription with word-level timestamps when available.
+3. Use word-level timestamps as the preferred source for cut boundaries, SRT timing, keyword animation timing, and subtitle-aligned packaging.
+4. Keep the key out of logs and code. If it must be persisted for helper compatibility, store it only in the local tool's ignored `.env` file with restrictive permissions.
+
+1. 让用户提供 ElevenLabs API key，或确认环境变量 `ELEVENLABS_API_KEY` 已经可用。
+2. 使用 ElevenLabs/Scribe 转写，并在可用时使用词级时间戳。
+3. 优先用词级时间戳作为剪辑边界、SRT 时间、关键词动画时间和字幕对齐包装的依据。
+4. 不把 key 写入日志或代码。如果为了 helper 兼容必须持久化，只能写入本地工具被忽略的 `.env`，并设置严格权限。
+
+If the user does not choose ElevenLabs:
+
+如果用户不选择 ElevenLabs：
 
 1. Use an existing `whisper`, `faster-whisper`, `mlx-whisper`, or equivalent local Whisper command if available.
 2. If no Whisper tool is available, install a Whisper-compatible option locally for the project environment, then transcribe.
@@ -73,7 +87,23 @@ Preferred order:
 
 ## Workflow / 流程
 
-### 1. Ask Whether Editing Is Needed / 询问是否需要剪辑
+### 1. Ask Transcription Method / 询问转写方式
+
+Start by asking whether the user wants to use ElevenLabs for transcription.
+
+首先询问用户是否使用 ElevenLabs 进行转写。
+
+- If yes: ask the user to provide an ElevenLabs API key, or confirm that `ELEVENLABS_API_KEY` is already available in the environment. Use ElevenLabs/Scribe word-level timestamps when possible.
+- If no: use Whisper-compatible local transcription.
+
+- 如果使用：让用户提供 ElevenLabs API key，或确认环境变量 `ELEVENLABS_API_KEY` 已可用。尽量使用 ElevenLabs/Scribe 的词级时间戳。
+- 如果不使用：使用 Whisper 兼容的本地转写方案。
+
+Keep this choice for the full workflow, including editing analysis, SRT generation, packaging timing, and keyword animation timing.
+
+这个选择贯穿完整流程，包括剪辑分析、SRT 生成、包装时间轴和关键词动画时间。
+
+### 2. Ask Whether Editing Is Needed / 询问是否需要剪辑
 
 Start by asking whether the user needs the raw footage edited.
 
@@ -131,7 +161,7 @@ Fine-cut output requirements:
 4. 保留剪辑决策文件，例如 `edl.json`，以及 `$video-use` 生成的项目记录。
 5. 渲染后跑一次静默检测，检查有没有明显错误、长空白或异常等待；发现明确问题先修正再进入后续步骤。
 
-### 2. Ask About Custom Style / 询问是否自定义风格
+### 3. Ask About Custom Style / 询问是否自定义风格
 
 After receiving the edited video, ask whether the user wants a custom visual style.
 
@@ -161,7 +191,7 @@ Default style brief when `DESIGN.md` is missing:
 - 动效：小幅卡片弹跳、关键词弹出、鼠标点击、拖拽吸附、清单勾选、卡片碰撞回弹、内容内部加载状态；避免转场闪烁、扫描光效和整条视频进度条。
 - 密度：包装元素要小于主体视觉权重，文字尽量短，元素错峰出现，当前句子节奏结束后及时退场或淡出。
 
-### 3. Design The Packaging Plan Only / 只设计包装方案
+### 4. Design The Packaging Plan Only / 只设计包装方案
 
 Use `$video-use` to analyze the edited video and align visual packaging to the transcript/subtitle content. This step must not render, modify, or overwrite the source video.
 
@@ -193,7 +223,7 @@ Present the draft to the user and wait for approval. Do not implement Remotion b
 
 把设计稿发给用户确认。用户未确认前，不进入 Remotion 实现。
 
-### 4. Implement Remotion + GSAP Preview / 实现 Remotion + GSAP 预览
+### 5. Implement Remotion + GSAP Preview / 实现 Remotion + GSAP 预览
 
 After approval, create or update a Remotion project for the video packaging.
 
@@ -229,7 +259,7 @@ Run a TypeScript or build check when available. Then open Remotion Studio and gi
 
 如果项目支持，运行 TypeScript 或构建检查。然后打开 Remotion Studio，并把本地 Studio 地址给用户。
 
-### 5. Export Only After Final Approval / 最终确认后才导出
+### 6. Export Only After Final Approval / 最终确认后才导出
 
 Wait for the user to review Studio and explicitly confirm export.
 
@@ -256,11 +286,12 @@ Never skip these gates:
 
 不要跳过这些确认点：
 
-1. Confirm whether editing is needed.
-2. If editing is needed, confirm the edit strategy before touching cuts.
-3. Confirm whether custom style is needed.
-4. Confirm the packaging motion design before Remotion implementation.
-5. Confirm Studio preview before final export.
+1. Confirm whether to use ElevenLabs or Whisper for transcription.
+2. Confirm whether editing is needed.
+3. If editing is needed, confirm the edit strategy before touching cuts.
+4. Confirm whether custom style is needed.
+5. Confirm the packaging motion design before Remotion implementation.
+6. Confirm Studio preview before final export.
 
 ## Common Mistakes / 常见错误
 
