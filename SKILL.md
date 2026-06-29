@@ -15,12 +15,12 @@ Run this as a confirmation-gated workflow. Do not edit, package, render, or expo
 
 Required companion skills:
 
-- Use `$video-use` at `/Users/wuji/.codex/skills/video-use/SKILL.md` for video analysis, transcription, cutting, SRT, and packaging-plan design.
+- Use the installed `$video-use` skill for video analysis, transcription, cutting, SRT, and packaging-plan design. If `$video-use` is not installed or cannot be loaded, stop and ask the user to install it before continuing.
 - Use Remotion + GSAP for the animation implementation after the user approves the packaging design.
 
 必要关联技能：
 
-- 用 `/Users/wuji/.codex/skills/video-use/SKILL.md` 的 `$video-use` 做视频分析、转写、剪辑、SRT 和包装方案设计。
+- 使用已安装的 `$video-use` skill 做视频分析、转写、剪辑、SRT 和包装方案设计。如果 `$video-use` 未安装或无法加载，先停止并让用户安装后再继续。
 - 用户确认包装设计后，用 Remotion + GSAP 实现动画包装。
 
 ## Workflow / 流程
@@ -90,14 +90,28 @@ After receiving the edited video, ask whether the user wants a custom visual sty
 拿到剪辑好视频后，询问用户是否需要自定义视觉风格。
 
 - If yes: ask the user to upload or point to a style Markdown file.
-- If no: use the project/default `DESIGN.md`.
+- If no: use the project/default `DESIGN.md`. If no usable `DESIGN.md` exists, create a default style brief before packaging design and either save it as `DESIGN.md` in the packaging workspace or include it at the top of the packaging plan.
 
 - 如果需要：让用户上传或指定风格 Markdown 文件。
-- 如果不需要：使用项目或默认的 `DESIGN.md`。
+- 如果不需要：使用项目或默认的 `DESIGN.md`。如果没有可用的 `DESIGN.md`，先创建默认风格简报，再进入包装设计；可以保存为包装工作区里的 `DESIGN.md`，也可以写在包装方案开头。
 
 Read the selected style file before designing packaging. Carry forward hard constraints such as safe zones, colors, typography, and forbidden transitions.
 
 设计包装前必须先读取所选风格文件。要继承安全区、颜色、字体、禁用转场等硬约束。
+
+Default style brief when `DESIGN.md` is missing:
+
+缺少 `DESIGN.md` 时的默认风格简报：
+
+- Layout: keep the middle lower subtitle area clear; place cards, keywords, terminals, and labels mainly on the left, right, or upper third; never cover the speaker's face or mouth.
+- Visual language: compact tech HUD, cyber-blue/cyan accents, restrained glow, translucent dark cards, thin borders, visible depth layers, and distinctive bold display typography rather than plain system-text styling.
+- Motion: small-scale card bounce, keyword pop, mouse click, drag/snap, checklist completion, collision rebound, and content-specific loading indicators; avoid transition flashes, scan wipes, and whole-video progress bars.
+- Density: keep overlays smaller than the main subject, use short text, stagger elements, and remove or fade packaging as soon as the sentence beat is complete.
+
+- 布局：预留下方中间字幕安全区；卡片、关键词、终端框和标签优先放左侧、右侧或上三分区；不得遮挡人物脸部和嘴部。
+- 视觉语言：紧凑科技 HUD，蓝色/青色点缀，克制发光，半透明深色卡片，细描边，明确层级，使用有辨识度的粗体标题字，不使用普通系统字的平铺效果。
+- 动效：小幅卡片弹跳、关键词弹出、鼠标点击、拖拽吸附、清单勾选、卡片碰撞回弹、内容内部加载状态；避免转场闪烁、扫描光效和整条视频进度条。
+- 密度：包装元素要小于主体视觉权重，文字尽量短，元素错峰出现，当前句子节奏结束后及时退场或淡出。
 
 ### 3. Design The Packaging Plan Only / 只设计包装方案
 
