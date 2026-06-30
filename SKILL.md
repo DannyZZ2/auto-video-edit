@@ -224,13 +224,13 @@ Use `$video-use` to analyze the edited video and align visual packaging to the t
 
 使用 `$video-use` 分析剪辑后的视频，并把视觉包装与字幕/文案内容对齐。此步骤不得渲染、不得修改、不得覆盖原视频。
 
-The main agent's role in this step is to prepare inputs for `$video-use`, including the edited video path, transcript artifacts, `edl.json`, source or master SRT when available, selected style Markdown or extracted image-style brief, and the keyword-animation reference. `$video-use` must return the packaging motion design draft. The main agent may summarize or relay that draft to the user, but must not replace it with a self-authored packaging plan.
+The main agent's role in this step is to prepare inputs for `$video-use`, including the edited video path, transcript artifacts, `edl.json`, source or master SRT when available, selected style Markdown or extracted image-style brief, `references/visual-quality-system.md`, and the keyword-animation reference. `$video-use` must return the packaging motion design draft. The main agent may summarize or relay that draft to the user, but must not replace it with a self-authored packaging plan.
 
-此步骤中，主 Agent 的职责是为 `$video-use` 准备输入，包括剪辑后视频路径、转写产物、`edl.json`、可用的源字幕或 `master.srt`、已选择的风格 Markdown 或图片风格提取 brief，以及关键词动效参考。包装动效设计稿必须由 `$video-use` 返回。主 Agent 可以整理或转述该设计稿给用户，但不得用自己另写的包装方案替代它。
+此步骤中，主 Agent 的职责是为 `$video-use` 准备输入，包括剪辑后视频路径、转写产物、`edl.json`、可用的源字幕或 `master.srt`、已选择的风格 Markdown 或图片风格提取 brief、`references/visual-quality-system.md`，以及关键词动效参考。包装动效设计稿必须由 `$video-use` 返回。主 Agent 可以整理或转述该设计稿给用户，但不得用自己另写的包装方案替代它。
 
-Before drafting the packaging plan, read `references/keyword-animation-effects.md` and choose or combine suitable keyword, card, mouse, collision, drag, snapping, checklist, and loading effects according to subtitle meaning.
+Before drafting the packaging plan, read `references/visual-quality-system.md` and `references/keyword-animation-effects.md`. Use the visual quality system for typography, components, hierarchy, color, safety, and QA constraints; use the keyword animation library to choose or combine suitable keyword, card, mouse, collision, drag, snapping, checklist, and loading effects according to subtitle meaning.
 
-设计包装方案前，先读取 `references/keyword-animation-effects.md`，并根据字幕语义选择或组合合适的关键词、卡片、鼠标、碰撞、拖拽、吸附、勾选、加载等动效。
+设计包装方案前，先读取 `references/visual-quality-system.md` 和 `references/keyword-animation-effects.md`。视觉质量系统用于约束字体、组件、层级、颜色、安全区和验收标准；关键词动效库用于根据字幕语义选择或组合合适的关键词、卡片、鼠标、碰撞、拖拽、吸附、勾选、加载等动效。
 
 The design draft must include, for every animation segment:
 
@@ -243,6 +243,9 @@ The design draft must include, for every animation segment:
 - Layout: safe zone, face/mouth avoidance, subtitle-safe area, layer order.
 - Visual style: colors, font/weight, card style, glow, borders, hierarchy.
 - Applied style constraints: cite the specific constraints from the selected style Markdown or extracted image-style brief that shaped this segment.
+- Typography: exact `fontFamily`, weight, size range, line height, and fallback.
+- Component: one component from `references/visual-quality-system.md`, such as `KeywordChip`, `TerminalCard`, or `StepListCard`.
+- Quality risk: state whether this segment may block face, mouth, subtitles, become too dense, or suffer font fallback.
 
 - 时间节点：开始和结束时间。
 - 画面文字：屏幕上实际出现的文字、关键词、卡片、标签或字幕。
@@ -251,6 +254,9 @@ The design draft must include, for every animation segment:
 - 布局：安全区、不挡脸不挡嘴、字幕安全区、层级顺序。
 - 视觉风格：颜色、字体/字重、卡片样式、发光、边框、层级。
 - 已应用的风格约束：说明该段具体采用了所选风格 Markdown 或图片风格提取 brief 中的哪些约束。
+- 字体：具体 `fontFamily`、字重、字号区间、行高和 fallback。
+- 组件：从 `references/visual-quality-system.md` 选择一个组件，例如 `KeywordChip`、`TerminalCard` 或 `StepListCard`。
+- 质量风险：说明该段是否可能挡脸、挡嘴、挡字幕、信息过密或字体 fallback。
 
 The packaging motion design draft must use this exact Markdown block format. Do not replace it with a table, a loose paragraph, or a general style summary:
 
@@ -265,6 +271,9 @@ The packaging motion design draft must use this exact Markdown block format. Do 
 运动：ease-out，关键元素错峰进入；如无独立运动细节，写“同动效描述”。
 布局：左上三分区，不碰脸部；层级在人物前但低视觉权重。
 已应用的风格约束：引用所选风格 Markdown 或图片风格提取 brief 中实际采用的颜色、字体、卡片、安全区或禁用项。
+字体：Source Han Sans Heavy / Inter Black，56-72px，line-height 0.96，fallback PingFang SC Heavy。
+组件：HudTitleCard + KeywordChip。
+质量风险：注意不要变成整句大字；标题卡不得压到脸部或字幕区。
 
 1.55-3.20s
 画面文字：2 种推理模式
@@ -272,11 +281,14 @@ The packaging motion design draft must use this exact Markdown block format. Do 
 运动：ease-out，芯片间 4 帧错峰，边框青色脉冲一次。
 布局：左侧中上，保留下方字幕区。
 已应用的风格约束：引用所选风格 Markdown 或图片风格提取 brief 中实际采用的约束。
+字体：Inter ExtraBold / PingFang SC Semibold，28-36px，line-height 1.18。
+组件：KeywordChip。
+质量风险：两枚芯片不要同时遮挡人物手势；边框发光不能过曝。
 ```
 
-Each segment must start with a precise `start-end` time range and must include `画面文字`、`动效`、`运动`、`布局`、`已应用的风格约束`. If a segment has no visible overlay, write `画面文字：无` and explain why no overlay should appear. The visible text must be short and concrete; do not use full transcript sentences as on-screen overlay text unless the user explicitly requests it.
+Each segment must start with a precise `start-end` time range and must include `画面文字`、`动效`、`运动`、`布局`、`已应用的风格约束`、`字体`、`组件`、`质量风险`. If a segment has no visible overlay, write `画面文字：无` and explain why no overlay should appear. The visible text must be short and concrete; do not use full transcript sentences as on-screen overlay text unless the user explicitly requests it.
 
-每个段落必须以精确的 `开始-结束` 时间范围开头，并且必须包含 `画面文字`、`动效`、`运动`、`布局`、`已应用的风格约束`。如果某段不应出现包装元素，写 `画面文字：无` 并说明不出现动效的原因。画面文字必须短而具体；除非用户明确要求，不要把完整口播句子直接作为包装大字。
+每个段落必须以精确的 `开始-结束` 时间范围开头，并且必须包含 `画面文字`、`动效`、`运动`、`布局`、`已应用的风格约束`、`字体`、`组件`、`质量风险`。如果某段不应出现包装元素，写 `画面文字：无` 并说明不出现动效的原因。画面文字必须短而具体；除非用户明确要求，不要把完整口播句子直接作为包装大字。
 
 Present the draft to the user and wait for approval. Do not implement Remotion before approval.
 
@@ -295,8 +307,10 @@ Implementation requirements:
 - Use Remotion for composition structure, video placement, timeline, Studio, and export.
 - Use GSAP for animation easing/timeline calculations or element motion logic.
 - Use the approved packaging plan as the source of truth.
+- Use `references/visual-quality-system.md` as the implementation quality bar for typography, components, hierarchy, spacing, and motion polish.
 - Keep video and audio aligned to the edited video.
 - Keep overlays outside face/mouth and subtitle-safe zones unless the approved plan explicitly says otherwise.
+- Explicitly set `fontFamily`, weight, size, line height, and fallback for every text component; do not rely on browser default fonts.
 - Do not add transition flashes or scan wipes if the selected style forbids them.
 - Do not add global top/bottom video progress bars. Progress bars are allowed only inside task cards or loading panels when they represent content-specific progress.
 - Do not render or export at this stage.
@@ -304,8 +318,10 @@ Implementation requirements:
 - 用 Remotion 负责合成结构、视频放置、时间线、Studio 和导出。
 - 用 GSAP 负责动画缓动、时间线计算或元素运动逻辑。
 - 以用户确认的包装方案为唯一实现依据。
+- 使用 `references/visual-quality-system.md` 作为字体、组件、层级、间距和动效质感的实现质量标准。
 - 保持视频与音频和剪辑后视频对齐。
 - 除非方案明确允许，否则包装元素必须避开脸部、嘴部和字幕安全区。
+- 每个文字组件都必须显式设置 `fontFamily`、字重、字号、行高和 fallback；不要依赖浏览器默认字体。
 - 如果风格文件禁止转场闪烁或扫描光效，就不得添加。
 - 不要添加顶部或底部的整条视频全局进度条。只有表示内容内部状态的任务卡片进度条或加载面板进度条可以使用。
 - 此阶段不渲染、不导出。
@@ -314,9 +330,9 @@ If dependencies are missing, install only what is needed for this stack, such as
 
 如果依赖缺失，只安装这个技术栈必需的依赖，例如 `remotion`、`@remotion/cli`、`react`、`react-dom`、`typescript`、`gsap`。不要把 Remotion + GSAP 替换成 HyperFrames、普通 HTML、PIL、Manim 或其它动画系统，除非用户明确改需求。
 
-Run a TypeScript or build check when available. Then open Remotion Studio and give the user the local Studio URL.
+Run a TypeScript or build check when available. Before opening Remotion Studio, capture at least one preview screenshot and check typography, face/mouth safety, subtitle safety, card density, glow intensity, and global-progress-bar violations. Fix clear issues before showing Studio. Then open Remotion Studio and give the user the local Studio URL.
 
-如果项目支持，运行 TypeScript 或构建检查。然后打开 Remotion Studio，并把本地 Studio 地址给用户。
+如果项目支持，运行 TypeScript 或构建检查。打开 Remotion Studio 前，至少截取一张预览图，并检查字体、脸部/嘴部安全、字幕安全、卡片密度、发光强度和全局进度条违规；发现明确问题先修正，再打开 Studio 并把本地 Studio 地址给用户。
 
 ### 6. Export Only After Final Approval / 最终确认后才导出
 
