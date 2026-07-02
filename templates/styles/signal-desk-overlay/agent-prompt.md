@@ -1,8 +1,12 @@
 # Agent Prompt / Agent 提示词
 
+Use this style for general keyword popups, process callouts, quote cards, skill/file callouts, and short explanatory overlays.
+
+用于通用关键词弹窗、流程提示、引用卡片、skill/文件提示和短说明型 overlay。
+
 ## 中文
 
-你正在为 Remotion 生成视频 overlay 弹窗动画。必须使用 `video-overlay-kit` 的 Signal Desk Overlay 风格。
+你正在为 Remotion 生成视频 overlay 弹窗动画。必须使用本 skill 随附的 `templates/styles/signal-desk-overlay/` Signal Desk Overlay 风格包。
 
 硬性规则：
 
@@ -19,7 +23,7 @@
 
 ## English
 
-You are generating Remotion video overlay popup animation. You must use the Signal Desk Overlay style from `video-overlay-kit`.
+You are generating Remotion video overlay popup animation. You must use the bundled Signal Desk Overlay style pack from `templates/styles/signal-desk-overlay/`.
 
 Hard rules:
 

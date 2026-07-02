@@ -113,6 +113,7 @@ Style preservation rules:
 - Do not invent a new palette, border radius, typography scale, or entrance timing for a built-in style unless the approved plan explicitly overrides it.
 - Before resolving a built-in style name, read `templates/styles/style-index.json` or `templates/styles/STYLE_INDEX.md`; use the canonical `id` and directory from the index.
 - When implementing any built-in style, first load the matching `templates/styles/<style-name>/tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md`.
+- When maintaining or copying this skill, run `node scripts/verify-style-assets.mjs` after any change to `templates/styles/`, `SKILL.md`, or `README.md`.
 - When implementing `Signal Desk Overlay`, use `templates/styles/signal-desk-overlay/` as the primary contract and `templates/remotion-overlay-kit/` as the shared component source.
 - When implementing `Dark Diagnostic HUD`, use `templates/styles/dark-diagnostic-hud/`, `dark-diagnostic-hud-style-system.md`, and `card-style-library.md` as the contract.
 - If a custom style is provided, treat it as an external brief for that task only; do not overwrite the built-in style fidelity assets.
@@ -121,6 +122,7 @@ Style preservation rules:
 - 除非已确认方案明确覆盖，否则不要为内置风格发明新的配色、圆角、字号层级或入场时长。
 - 解析内置风格名称前，先读取 `templates/styles/style-index.json` 或 `templates/styles/STYLE_INDEX.md`；使用索引中的标准 `id` 和目录。
 - 实现任何内置风格时，先加载匹配的 `templates/styles/<style-name>/tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md`。
+- 维护或复制本 skill 时，只要改过 `templates/styles/`、`SKILL.md` 或 `README.md`，都要运行 `node scripts/verify-style-assets.mjs`。
 - 实现 `Signal Desk Overlay / 标准重点弹窗` 时，以 `templates/styles/signal-desk-overlay/` 为主契约，并把 `templates/remotion-overlay-kit/` 作为共享组件来源。
 - 实现 `Dark Diagnostic HUD / 暗色诊断 HUD` 时，以 `templates/styles/dark-diagnostic-hud/`、`dark-diagnostic-hud-style-system.md` 和 `card-style-library.md` 为契约。
 - 用户提供自定义风格时，只作为当前任务的外部 brief，不覆盖内置风格保真资产。
@@ -642,6 +644,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not generate flat single-layer cards. Cards need glass material, gradient, semantic border, inner/outer shadows, icon container, and explicit typography hierarchy.
 - Do not use removed or unselected styles. Default to `Dark Diagnostic HUD`; use `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, or `Terminal Agent HUD` only when explicitly selected.
 - Do not ignore bundled style fidelity files. If the built-in style is used, read `templates/styles/style-index.json`, the matching `references/` files, and copy/adapt matching `templates/styles/<style-name>/` code before inventing components.
+- Do not change, remove, or add a built-in style without running `node scripts/verify-style-assets.mjs`.
 - Do not ignore reference image(s) when the user provides them as the custom style source; extract a style brief first.
 - Do not ignore current-project content assets. If an asset filename, path segment, or filename-token alias matches a subtitle keyword, use it at that keyword cue or explicitly explain why it is unsafe or unsuitable. Do not use image content, OCR, labels inferred from pixels, or subject classification for matching.
 - Do not search for packaging assets in the uploaded video's folder by default. Use the current Codex project/workspace as the default asset source; only use the video folder if the user explicitly designates it as an asset source.
@@ -663,6 +666,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 不要生成单层扁平卡片。卡片需要玻璃材质、渐变、语义描边、内外阴影、图标容器和明确字体层级。
 - 不要混用已移除或未被选择的风格。默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`；只有明确选择时才使用 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片` 或 `Terminal Agent HUD / 终端 Agent HUD`。
 - 不要忽略随 skill 打包的风格保真文件。使用内置风格时，先读取 `templates/styles/style-index.json`、匹配的 `references/` 文件，并先复制或改造匹配的 `templates/styles/<style-name>/` 代码，再考虑新写组件。
+- 不要在没有运行 `node scripts/verify-style-assets.mjs` 的情况下修改、删除或新增内置风格。
 - 用户提供参考图片作为自定义风格来源时，不要忽略图片；必须先提取风格 brief。
 - 不要忽略当前项目内容素材。只要素材文件名、路径片段或文件名分词别名匹配字幕关键词，就在该关键词 cue 使用，或明确说明为什么不安全/不适合。不要用图片内容、OCR、从像素推断的标签或主体分类做匹配。
 - 不要默认去用户上传视频所在文件夹里找包装素材。默认素材来源是当前 Codex 项目/工作区；只有用户明确指定时，才把视频所在目录当素材来源。

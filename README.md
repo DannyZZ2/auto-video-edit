@@ -148,10 +148,25 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `templates/styles/terminal-agent-hud/`：完整终端 Agent 风格包，包含 tokens、theme、components、example 和 agent prompt。
 - `templates/remotion-overlay-kit/`：保留用于 Signal Desk 兼容的可复用共享 Remotion overlay 组件包。
 
+## Verify Style Assets / 校验风格资产
+
+Run this after changing `templates/styles/`, `SKILL.md`, or `README.md`:
+
+修改 `templates/styles/`、`SKILL.md` 或 `README.md` 后运行：
+
+```bash
+node scripts/verify-style-assets.mjs
+```
+
+The verifier checks the style index, the 5 canonical style IDs, aliases, required files, non-empty component/example/prompt files, and parseable tokens.
+
+校验脚本会检查风格索引、5 个标准风格 ID、别名、必需文件、非空组件/示例/prompt 文件，以及可解析的 tokens。
+
 ## Included Files / 包含文件
 
 - `SKILL.md`
 - `agents/openai.yaml`
+- `scripts/verify-style-assets.mjs`
 - `references/default-design.md`
 - `references/card-style-library.md`
 - `references/dark-diagnostic-hud-style-system.md`
