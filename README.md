@@ -11,7 +11,7 @@ Install with the Codex skill installer:
 使用 Codex skill 安装器：
 
 ```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --repo DannyZZ2/video-auto-edit --path . --name video-auto-edit
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --repo DannyZZ2/auto-video-edit --path . --name video-auto-edit
 ```
 
 Manual install is also possible:
@@ -19,8 +19,12 @@ Manual install is also possible:
 也可以手动安装：
 
 ```bash
-git clone https://github.com/DannyZZ2/video-auto-edit.git ~/.codex/skills/video-auto-edit
+git clone https://github.com/DannyZZ2/auto-video-edit.git ~/.codex/skills/video-auto-edit
 ```
+
+The GitHub repository is named `auto-video-edit`; the installed skill name remains `video-auto-edit` for compatibility with existing `$video-auto-edit` prompts.
+
+GitHub 仓库名是 `auto-video-edit`；安装后的 skill 名称仍保留 `video-auto-edit`，以兼容现有 `$video-auto-edit` 调用方式。
 
 ## Requirements / 依赖
 
