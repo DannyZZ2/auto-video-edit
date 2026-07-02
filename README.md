@@ -63,11 +63,12 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 7. If a reference image file name contains `github`, or the explicitly provided reference image contains a GitHub repository pattern, parse it into a `GitHubRepoCard`. For ordinary content assets, create GitHub cards only from filename tokens or user-provided metadata, not from image-content understanding.
 8. Before packaging design, inspect the final video for pointing, dragging, swiping, circling, or line-drawing gestures. If gestures are visible near a cue, pass them to `$video-use` and use the gesture position as the preferred image/animation anchor.
 9. If no custom style is provided, use the default `Dark Diagnostic HUD` style. The built-in variants are `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, and `Terminal Agent HUD`, and they are used only when explicitly selected.
-10. Use `$video-use` to generate a packaging motion design draft from the final video, timing bundle, selected style, asset manifest, gesture cues, card style library, and keyword animation library.
-11. Wait for user confirmation.
-12. Implement the approved design with Remotion + GSAP.
-13. Open Remotion Studio for preview only.
-14. Export only after the user confirms the Studio preview.
+10. Load the bundled style fidelity assets from `references/` and `templates/remotion-overlay-kit/` before generating or implementing built-in overlay styles.
+11. Use `$video-use` to generate a packaging motion design draft from the final video, timing bundle, selected style, asset manifest, gesture cues, card style library, and keyword animation library.
+12. Wait for user confirmation.
+13. Implement the approved design with Remotion + GSAP, copying or adapting bundled templates when they match the selected style.
+14. Open Remotion Studio for preview only.
+15. Export only after the user confirms the Studio preview.
 
 1. 先问用户是否需要剪辑。
 2. 如果需要剪辑，先让用户提供源视频文件夹，然后默认执行精剪方案。不要再询问普通剪辑还是精剪。
@@ -78,11 +79,12 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 7. 如果参考图文件名包含 `github`，或用户明确提供的参考图中有 GitHub 仓库结构，解析为 `GitHubRepoCard`。普通内容素材只能从文件名分词或用户提供的元数据生成 GitHub 卡片，不根据图片内容理解生成。
 8. 包装设计前先检查最终视频中是否有指、拖、划、圈选或画线手势。如果 cue 附近有手势，把手势 cue 传给 `$video-use`，并优先使用手势位置作为图片/动画锚点。
 9. 如果没有自定义风格，默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`。内置变体是 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片`、`Terminal Agent HUD / 终端 Agent HUD`，且只有明确选择时才使用。
-10. 调用 `$video-use`，基于最终视频、时间包、风格、素材清单、手势 cue、卡片风格库和关键词动效库生成包装动效设计稿。
-11. 等用户确认。
-12. 用 Remotion + GSAP 实现确认后的动效。
-13. 只打开 Remotion Studio 预览。
-14. 用户确认 Studio 效果后再导出。
+10. 生成或实现内置 overlay 风格前，先加载 `references/` 和 `templates/remotion-overlay-kit/` 中随 skill 打包的风格保真资产。
+11. 调用 `$video-use`，基于最终视频、时间包、风格、素材清单、手势 cue、卡片风格库和关键词动效库生成包装动效设计稿。
+12. 等用户确认。
+13. 用 Remotion + GSAP 实现确认后的动效；已选风格有匹配模板时，优先复制或改造随 skill 打包的模板。
+14. 只打开 Remotion Studio 预览。
+15. 用户确认 Studio 效果后再导出。
 
 ## Core Rules / 核心规则
 
@@ -97,6 +99,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - Avoid blocking faces, mouths, gestures, and the subtitle safe zone.
 - Do not generate global top or bottom video progress bars.
 - Do not switch away from Remotion + GSAP for animation implementation.
+- Do not ignore bundled style fidelity assets. Built-in styles must use their matching references and templates.
 - Never commit `.env`, API keys, tokens, or local secrets.
 
 - 未到对应确认节点前，不剪辑、不包装、不渲染、不导出。
@@ -110,7 +113,28 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - 避免遮挡脸、嘴、手势和字幕安全区。
 - 不生成顶部/底部整条视频进度条。
 - 动画实现不切换到 Remotion + GSAP 以外的方案。
+- 不忽略随 skill 打包的风格保真资产。内置风格必须使用匹配的 references 和 templates。
 - 不提交 `.env`、API key、token 或任何本地密钥。
+
+## Style Fidelity Assets / 风格保真资产
+
+The repository includes the assets needed to preserve the built-in visual style across other projects:
+
+仓库包含在其他项目中维持内置视觉风格所需的资产：
+
+- `references/card-style-library.md`: the active 5-style family.
+- `references/dark-diagnostic-hud-style-system.md`: complete Dark Diagnostic HUD style system.
+- `references/dark-diagnostic-hud-remotion-agent-prompt.md`: Remotion implementation prompt for the Dark Diagnostic HUD style.
+- `references/visual-quality-system.md`: typography, material, hierarchy, safe-zone, and QA standards.
+- `references/keyword-animation-effects.md`: keyword-triggered motion options.
+- `templates/remotion-overlay-kit/`: reusable Remotion overlay kit with tokens, theme, popup components, examples, style spec, and agent prompt.
+
+- `references/card-style-library.md`：当前 5 种内置风格族。
+- `references/dark-diagnostic-hud-style-system.md`：完整 Dark Diagnostic HUD 风格系统。
+- `references/dark-diagnostic-hud-remotion-agent-prompt.md`：Dark Diagnostic HUD 的 Remotion 实现提示。
+- `references/visual-quality-system.md`：字体、材质、层级、安全区和 QA 标准。
+- `references/keyword-animation-effects.md`：按关键词触发的动效选项。
+- `templates/remotion-overlay-kit/`：可复用 Remotion overlay 风格包，包含 tokens、theme、弹窗组件、examples、style spec 和 agent prompt。
 
 ## Included Files / 包含文件
 
@@ -118,9 +142,18 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - `agents/openai.yaml`
 - `references/default-design.md`
 - `references/card-style-library.md`
+- `references/dark-diagnostic-hud-style-system.md`
+- `references/dark-diagnostic-hud-remotion-agent-prompt.md`
 - `references/keyword-animation-effects.md`
 - `references/visual-quality-system.md`
+- `templates/remotion-overlay-kit/README.md`
+- `templates/remotion-overlay-kit/style-spec.md`
+- `templates/remotion-overlay-kit/agent-prompt.md`
+- `templates/remotion-overlay-kit/tokens.json`
+- `templates/remotion-overlay-kit/theme.ts`
+- `templates/remotion-overlay-kit/components/`
+- `templates/remotion-overlay-kit/examples/`
 
-The repository intentionally does not include local videos, Remotion projects, generated renders, reference images, or API keys.
+The repository intentionally does not include local videos, generated renders, user reference images, API keys, dependency folders, or installed `node_modules`.
 
-仓库有意不包含本地视频、Remotion 工程、生成成片、参考图片或 API key。
+仓库有意不包含本地视频、生成成片、用户参考图片、API key、依赖目录或已安装的 `node_modules`。
