@@ -63,10 +63,10 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 7. If a reference image file name contains `github`, or the explicitly provided reference image contains a GitHub repository pattern, parse it into a `GitHubRepoCard`. For ordinary content assets, create GitHub cards only from filename tokens or user-provided metadata, not from image-content understanding.
 8. Before packaging design, inspect the final video for pointing, dragging, swiping, circling, or line-drawing gestures. If gestures are visible near a cue, pass them to `$video-use` and use the gesture position as the preferred image/animation anchor.
 9. If no custom style is provided, use the default `Dark Diagnostic HUD` style. The built-in variants are `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, and `Terminal Agent HUD`, and they are used only when explicitly selected.
-10. Load the bundled style fidelity assets from `references/` and `templates/remotion-overlay-kit/` before generating or implementing built-in overlay styles.
+10. Load the bundled style fidelity assets from `references/` and the matching `templates/styles/<style-name>/` directory before generating or implementing built-in overlay styles.
 11. Use `$video-use` to generate a packaging motion design draft from the final video, timing bundle, selected style, asset manifest, gesture cues, card style library, and keyword animation library.
 12. Wait for user confirmation.
-13. Implement the approved design with Remotion + GSAP, copying or adapting bundled templates when they match the selected style.
+13. Implement the approved design with Remotion + GSAP, copying or adapting the bundled style pack for the selected style.
 14. Open Remotion Studio for preview only.
 15. Export only after the user confirms the Studio preview.
 
@@ -79,10 +79,10 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 7. 如果参考图文件名包含 `github`，或用户明确提供的参考图中有 GitHub 仓库结构，解析为 `GitHubRepoCard`。普通内容素材只能从文件名分词或用户提供的元数据生成 GitHub 卡片，不根据图片内容理解生成。
 8. 包装设计前先检查最终视频中是否有指、拖、划、圈选或画线手势。如果 cue 附近有手势，把手势 cue 传给 `$video-use`，并优先使用手势位置作为图片/动画锚点。
 9. 如果没有自定义风格，默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`。内置变体是 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片`、`Terminal Agent HUD / 终端 Agent HUD`，且只有明确选择时才使用。
-10. 生成或实现内置 overlay 风格前，先加载 `references/` 和 `templates/remotion-overlay-kit/` 中随 skill 打包的风格保真资产。
+10. 生成或实现内置 overlay 风格前，先加载 `references/` 和匹配的 `templates/styles/<style-name>/` 目录中的风格保真资产。
 11. 调用 `$video-use`，基于最终视频、时间包、风格、素材清单、手势 cue、卡片风格库和关键词动效库生成包装动效设计稿。
 12. 等用户确认。
-13. 用 Remotion + GSAP 实现确认后的动效；已选风格有匹配模板时，优先复制或改造随 skill 打包的模板。
+13. 用 Remotion + GSAP 实现确认后的动效；优先复制或改造已选风格对应的随 skill 打包风格包。
 14. 只打开 Remotion Studio 预览。
 15. 用户确认 Studio 效果后再导出。
 
@@ -99,7 +99,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - Avoid blocking faces, mouths, gestures, and the subtitle safe zone.
 - Do not generate global top or bottom video progress bars.
 - Do not switch away from Remotion + GSAP for animation implementation.
-- Do not ignore bundled style fidelity assets. Built-in styles must use their matching references and templates.
+- Do not ignore bundled style fidelity assets. Built-in styles must use their matching references and `templates/styles/<style-name>/` style pack.
 - Never commit `.env`, API keys, tokens, or local secrets.
 
 - 未到对应确认节点前，不剪辑、不包装、不渲染、不导出。
@@ -113,7 +113,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - 避免遮挡脸、嘴、手势和字幕安全区。
 - 不生成顶部/底部整条视频进度条。
 - 动画实现不切换到 Remotion + GSAP 以外的方案。
-- 不忽略随 skill 打包的风格保真资产。内置风格必须使用匹配的 references 和 templates。
+- 不忽略随 skill 打包的风格保真资产。内置风格必须使用匹配的 references 和 `templates/styles/<style-name>/` 风格包。
 - 不提交 `.env`、API key、token 或任何本地密钥。
 
 ## Style Fidelity Assets / 风格保真资产
@@ -127,14 +127,24 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`: Remotion implementation prompt for the Dark Diagnostic HUD style.
 - `references/visual-quality-system.md`: typography, material, hierarchy, safe-zone, and QA standards.
 - `references/keyword-animation-effects.md`: keyword-triggered motion options.
-- `templates/remotion-overlay-kit/`: reusable Remotion overlay kit with tokens, theme, popup components, examples, style spec, and agent prompt.
+- `templates/styles/dark-diagnostic-hud/`: complete default style pack with tokens, theme, components, example, and agent prompt.
+- `templates/styles/signal-desk-overlay/`: complete standard popup style pack with tokens, theme, components, example, and agent prompt.
+- `templates/styles/precision-hud-cards/`: complete precision HUD style pack with tokens, theme, components, example, and agent prompt.
+- `templates/styles/diagnostic-glass-cards/`: complete diagnostic glass style pack with tokens, theme, components, example, and agent prompt.
+- `templates/styles/terminal-agent-hud/`: complete terminal agent style pack with tokens, theme, components, example, and agent prompt.
+- `templates/remotion-overlay-kit/`: reusable shared Remotion overlay kit retained for Signal Desk compatibility.
 
 - `references/card-style-library.md`：当前 5 种内置风格族。
 - `references/dark-diagnostic-hud-style-system.md`：完整 Dark Diagnostic HUD 风格系统。
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`：Dark Diagnostic HUD 的 Remotion 实现提示。
 - `references/visual-quality-system.md`：字体、材质、层级、安全区和 QA 标准。
 - `references/keyword-animation-effects.md`：按关键词触发的动效选项。
-- `templates/remotion-overlay-kit/`：可复用 Remotion overlay 风格包，包含 tokens、theme、弹窗组件、examples、style spec 和 agent prompt。
+- `templates/styles/dark-diagnostic-hud/`：完整默认风格包，包含 tokens、theme、components、example 和 agent prompt。
+- `templates/styles/signal-desk-overlay/`：完整标准弹窗风格包，包含 tokens、theme、components、example 和 agent prompt。
+- `templates/styles/precision-hud-cards/`：完整精密 HUD 风格包，包含 tokens、theme、components、example 和 agent prompt。
+- `templates/styles/diagnostic-glass-cards/`：完整诊断玻璃风格包，包含 tokens、theme、components、example 和 agent prompt。
+- `templates/styles/terminal-agent-hud/`：完整终端 Agent 风格包，包含 tokens、theme、components、example 和 agent prompt。
+- `templates/remotion-overlay-kit/`：保留用于 Signal Desk 兼容的可复用共享 Remotion overlay 组件包。
 
 ## Included Files / 包含文件
 
@@ -153,6 +163,31 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `templates/remotion-overlay-kit/theme.ts`
 - `templates/remotion-overlay-kit/components/`
 - `templates/remotion-overlay-kit/examples/`
+- `templates/styles/dark-diagnostic-hud/tokens.json`
+- `templates/styles/dark-diagnostic-hud/theme.ts`
+- `templates/styles/dark-diagnostic-hud/components.tsx`
+- `templates/styles/dark-diagnostic-hud/example.tsx`
+- `templates/styles/dark-diagnostic-hud/agent-prompt.md`
+- `templates/styles/signal-desk-overlay/tokens.json`
+- `templates/styles/signal-desk-overlay/theme.ts`
+- `templates/styles/signal-desk-overlay/components.tsx`
+- `templates/styles/signal-desk-overlay/example.tsx`
+- `templates/styles/signal-desk-overlay/agent-prompt.md`
+- `templates/styles/precision-hud-cards/tokens.json`
+- `templates/styles/precision-hud-cards/theme.ts`
+- `templates/styles/precision-hud-cards/components.tsx`
+- `templates/styles/precision-hud-cards/example.tsx`
+- `templates/styles/precision-hud-cards/agent-prompt.md`
+- `templates/styles/diagnostic-glass-cards/tokens.json`
+- `templates/styles/diagnostic-glass-cards/theme.ts`
+- `templates/styles/diagnostic-glass-cards/components.tsx`
+- `templates/styles/diagnostic-glass-cards/example.tsx`
+- `templates/styles/diagnostic-glass-cards/agent-prompt.md`
+- `templates/styles/terminal-agent-hud/tokens.json`
+- `templates/styles/terminal-agent-hud/theme.ts`
+- `templates/styles/terminal-agent-hud/components.tsx`
+- `templates/styles/terminal-agent-hud/example.tsx`
+- `templates/styles/terminal-agent-hud/agent-prompt.md`
 
 The repository intentionally does not include local videos, generated renders, user reference images, API keys, dependency folders, or installed `node_modules`.
 
