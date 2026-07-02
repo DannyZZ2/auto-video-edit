@@ -41,32 +41,30 @@ Recommended question sequence:
 
 推荐询问顺序：
 
-1. Ask: "是否需要使用 ElevenLabs 转写？"
-2. If yes, ask upload consent. After consent, create or locate the local ignored env/config file and open it for the user to fill `ELEVENLABS_API_KEY`. If no, default to Whisper without asking more unless local setup is missing.
-3. Ask: "是否需要剪辑？"
-4. If yes, ask for the source video folder, then run the fine-cut plan by default. If no, ask for the already-edited video file.
-5. After a final video exists, ask: "是否需要自定义包装风格？"
-6. If yes, ask for one style source type: Markdown or reference image. Then ask for the file/path. If no, use the default style.
-7. Before packaging design, build the timing bundle, asset manifest, and gesture cues. Then generate the packaging design draft and ask for approval.
+1. Ask: "是否需要剪辑？"
+2. If yes, ask for the source video folder, then run the fine-cut plan by default. If no, ask for the already-edited video file.
+3. Transcribe the final video with local `faster-whisper` automatically. Do not ask the user to choose a transcription provider.
+4. After a final video exists, ask: "是否需要自定义包装风格？"
+5. If yes, ask for one style source type: Markdown or reference image. Then ask for the file/path. If no, use the default style.
+6. Before packaging design, build the timing bundle, asset manifest, and gesture cues. Then generate the packaging design draft and ask for approval.
 
-1. 先问：“是否需要使用 ElevenLabs 转写？”
-2. 如果使用，再问是否同意上传音频；同意后创建或定位本地已忽略的 env/config 文件，并打开让用户填写 `ELEVENLABS_API_KEY`。如果不使用，默认直接走 Whisper，除非本地环境缺失才继续询问。
-3. 再问：“是否需要剪辑？”
-4. 如果需要，先问源视频文件夹，然后默认直接执行精剪方案。如果不需要，只问剪辑好的视频文件。
-5. 拿到最终视频后，再问：“是否需要自定义包装风格？”
-6. 如果需要，再问风格来源类型：Markdown 或参考图片；然后再要对应文件/路径。如果不需要，直接使用默认风格。
-7. 包装设计前先生成时间包、素材清单和手势 cue，再生成包装动效设计稿并让用户确认。
+1. 先问：“是否需要剪辑？”
+2. 如果需要，先问源视频文件夹，然后默认直接执行精剪方案。如果不需要，只问剪辑好的视频文件。
+3. 基于最终视频自动使用本地 `faster-whisper` 转写。不要询问用户选择转写服务。
+4. 拿到最终视频后，再问：“是否需要自定义包装风格？”
+5. 如果需要，再问风格来源类型：Markdown 或参考图片；然后再要对应文件/路径。如果不需要，直接使用默认风格。
+6. 包装设计前先生成时间包、素材清单和手势 cue，再生成包装动效设计稿并让用户确认。
 
 Required companion skills:
 
 - Use the installed `$video-use` skill for video analysis, cutting, SRT handling, and packaging-plan design. If `$video-use` is not installed or cannot be loaded, bootstrap it automatically before continuing.
-- Ask the user only whether ElevenLabs transcription is needed. Use ElevenLabs only after the user opts in, consents to audio upload, and fills the API key in a local ignored env/config file opened for them. Otherwise default to Whisper-compatible local transcription.
+- Use local `SYSTRAN/faster-whisper` for every transcription task. Do not offer external transcription providers or ask the user to choose a transcription provider.
 - Use Remotion + GSAP for the animation implementation after the user approves the packaging design.
 
 必要关联技能：
 
 - 使用已安装的 `$video-use` skill 做视频分析、剪辑、SRT 处理和包装方案设计。如果 `$video-use` 未安装或无法加载，先自动自举安装后再继续。
-- 只询问用户是否需要使用 ElevenLabs 转写。只有用户主动选择、同意上传音频，并在打开的本地已忽略 env/config 文件里填写 API key 后才使用 ElevenLabs；否则默认使用 Whisper 兼容的本地转写方案。
+- 所有转写任务统一使用本地 `SYSTRAN/faster-whisper`。不要提供外部转写服务，也不要让用户选择转写方案。
 - 用户确认包装设计后，用 Remotion + GSAP 实现动画包装。
 
 ## Dependency Bootstrap / 依赖自举
@@ -83,53 +81,47 @@ After installation:
 
 安装后：
 
-- Read the installed `video-use/install.md` only for general setup and the transcription option selected by the user.
-- Install or request only hard requirements that cannot be skipped, such as `ffmpeg`, `ffprobe`, Python dependencies, a Whisper-compatible transcription tool, or a local ignored env/config file for `ELEVENLABS_API_KEY` when the user opts into ElevenLabs.
-- Do not echo or log ElevenLabs API keys. Never commit `.env`.
+- Read the installed `video-use/install.md` only for general setup. Ignore any transcription-provider choice flow in that skill; this skill always uses local `faster-whisper`.
+- Install or request only hard requirements that cannot be skipped, such as `ffmpeg`, `ffprobe`, Python 3.9+ dependencies, and `faster-whisper`.
+- Never commit `.env`, local model caches, generated transcript files, or temporary audio extracts unless the user explicitly asks to version a specific artifact.
 - If the current Codex session cannot dynamically load the newly installed skill, read the installed `video-use/SKILL.md` directly for this session and tell the user to restart Codex after the current workflow to pick up the skill normally.
-- If GitHub access, network, package manager permissions, Whisper setup, or ElevenLabs key validation fails, explain the exact missing requirement and ask the user only for that one unblocker.
+- If GitHub access, network, package manager permissions, Python setup, `ffmpeg`, or `faster-whisper` setup fails, explain the exact missing requirement and ask the user only for that one unblocker.
 
-- 读取已安装的 `video-use/install.md` 时，只参考通用安装步骤和用户选择的转写方案。
-- 只安装或索取不能跳过的硬依赖，例如 `ffmpeg`、`ffprobe`、Python 依赖、Whisper 兼容转写工具，或用户选择 ElevenLabs 时用于填写 `ELEVENLABS_API_KEY` 的本地已忽略 env/config 文件。
-- 不回显、不记录 ElevenLabs API key；不要提交 `.env`。
+- 读取已安装的 `video-use/install.md` 时，只参考通用安装步骤。忽略其中的转写服务选择流程；本 skill 始终使用本地 `faster-whisper`。
+- 只安装或索取不能跳过的硬依赖，例如 `ffmpeg`、`ffprobe`、Python 3.9+ 依赖和 `faster-whisper`。
+- 不提交 `.env`、本地模型缓存、生成的转写文件或临时音频提取文件，除非用户明确要求把某个产物纳入版本管理。
 - 如果当前 Codex 会话不能动态加载新安装的 skill，本轮直接读取已安装的 `video-use/SKILL.md` 使用，并提醒用户当前流程结束后重启 Codex，以便后续正常识别。
-- 如果 GitHub 访问、网络、包管理器权限、Whisper 安装或 ElevenLabs key 校验失败，只说明当前缺少的具体条件，并只向用户索取这一项阻塞信息。
+- 如果 GitHub 访问、网络、包管理器权限、Python 环境、`ffmpeg` 或 `faster-whisper` 安装失败，只说明当前缺少的具体条件，并只向用户索取这一项阻塞信息。
 
-## Transcription Opt-In / 转写启用
+## Local faster-whisper Transcription / 本地 faster-whisper 转写
 
-Before any transcription, editing analysis, SRT generation, or packaging timing work, ask only whether the user needs ElevenLabs transcription. Do not present Whisper as a choice. Whisper is the default when the user does not opt into ElevenLabs.
+Before any editing analysis, SRT generation, packaging timing work, or keyword cue extraction, use local `faster-whisper` automatically. Do not ask whether to use another transcription provider.
 
-在任何转写、剪辑分析、SRT 生成或包装时间轴设计之前，只询问用户是否需要使用 ElevenLabs 转写。不要把 Whisper 作为一个需要选择的选项展示出来；用户不启用 ElevenLabs 时，默认直接使用 Whisper。
+在任何剪辑分析、SRT 生成、包装时间轴设计或关键词 cue 提取之前，自动使用本地 `faster-whisper`。不要询问是否使用其他转写服务。
 
-If the user chooses ElevenLabs:
+Required behavior:
 
-如果用户选择 ElevenLabs：
+必要行为：
 
-1. Tell the user that ElevenLabs transcription uploads the video's audio to an external ElevenLabs service, then ask only for explicit consent to upload the audio.
-2. After consent is confirmed, create or locate the local ignored env/config file used by the workflow, open it for the user, and ask the user to fill `ELEVENLABS_API_KEY` there. Do not ask the user to paste the API key into chat.
-3. Use ElevenLabs/Scribe transcription with word-level timestamps only after both consent and API-key availability are confirmed.
-4. Use word-level timestamps as the preferred source for cut boundaries, SRT timing, keyword animation timing, and subtitle-aligned packaging.
-5. Keep the key out of logs and code. If it must be persisted for helper compatibility, store it only in the local tool's ignored `.env` file with restrictive permissions.
+1. Ensure `ffmpeg`, `ffprobe`, Python 3.9+, and `faster-whisper` are available. If missing, install only the missing hard requirement.
+2. Prefer the Python API over shelling out to unrelated Whisper wrappers: create a `WhisperModel`, call `transcribe(..., word_timestamps=True, vad_filter=True)`, and consume the returned `segments` iterator before writing outputs.
+3. Generate independent SRT by default. Do not burn subtitles into the video unless the user explicitly asks.
+4. Store transcript text, segment timestamps, and word timestamps when available. Use word timestamps as the preferred source for cut boundaries, SRT timing, keyword animation timing, and subtitle-aligned packaging.
+5. If word timestamps are unavailable for a specific run, use segment timestamps plus silence detection to estimate keyword triggers and mark cue confidence as `estimated`.
 
-1. 告知用户 ElevenLabs 转写会把视频音频上传到外部 ElevenLabs 服务，然后只询问是否同意上传音频。
-2. 用户确认同意后，创建或定位该流程使用的本地已忽略 env/config 文件，打开文件让用户在里面填写 `ELEVENLABS_API_KEY`。不要让用户把 API key 粘贴到聊天里。
-3. 只有在用户同意上传且 API key 可用后，才使用 ElevenLabs/Scribe 转写和词级时间戳。
-4. 优先用词级时间戳作为剪辑边界、SRT 时间、关键词动画时间和字幕对齐包装的依据。
-5. 不把 key 写入日志或代码。如果为了 helper 兼容必须持久化，只能写入本地工具被忽略的 `.env`，并设置严格权限。
-
-If the user does not need ElevenLabs:
-
-如果用户不需要 ElevenLabs：
-
-1. Use an existing `whisper`, `faster-whisper`, `mlx-whisper`, or equivalent local Whisper command if available.
-2. If no Whisper tool is available, install a Whisper-compatible option locally for the project environment, then transcribe.
-3. Output separate SRT by default. Do not burn subtitles into the video unless the user explicitly asks.
-4. For packaging design, use Whisper transcript text and timestamps as the timing source. If word-level timestamps are unavailable, use segment timestamps plus silence detection to avoid obvious cut or animation timing errors.
-
-1. 如果环境里已有 `whisper`、`faster-whisper`、`mlx-whisper` 或等价本地 Whisper 命令，优先使用。
-2. 如果没有 Whisper 工具，在当前项目环境中安装 Whisper 兼容方案后再转写。
+1. 确认 `ffmpeg`、`ffprobe`、Python 3.9+ 和 `faster-whisper` 可用。缺失时只安装缺失的硬依赖。
+2. 优先使用 Python API，不要改走无关的 Whisper wrapper：创建 `WhisperModel`，调用 `transcribe(..., word_timestamps=True, vad_filter=True)`，并在写出产物前消费返回的 `segments` 迭代器。
 3. 默认输出独立 SRT；除非用户明确要求，否则不烧录字幕。
-4. 包装设计以 Whisper 转写文本和时间戳作为时间依据。如果没有词级时间戳，用分段时间戳配合静默检测，避免明显的剪辑或动效对齐错误。
+4. 保存转写文本、分段时间戳和可用的词级时间戳。优先用词级时间戳作为剪辑边界、SRT 时间、关键词动画时间和字幕对齐包装的依据。
+5. 如果某次运行无法产出词级时间戳，用分段时间戳配合静默检测估算关键词触发点，并把 cue 置信度标记为 `estimated`。
+
+Minimal install command:
+
+最小安装命令：
+
+```bash
+pip install -U faster-whisper
+```
 
 ## Packaging Timing Bundle / 包装时间包
 
@@ -144,9 +136,9 @@ The bundle must include:
 - `edited_video_path`: the final edited video used for packaging.
 - `srt_path`: independent SRT path. Generate one by default and do not burn subtitles into the video.
 - `transcript_text` or `transcript_path`: transcript text matched to the final edited video.
-- `transcription_provider`: `elevenlabs` or `whisper`.
-- `word_timestamps_path`: required when ElevenLabs is selected, unless the user provided a verified equivalent word-level timestamp file.
-- `segment_timestamps_path`: required when Whisper is selected. If the local Whisper tool can produce word-level timestamps, include that file too, but still mark the provider as `whisper`.
+- `transcription_provider`: always `faster-whisper`.
+- `word_timestamps_path`: required when `faster-whisper` emits word-level timestamps. If a run cannot emit word timestamps, set this to `none` and mark affected keyword cues as `estimated`.
+- `segment_timestamps_path`: required for every `faster-whisper` run.
 - `keyword_cues_path`: required for packaging. It must list each selected subtitle keyword, its subtitle line, trigger time, timing source, and confidence.
 - `edl_path`: edit decision file when available. If the user provided an already-edited video and no EDL exists, set this to `none`.
 - `asset_manifest_path`: required by default for packaging. Build it from the current Codex project/workspace files, plus any extra asset paths explicitly provided by the user. Do not scan the uploaded video's source folder or parent directory for assets unless the user explicitly designates that folder as an asset source. The manifest must list each asset path, source root, filename stem, filename-token aliases, dimensions, transparency, and suggested use. Do not OCR, classify, or infer meaning from the asset image content for matching.
@@ -155,9 +147,9 @@ The bundle must include:
 - `edited_video_path`：用于包装的最终剪辑视频。
 - `srt_path`：独立 SRT 路径。默认生成，不烧录进视频。
 - `transcript_text` 或 `transcript_path`：与最终剪辑视频匹配的转写文本。
-- `transcription_provider`：`elevenlabs` 或 `whisper`。
-- `word_timestamps_path`：选择 ElevenLabs 时必须提供，除非用户已经提供可验证的等效词级时间戳文件。
-- `segment_timestamps_path`：选择 Whisper 时必须提供。如果本地 Whisper 工具能产出词级时间戳，也一并保留，但 provider 仍标记为 `whisper`。
+- `transcription_provider`：始终为 `faster-whisper`。
+- `word_timestamps_path`：`faster-whisper` 产出词级时间戳时必须提供。如果某次运行无法产出词级时间戳，写 `none`，并把受影响的关键词 cue 标记为 `estimated`。
+- `segment_timestamps_path`：每次 `faster-whisper` 转写都必须提供。
 - `keyword_cues_path`：包装阶段必须提供。它要列出每个选中的字幕关键词、所属字幕行、触发时间、时间来源和置信度。
 - `edl_path`：有剪辑决策文件时填写；如果用户提供的是已经剪辑好的视频且没有 EDL，写 `none`。
 - `asset_manifest_path`：默认必须生成。素材来源是当前 Codex 项目/工作区文件，以及用户明确额外指定的素材路径。不要自动扫描用户上传视频所在的素材文件夹或父目录，除非用户明确把该目录指定为素材来源。清单要列出每个素材路径、来源根目录、文件名主干、文件名分词别名、尺寸、是否透明和建议用途。匹配时不要 OCR、不要分类、不要根据素材图片内容推断含义。
@@ -167,17 +159,17 @@ If `$video-use` produced a fine cut, reuse cached transcript/SRT/timestamp artif
 
 如果 `$video-use` 产出了精剪成片，只有在缓存的转写、SRT、时间戳产物与最终剪辑视频一致时才复用。若这些产物来自原始素材或早期预览版本，进入包装设计前必须基于最终剪辑视频重新生成或归一化时间产物。
 
-If the user provides an already-edited video, still run the selected transcription path before packaging design unless the user provides both a usable SRT and verified word-level timestamps. A user-provided SRT can be used as subtitle text and base timing, but it is not a replacement for word-level keyword timing. When ElevenLabs is selected and upload consent is granted, run ElevenLabs on the edited video to get word-level timestamps for keyword animation. If the user refuses external upload, use Whisper and mark the bundle as segment-level timing unless local word-level timing is available.
+If the user provides an already-edited video, still run `faster-whisper` before packaging design unless the user provides both a usable SRT and verified word-level timestamps. A user-provided SRT can be used as subtitle text and base timing, but it is not a replacement for word-level keyword timing. When verified word-level timestamps are missing, run `faster-whisper` on the edited video and use its word timestamps for keyword animation when available.
 
-如果用户提供的是已经剪辑好的视频，进入包装设计前仍要按已选择的转写方案生成时间产物，除非用户同时提供可用 SRT 和已验证的词级时间戳。用户上传的 SRT 可以作为字幕文本和基础时间，但不能替代关键词动画所需的词级时间。若用户选择 ElevenLabs 且同意上传音频，应对剪辑成片运行 ElevenLabs，拿到关键词动效用的词级时间戳。若用户拒绝外部上传，则使用 Whisper，并在时间包中标记为分段级时间；本地工具能产出词级时间时再补充词级文件。
+如果用户提供的是已经剪辑好的视频，进入包装设计前仍要运行 `faster-whisper` 生成时间产物，除非用户同时提供可用 SRT 和已验证的词级时间戳。用户上传的 SRT 可以作为字幕文本和基础时间，但不能替代关键词动画所需的词级时间。缺少已验证词级时间戳时，对剪辑成片运行 `faster-whisper`，并优先使用它产出的词级时间戳驱动关键词动效。
 
 Save the normalized bundle as `timing/<video-name>-packaging-timing.json` or `packaging-timing-<video-name>.json`, then pass this bundle to `$video-use`. `$video-use` must design packaging from the bundle instead of ad hoc transcript, SRT, or EDL paths.
 
 将归一化后的时间包保存为 `timing/<video-name>-packaging-timing.json` 或 `packaging-timing-<video-name>.json`，然后交给 `$video-use`。`$video-use` 必须基于这个时间包做包装方案，不要临时拼接零散的转写、SRT 或 EDL 路径。
 
-Packaging animations must be anchored to subtitle keyword cue points, but the design must be grouped by semantic beats, clauses, or information groups instead of blindly cutting a new segment for every word. Prefer exact word-level keyword start times from `word_timestamps_path` for entrance or emphasis timing. If only segment-level Whisper timing is available, estimate the keyword trigger inside the matching subtitle segment by text position and nearby silence/speech energy, then mark the cue confidence as estimated. Do not trigger effects only from evenly divided scene times or generic segment start times unless the segment has no usable keyword; in that case write `triggerKeyword: none` and explain why. Do not dismiss or exit a related card just because the next related keyword appears; keep related cards visible until the sentence, clause, list, comparison, or workflow step is semantically complete.
+Packaging animations must be anchored to subtitle keyword cue points, but the design must be grouped by semantic beats, clauses, or information groups instead of blindly cutting a new segment for every word. Prefer exact word-level keyword start times from `word_timestamps_path` for entrance or emphasis timing. If only segment-level `faster-whisper` timing is available, estimate the keyword trigger inside the matching subtitle segment by text position and nearby silence/speech energy, then mark the cue confidence as estimated. Do not trigger effects only from evenly divided scene times or generic segment start times unless the segment has no usable keyword; in that case write `triggerKeyword: none` and explain why. Do not dismiss or exit a related card just because the next related keyword appears; keep related cards visible until the sentence, clause, list, comparison, or workflow step is semantically complete.
 
-包装动效必须锚定字幕关键词落点，但设计分段要按语义节奏、从句或信息组来判断，不要机械地每个词都切一个新段。优先使用 `word_timestamps_path` 中精确的词级关键词开始时间作为入场或强调时间。如果只有 Whisper 分段时间，则根据关键词在字幕文本中的位置和附近静默/语音能量，在对应字幕段内估算触发点，并把 cue 置信度标记为 estimated。不要只按均分场景时间或泛泛的段落开始时间触发动效；除非该段没有可用关键词，此时必须写 `triggerKeyword: none` 并说明原因。不要因为下一个相关关键词出现，就让前一个相关卡片立即退场；相关卡片应保留到句子、从句、清单、对比或工作流步骤语义完成后再退场。
+包装动效必须锚定字幕关键词落点，但设计分段要按语义节奏、从句或信息组来判断，不要机械地每个词都切一个新段。优先使用 `word_timestamps_path` 中精确的词级关键词开始时间作为入场或强调时间。如果只有 `faster-whisper` 分段时间，则根据关键词在字幕文本中的位置和附近静默/语音能量，在对应字幕段内估算触发点，并把 cue 置信度标记为 estimated。不要只按均分场景时间或泛泛的段落开始时间触发动效；除非该段没有可用关键词，此时必须写 `triggerKeyword: none` 并说明原因。不要因为下一个相关关键词出现，就让前一个相关卡片立即退场；相关卡片应保留到句子、从句、清单、对比或工作流步骤语义完成后再退场。
 
 By default, search the current Codex project/workspace for packaging assets before designing overlays. Include common image and element formats such as `.png`, `.jpg`, `.jpeg`, `.webp`, `.svg`, `.gif`, `.json` animation data, and clearly named asset folders. Exclude dependency/build/cache folders such as `node_modules`, `.git`, `dist`, `build`, `.next`, `out`, `exports`, and rendered video output folders. Do not search inside the uploaded video's project/source folder just because the video came from there. Match discovered assets to subtitle keywords by comparing only asset filenames, filename stems, path segment names, and filename-token aliases using exact and fuzzy matching. Do not inspect image contents, do not OCR visible text, and do not classify the image subject for matching. If an asset name is identical or semantically similar to a subtitle keyword or phrase, show that asset at the keyword cue time unless it would block the face, mouth, subtitles, or the approved style. If multiple assets match, choose the most specific filename match and record the reason. If no filename match exists, continue with generated cards.
 
@@ -189,21 +181,21 @@ Before packaging design, inspect the final video for pointing, dragging, swiping
 
 ## Workflow / 流程
 
-### 1. Ask Whether ElevenLabs Is Needed / 询问是否需要 ElevenLabs
+### 1. Prepare Local Transcription / 准备本地转写
 
-Start by asking whether the user needs ElevenLabs transcription. Do not ask the user to choose between ElevenLabs and Whisper.
+Use local `faster-whisper` as the fixed transcription path. Do not ask the user to choose between transcription providers.
 
-首先询问用户是否需要使用 ElevenLabs 转写。不要让用户在 ElevenLabs 和 Whisper 之间二选一。
+固定使用本地 `faster-whisper` 作为转写路径。不要让用户在多个转写服务之间选择。
 
-- If yes: tell the user that the video's audio will be uploaded to the external ElevenLabs service, then ask only for explicit upload consent. After consent is confirmed, create or locate the local ignored env/config file used by the workflow, open it for the user, and ask the user to fill `ELEVENLABS_API_KEY` there. Use ElevenLabs/Scribe word-level timestamps only after consent and key availability are confirmed.
-- If no: default to Whisper-compatible local transcription without asking another transcription-choice question.
+- If `faster-whisper` is installed, use it directly for editing analysis, SRT generation, packaging timing, and keyword animation timing.
+- If it is missing, install it in the current project or workflow environment before transcription. Ask the user only if package installation or model download is blocked.
 
-- 如果需要：告知用户视频音频会上传到外部 ElevenLabs 服务，然后只询问是否同意上传。用户确认同意后，创建或定位该流程使用的本地已忽略 env/config 文件，打开文件让用户在里面填写 `ELEVENLABS_API_KEY`。只有同意上传且 key 可用后，才使用 ElevenLabs/Scribe 的词级时间戳。
-- 如果不需要：默认使用 Whisper 兼容的本地转写方案，不再追问转写方式。
+- 如果已经安装 `faster-whisper`，直接用于剪辑分析、SRT 生成、包装时间轴和关键词动画时间。
+- 如果缺失，先在当前项目或流程环境中安装。只有包安装或模型下载被阻塞时，才向用户索取这一项阻塞信息。
 
-Keep this choice for the full workflow, including editing analysis, SRT generation, packaging timing, and keyword animation timing.
+Keep this provider fixed for the full workflow.
 
-这个选择贯穿完整流程，包括剪辑分析、SRT 生成、包装时间轴和关键词动画时间。
+整个流程都保持这个固定转写方案。
 
 ### 2. Ask Whether Editing Is Needed / 询问是否需要剪辑
 
@@ -560,9 +552,9 @@ Never skip these gates, but present them progressively. Show only the current ga
 
 不要跳过这些确认点，但必须渐进展示。每次只展示当前确认点。当前确认点解决前，不要列出后续确认点，也不要提前询问后续确认点的问题。
 
-1. Confirm whether ElevenLabs is needed. If it is not needed, default to Whisper.
-2. Confirm whether editing is needed.
-3. If editing is needed, ask for the source folder, then use the fine-cut plan by default.
+1. Confirm whether editing is needed.
+2. If editing is needed, ask for the source folder, then use the fine-cut plan by default.
+3. Transcribe with local `faster-whisper` automatically. This is not a user choice gate.
 4. Confirm whether custom style is needed. If yes, ask the style source type in a separate follow-up question, then ask for the matching file/path.
 5. Generate the timing bundle, asset manifest, and gesture cues before packaging design.
 6. Confirm the packaging motion design before Remotion implementation.
