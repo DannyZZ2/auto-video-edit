@@ -83,10 +83,10 @@
 
 连线类补充规则：
 
-- `native.orbitFlow` 的每条曲线都要有一个发光原点沿曲线移动，路径颜色与对应目标卡一致。
+- `native.orbitFlow` 的每条曲线都要有一个发光原点沿实际生成的曲线移动，路径颜色与对应目标卡一致。
 - `native.comparisonSwap` 的旧词到新词之间，需要有箭头线和移动光点，表示替换/修正方向。
 - 其它任何 `line/path/arrow/connector` 组件，也按同样规则加移动光点；光点必须是柔和光晕，不是生硬实心圆，大小控制在 6-12px，外发光半径不超过 28px，避免变成转场光效。
-- 连线光点必须沿线条循环运动。路径画完后不能停在终点不动；可用 `loop01(frame, start, duration)`、`MotionPathPlugin`、SVG `getPointAtLength` 或等价方法让光晕持续沿路径移动。
+- 连线光点必须沿实际生成的线条/SVG path 循环运动。路径画完后不能停在终点不动，也不能用两端点直线插值、固定 x/y 位移或端点闪烁代替沿线运动；可用 `loop01(frame, start, duration)` 配合 SVG `getPointAtLength`、`MotionPathPlugin` 或等价路径采样方法，让光晕持续沿同一条 path 移动。
 - 连线长度必须根据目标元素边框和内容宽度计算：起点贴合源节点边缘，终点贴合目标卡片/标签边缘，不能靠固定长度目测。
 - 替换/纠错类卡片中，新词必须放在箭头指向的目标位置，不能出现在旧词下方或其它非指向区域。
 - 环形仪表、进度弧在数值为 0 时不能露出彩色进度端点；应使用 `pathLength`、`strokeDasharray`、`clipPath` 或显式 `opacity` 处理 0 值状态。

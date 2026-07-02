@@ -41,6 +41,7 @@ If the user provides a custom Markdown style or reference image, treat it as an 
 - 卡片放左右侧、上半区或空白墙面，避开脸、嘴、麦克风、手势和字幕安全区。
 - 卡片有半透明深色底、渐变边框、轻微颗粒、内高光、外阴影和明确字体层级。
 - 连线类动效必须使用 SVG 曲线和循环移动的柔和光晕点。
+- 关键信息按短视频快速读取放大，不能使用偏小的桌面科技 UI 比例。
 
 ## Optional Built-In Style / 可选内置风格
 
@@ -59,6 +60,7 @@ If the user provides a custom Markdown style or reference image, treat it as an 
 - 背景可有极淡网格和点阵，但不做全局进度条。
 - 图标使用简单线性 SVG，不使用复杂图片图标。
 - 单屏优先 1 张主面板 + 1-2 个状态 chip，避免压住人物脸部和嘴部。
+- HUD 主卡、状态结果、关键词和任务名必须放大到短视频扫读尺寸；不要做成小字号密集仪表盘。
 
 Remotion 实现：
 
@@ -67,6 +69,8 @@ container: backdrop-filter blur(10px-16px), dark blue-black glass gradient
 border: cyan/violet double stroke
 shadow: weak outer glow + inset highlight
 text: Inter Black / JetBrains Mono / Source Han Sans Heavy
+key text: 42-72px landscape, 34-56px portrait
+secondary text: 26-40px landscape, 22-34px portrait
 motion: corner frame draw -> panel slide -> chip pop -> mono text type-in
 ```
 
@@ -142,6 +146,7 @@ motion: card slide/pop -> one-shot shine sweep -> icon/text stagger -> subtle id
 - 语义色固定：蓝=信息/主路径，绿=通过/正确，黄=警告/评分，红=风险/错误。
 - 连线必须使用 SVG path，线条中间有循环移动的柔和光晕点，用来显性表现关联与传输。
 - 比默认风格信息密度更高，只在用户明确选择时使用。
+- 虽然信息密度更高，但仍按短视频快速读取放大卡片和关键文字；不要缩成小型软件仪表盘。
 
 Remotion 实现：
 
@@ -151,6 +156,8 @@ panel: dark glass gradient + semantic stroke + weak glow
 chart: SVG radar/gauge/table/branch/terminal primitives
 connector: strokeDashoffset draw + frame-driven moving glow dot
 text: Inter Black / JetBrains Mono / Source Han Sans Heavy
+key text: 42-72px landscape, 34-56px portrait
+secondary text: 26-40px landscape, 22-34px portrait
 motion: header reveal -> panel draw -> rows/cards/charts by keyword cue -> connector glow dot loop
 ```
 
@@ -158,7 +165,7 @@ motion: header reveal -> panel draw -> rows/cards/charts by keyword cue -> conne
 
 - 标题先出现，主面板 6-10 帧后描边绘制。
 - 表格行、雷达角标、终端步骤按字幕关键词逐项点亮。
-- 连线先绘制，再让光晕点沿路径循环运动；光点不能停在终点。
+- 连线先绘制，再让光晕点沿实际 SVG path 循环运动；光点不能停在终点，也不能用两端点直线插值代替曲线路径。
 - 仪表盘数值从 0 增长时，0 帧状态不能提前显示右侧进度。
 - 卡片间距、连线长度和目标卡宽度必须由内容尺寸决定，避免视觉间距不一致。
 
@@ -207,7 +214,7 @@ motion: header reveal -> panel draw -> rows/cards/charts by keyword cue -> conne
 card: React div + CSS gradient border + backdrop-filter or translucent fill
 icon: inline SVG or lucide icon
 connector: SVG path with strokeDashoffset draw
-moving dot: frame-driven point along SVG/cubic path, rendered as soft glow circle
+moving dot: frame-driven point along the exact generated SVG/cubic path, rendered as soft glow circle; use getPointAtLength, MotionPath, or equivalent path sampling
 keyword reveal: clip-path / mask / scaleX
 motion timing: cueFrame - 6 entry, cueFrame highlight, cueFrame + 8 settle
 ```
@@ -229,5 +236,5 @@ motion timing: cueFrame - 6 entry, cueFrame highlight, cueFrame + 8 settle
 - 不生成全屏系统框、雷达仪表盘或分析报告大面板。
 - 不把卡片做成纯色扁平矩形。
 - 不把完整口播句子作为大字卡片。
-- 不让连线光点停在终点，必须沿路径循环运动。
+- 不让连线光点停在终点，必须沿实际生成的线/path 循环运动。
 - 不遮挡脸部、嘴部、手势和字幕安全区。

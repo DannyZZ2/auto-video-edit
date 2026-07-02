@@ -374,7 +374,7 @@ The design draft must include, for every animation segment:
 - 触发关键词落点：准确的字幕关键词、cue 时间、时间来源和置信度。
 - 画面文字：屏幕上实际出现的文字、关键词、卡片、标签或字幕。
 - 动画效果：入场、待机、重点强调、退场或交接。
-- 运动细节：方向、速度感、缓动、错峰、重点高亮时间。
+- 运动细节：方向、速度感、缓动、错峰、重点高亮时间；如果包含连线/箭头/path，必须说明光点如何沿实际生成的 SVG/path 轨迹运动。
 - 布局：安全区、不挡脸不挡嘴、字幕安全区、层级顺序。
 - 视觉风格：颜色、字体/字重、卡片样式、发光、边框、层级。
 - 卡片材质：玻璃层、暗色渐变、语义描边、内外阴影、图标容器和高光处理。
@@ -458,6 +458,7 @@ Implementation requirements:
 - Use the approved packaging plan as the source of truth.
 - Drive overlay entrances, highlights, bounces, clicks, card collisions, and exits from the approved subtitle keyword cue times. Convert cue seconds to Remotion frames and use those frames as animation anchors.
 - When the approved plan includes a matched asset, import or copy that image/element into the Remotion project asset folder and display it at the approved keyword cue. Preserve aspect ratio, clamp max size to the safe area, and use the approved style's card/frame treatment when needed.
+- When implementing connector, arrow, route, or flow-line effects, render the line as an SVG path and move the glow dot along that exact generated path. Use `getPointAtLength`, GSAP MotionPath, or equivalent path sampling from the same path data. Do not fake the motion with endpoint interpolation, fixed x/y animation, or blinking at the line ends.
 - When the approved plan includes `GitHubRepoCard`, implement it with text and vector/CSS elements rather than using the reference image as a flat bitmap unless the user explicitly asks for screenshot reuse. The card must expose editable fields for owner, repo, function, visibility, languages, and language percentages.
 - When the approved plan includes a gesture anchor, place the matched asset or animation at the gesture-derived region first, then apply the recorded safety offset. Do not recenter it into a generic layout unless gesture placement would block the face, mouth, subtitles, or key hand motion.
 - Use `references/visual-quality-system.md` as the implementation quality bar for typography, components, hierarchy, spacing, and motion polish.
@@ -474,6 +475,7 @@ Implementation requirements:
 - 以用户确认的包装方案为唯一实现依据。
 - 按已确认方案中的字幕关键词落点驱动包装元素入场、高亮、弹跳、点击、卡片碰撞和退场。将 cue 秒数转换成 Remotion 帧，并以这些帧作为动画锚点。
 - 当确认方案包含匹配素材时，把该图片/元素导入或复制到 Remotion 项目素材目录，并在对应关键词 cue 展示。保持原始比例，把最大尺寸限制在安全区内，必要时套用已选风格的卡片/边框处理。
+- 实现连线、箭头、路径或流程线动效时，线条必须是 SVG path，光点必须沿这条实际生成的 path 运动。使用同一份 path 数据的 `getPointAtLength`、GSAP MotionPath 或等价路径采样方法；不要用端点插值、固定 x/y 动画或端点闪烁伪装沿线运动。
 - 当确认方案包含 `GitHubRepoCard` 时，优先用文字和矢量/CSS 元素实现，不要把参考图直接当作扁平截图贴上去，除非用户明确要求复用截图。卡片必须暴露可编辑字段：用户名、项目名、项目功能、公开/私有标记、语言和语言占比。
 - 当确认方案包含手势锚点时，优先把匹配素材或动画放到手势推导区域，再应用记录的安全偏移。除非手势位置会挡脸、挡嘴、挡字幕或关键手部动作，否则不要改成通用居中布局。
 - 使用 `references/visual-quality-system.md` 作为字体、组件、层级、间距和动效质感的实现质量标准。
@@ -508,16 +510,18 @@ Required checks:
 3. Inspect the stills before showing Studio. Confirm that the frame is not blank, the base video is visible, the packaging layer is above the video, and at least one expected overlay is visible at each sampled cue time.
 4. Verify subtitle keyword timing: an overlay tied to a keyword must be absent before its cue and visible at or just after its cue. If exact pre/post frame checks are too expensive, check at least the cue frame and one nearby later frame.
 5. Check typography, face/mouth safety, subtitle safety, card density, glow intensity, material layering, semantic border color, and global-progress-bar violations.
-6. If any sampled frame is blank, missing overlays, hidden behind video, off-canvas, blocking the face/mouth, or showing the wrong keyword timing, fix the issue and rerun the relevant still checks before opening Studio.
-7. Only after silent QA passes, open Remotion Studio and give the user the local Studio URL. Summarize only pass/fail and key fixes; do not require the user to manually discover basic visibility bugs.
+6. For connector/path scenes, sample at least two frames during the dot loop and verify the glow dot sits on the rendered line path, not beside it, at endpoints only, or on a straight shortcut.
+7. If any sampled frame is blank, missing overlays, hidden behind video, off-canvas, blocking the face/mouth, showing the wrong keyword timing, or showing a glow dot that does not follow the generated path, fix the issue and rerun the relevant still checks before opening Studio.
+8. Only after silent QA passes, open Remotion Studio and give the user the local Studio URL. Summarize only pass/fail and key fixes; do not require the user to manually discover basic visibility bugs.
 
 1. 运行项目可用检查，例如 `npm run typecheck`、`npm run build` 或 `npm run compositions`。
 2. 用 `remotion still` 抽取至少 3 个关键静帧：一个早期包装出现点、一个中段关键词/卡片点、一个后段风险或 payoff 点。若合成里有很多关键词 cue，优先抽 5 帧。
 3. 打开 Studio 前先检查这些静帧。确认画面不是空白、底层视频可见、包装层在视频上方，并且每个抽样 cue 时间点至少有一个预期包装元素可见。
 4. 检查字幕关键词时间：绑定关键词的包装元素在 cue 前应不可见，在 cue 当帧或稍后应可见。如果逐个前后帧成本太高，至少检查 cue 帧和一个稍后的邻近帧。
 5. 检查字体、脸部/嘴部安全、字幕安全、卡片密度、发光强度、材质层次、语义描边颜色和全局进度条违规。
-6. 如果任何抽样帧空白、包装缺失、被视频盖住、跑到画面外、挡脸/挡嘴，或关键词时间错误，先修复并重新跑相关静帧检查，再打开 Studio。
-7. 静默自检通过后，才打开 Remotion Studio 并给用户本地 Studio URL。只向用户总结通过/失败和关键修复点；不要让用户手动发现基础可见性问题。
+6. 对连线/path 场景，至少抽查光点循环中的两个帧，确认发光点贴在已渲染线条路径上，而不是偏在线外、只停在端点，或走两点之间的直线捷径。
+7. 如果任何抽样帧空白、包装缺失、被视频盖住、跑到画面外、挡脸/挡嘴、关键词时间错误，或光点没有沿生成路径运动，先修复并重新跑相关静帧检查，再打开 Studio。
+8. 静默自检通过后，才打开 Remotion Studio 并给用户本地 Studio URL。只向用户总结通过/失败和关键修复点；不要让用户手动发现基础可见性问题。
 
 ### 6. Export Only After Final Approval / 最终确认后才导出
 
@@ -574,6 +578,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not ignore current-project content assets. If an asset filename, path segment, or filename-token alias matches a subtitle keyword, use it at that keyword cue or explicitly explain why it is unsafe or unsuitable. Do not use image content, OCR, labels inferred from pixels, or subject classification for matching.
 - Do not search for packaging assets in the uploaded video's folder by default. Use the current Codex project/workspace as the default asset source; only use the video folder if the user explicitly designates it as an asset source.
 - Do not place gesture-driven assets in a generic center position. If pointing, dragging, swiping, circling, or line-drawing gestures are visible, use the gesture region as the preferred placement anchor with a safety offset.
+- Do not fake connector glow-dot motion with endpoint blinking, straight-line shortcuts, or fixed x/y offsets; it must follow the generated SVG/path.
 - Do not silently switch from Remotion + GSAP to another tool when setup is inconvenient.
 - Do not overwrite the original or edited source video.
 
@@ -592,5 +597,6 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 不要忽略当前项目内容素材。只要素材文件名、路径片段或文件名分词别名匹配字幕关键词，就在该关键词 cue 使用，或明确说明为什么不安全/不适合。不要用图片内容、OCR、从像素推断的标签或主体分类做匹配。
 - 不要默认去用户上传视频所在文件夹里找包装素材。默认素材来源是当前 Codex 项目/工作区；只有用户明确指定时，才把视频所在目录当素材来源。
 - 不要把手势触发的素材放到通用居中位置。如果画面中有指、拖、划、圈选或画线手势，优先使用手势区域作为放置锚点，并做安全偏移。
+- 不要用端点闪烁、两点直线捷径或固定 x/y 偏移伪装连线光点运动；光点必须沿实际生成的 SVG/path 运动。
 - 不要因为环境麻烦就偷偷换掉 Remotion + GSAP。
 - 不要覆盖原始视频或剪辑后源视频。
