@@ -1,8 +1,8 @@
 # video-auto-edit
 
-`video-auto-edit` is a Codex skill for a confirmation-gated video workflow: optional fine-cut editing, SRT/timing generation, subtitle-keyword-driven visual packaging, Remotion + GSAP animation preview, and final export after user approval.
+`video-auto-edit` is a Codex skill for a confirmation-gated video workflow: optional fine-cut editing, SRT/timing generation, subtitle-keyword-anchored but semantic-group-driven visual packaging, Remotion + GSAP animation preview, and final export after user approval.
 
-`video-auto-edit` 是一个 Codex skill，用于把视频流程固定成：可选精剪、生成 SRT/时间包、按语音/字幕关键词触发视觉包装、用 Remotion + GSAP 生成动效预览，并在用户确认后再导出。
+`video-auto-edit` 是一个 Codex skill，用于把视频流程固定成：可选精剪、生成 SRT/时间包、以语音/字幕关键词作为锚点但按语义组控制生命周期的视觉包装、用 Remotion + GSAP 生成动效预览，并在用户确认后再导出。
 
 ## Install / 安装
 
@@ -80,7 +80,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 
 - Do not edit, package, render, or export before the matching confirmation step.
 - Generate independent SRT by default; do not burn subtitles unless explicitly requested.
-- Trigger all packaging animations from subtitle/voice keyword cue points.
+- Anchor packaging animation entrances and emphasis to subtitle/voice keyword cue points, but keep related cards alive by semantic group rather than splitting every word into separate segments.
 - Use matching current Codex project assets by default when asset filenames, path segment names, or filename-token aliases match subtitle keywords.
 - Do not match assets by understanding image content, OCR, inferred labels, or subject classification.
 - Do not search the uploaded video's source folder for packaging assets unless the user explicitly designates it as an asset source.
@@ -93,7 +93,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 
 - 未到对应确认节点前，不剪辑、不包装、不渲染、不导出。
 - 默认生成独立 SRT；除非用户明确要求，否则不烧录字幕。
-- 所有包装动效必须按语音/字幕关键词落点触发。
+- 包装动效入场和强调以语音/字幕关键词落点作为锚点，但相关卡片按语义组控制停留和退场，不要每个词都切成独立段落。
 - 默认使用当前 Codex 项目素材；当素材文件名、路径片段名称或文件名分词别名匹配字幕关键词时，优先使用该素材。
 - 不要通过理解图片内容、OCR、推断标签或主体分类来匹配素材。
 - 除非用户明确指定，否则不要去用户上传视频所在源文件夹里找包装素材。

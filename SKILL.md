@@ -175,9 +175,9 @@ Save the normalized bundle as `timing/<video-name>-packaging-timing.json` or `pa
 
 将归一化后的时间包保存为 `timing/<video-name>-packaging-timing.json` 或 `packaging-timing-<video-name>.json`，然后交给 `$video-use`。`$video-use` 必须基于这个时间包做包装方案，不要临时拼接零散的转写、SRT 或 EDL 路径。
 
-All packaging animations must be triggered by subtitle keyword cue points. Prefer exact word-level keyword start times from `word_timestamps_path`. If only segment-level Whisper timing is available, estimate the keyword trigger inside the matching subtitle segment by text position and nearby silence/speech energy, then mark the cue confidence as estimated. Do not trigger effects only from evenly divided scene times or generic segment start times unless the segment has no usable keyword; in that case write `triggerKeyword: none` and explain why.
+Packaging animations must be anchored to subtitle keyword cue points, but the design must be grouped by semantic beats, clauses, or information groups instead of blindly cutting a new segment for every word. Prefer exact word-level keyword start times from `word_timestamps_path` for entrance or emphasis timing. If only segment-level Whisper timing is available, estimate the keyword trigger inside the matching subtitle segment by text position and nearby silence/speech energy, then mark the cue confidence as estimated. Do not trigger effects only from evenly divided scene times or generic segment start times unless the segment has no usable keyword; in that case write `triggerKeyword: none` and explain why. Do not dismiss or exit a related card just because the next related keyword appears; keep related cards visible until the sentence, clause, list, comparison, or workflow step is semantically complete.
 
-所有包装动效都必须按字幕关键词落点触发。优先使用 `word_timestamps_path` 中精确的词级关键词开始时间。如果只有 Whisper 分段时间，则根据关键词在字幕文本中的位置和附近静默/语音能量，在对应字幕段内估算触发点，并把 cue 置信度标记为 estimated。不要只按均分场景时间或泛泛的段落开始时间触发动效；除非该段没有可用关键词，此时必须写 `triggerKeyword: none` 并说明原因。
+包装动效必须锚定字幕关键词落点，但设计分段要按语义节奏、从句或信息组来判断，不要机械地每个词都切一个新段。优先使用 `word_timestamps_path` 中精确的词级关键词开始时间作为入场或强调时间。如果只有 Whisper 分段时间，则根据关键词在字幕文本中的位置和附近静默/语音能量，在对应字幕段内估算触发点，并把 cue 置信度标记为 estimated。不要只按均分场景时间或泛泛的段落开始时间触发动效；除非该段没有可用关键词，此时必须写 `triggerKeyword: none` 并说明原因。不要因为下一个相关关键词出现，就让前一个相关卡片立即退场；相关卡片应保留到句子、从句、清单、对比或工作流步骤语义完成后再退场。
 
 By default, search the current Codex project/workspace for packaging assets before designing overlays. Include common image and element formats such as `.png`, `.jpg`, `.jpeg`, `.webp`, `.svg`, `.gif`, `.json` animation data, and clearly named asset folders. Exclude dependency/build/cache folders such as `node_modules`, `.git`, `dist`, `build`, `.next`, `out`, `exports`, and rendered video output folders. Do not search inside the uploaded video's project/source folder just because the video came from there. Match discovered assets to subtitle keywords by comparing only asset filenames, filename stems, path segment names, and filename-token aliases using exact and fuzzy matching. Do not inspect image contents, do not OCR visible text, and do not classify the image subject for matching. If an asset name is identical or semantically similar to a subtitle keyword or phrase, show that asset at the keyword cue time unless it would block the face, mouth, subtitles, or the approved style. If multiple assets match, choose the most specific filename match and record the reason. If no filename match exists, continue with generated cards.
 
@@ -369,6 +369,7 @@ The design draft must include, for every animation segment:
 - Typography: exact `fontFamily`, weight, size range, line height, and fallback.
 - Component: one component from `references/visual-quality-system.md`, such as `KeywordChip`, `TerminalCard`, or `StepListCard`.
 - Quality risk: state whether this segment may block face, mouth, subtitles, become too dense, or suffer font fallback.
+- Semantic group lifecycle: state whether this segment starts, updates, coexists with, or exits an information group, and when related cards should remain visible together.
 
 - 时间节点：开始和结束时间。
 - 触发关键词落点：准确的字幕关键词、cue 时间、时间来源和置信度。
@@ -384,6 +385,7 @@ The design draft must include, for every animation segment:
 - 字体：具体 `fontFamily`、字重、字号区间、行高和 fallback。
 - 组件：从 `references/visual-quality-system.md` 选择一个组件，例如 `KeywordChip`、`TerminalCard` 或 `StepListCard`。
 - 质量风险：说明该段是否可能挡脸、挡嘴、挡字幕、信息过密或字体 fallback。
+- 语义组生命周期：说明该段是在开始、更新、共存还是结束一个信息组，以及相关卡片应共存到什么时候。
 
 The packaging motion design draft must use this exact Markdown block format. Do not replace it with a table, a loose paragraph, or a general style summary:
 
@@ -405,6 +407,7 @@ The packaging motion design draft must use this exact Markdown block format. Do 
 字体：Source Han Sans Heavy / Inter Black，56-72px，line-height 0.96，fallback PingFang SC Heavy。
 组件：PremiumKeywordPanel + KeywordChip。
 质量风险：注意不要变成整句大字；标题卡不得压到脸部或字幕区。
+语义组生命周期：开始“发布信息”组；本卡保留到 1.55s，与下一段模式芯片不重叠。
 
 1.55-3.20s
 触发关键词：推理模式 @ 1.82s，source=word_timestamps，confidence=exact
@@ -419,6 +422,7 @@ The packaging motion design draft must use this exact Markdown block format. Do 
 字体：Inter ExtraBold / PingFang SC Semibold，28-36px，line-height 1.18。
 组件：RemotionModularCard / KeywordChip。
 质量风险：两枚芯片不要同时遮挡人物手势；边框发光不能过曝。
+语义组生命周期：开始“模式说明”组；两枚芯片在同一组内共存到 3.20s，再一起收纳或退场。
 
 3.20-4.60s
 触发关键词：开源仓库 @ 3.42s，source=word_timestamps，confidence=exact
@@ -433,11 +437,12 @@ The packaging motion design draft must use this exact Markdown block format. Do 
 字体：Inter Black / Source Han Sans Heavy，title 34-44px，meta 22-28px，mono/language 20-26px。
 组件：GitHubRepoCard。
 质量风险：语言条不能做成整条视频进度条；只表示项目语言占比。
+语义组生命周期：开始“仓库说明”组；GitHub 卡保持到该句结束，如果后续还在解释同一仓库，则继续保留并只更新高亮。
 ```
 
-Each segment must start with a precise `start-end` time range and must include `触发关键词`、`画面文字`、`动效`、`运动`、`布局`、`卡片材质`、`匹配素材`、`手势锚点`、`已应用的风格约束`、`字体`、`组件`、`质量风险`. If a segment has no visible overlay, write `画面文字：无` and explain why no overlay should appear. The visible text must be short and concrete; do not use full transcript sentences as on-screen overlay text unless the user explicitly requests it. If a matching asset exists, the plan must either use it or explicitly explain why it is not used. If a GitHub repository reference image or asset matches the cue, use `GitHubRepoCard` and include owner, project name, project function, and languages.
+Each segment must start with a precise `start-end` time range and must include `触发关键词`、`画面文字`、`动效`、`运动`、`布局`、`卡片材质`、`匹配素材`、`手势锚点`、`已应用的风格约束`、`字体`、`组件`、`质量风险`、`语义组生命周期`. If a segment has no visible overlay, write `画面文字：无` and explain why no overlay should appear. The visible text must be short and concrete; do not use full transcript sentences as on-screen overlay text unless the user explicitly requests it. If a matching asset exists, the plan must either use it or explicitly explain why it is not used. If a GitHub repository reference image or asset matches the cue, use `GitHubRepoCard` and include owner, project name, project function, and languages. If two or more cards explain the same clause, comparison, list, or workflow, the plan must keep them on screen together until the semantic group finishes, then exit or compress them as a group.
 
-每个段落必须以精确的 `开始-结束` 时间范围开头，并且必须包含 `触发关键词`、`画面文字`、`动效`、`运动`、`布局`、`卡片材质`、`匹配素材`、`手势锚点`、`已应用的风格约束`、`字体`、`组件`、`质量风险`。如果某段不应出现包装元素，写 `画面文字：无` 并说明不出现动效的原因。画面文字必须短而具体；除非用户明确要求，不要把完整口播句子直接作为包装大字。如果存在匹配素材，方案必须使用它，或明确说明为什么不用。如果 GitHub 仓库参考图或素材匹配到当前 cue，必须使用 `GitHubRepoCard`，并包含用户名、项目名、项目功能和语言。
+每个段落必须以精确的 `开始-结束` 时间范围开头，并且必须包含 `触发关键词`、`画面文字`、`动效`、`运动`、`布局`、`卡片材质`、`匹配素材`、`手势锚点`、`已应用的风格约束`、`字体`、`组件`、`质量风险`、`语义组生命周期`。如果某段不应出现包装元素，写 `画面文字：无` 并说明不出现动效的原因。画面文字必须短而具体；除非用户明确要求，不要把完整口播句子直接作为包装大字。如果存在匹配素材，方案必须使用它，或明确说明为什么不用。如果 GitHub 仓库参考图或素材匹配到当前 cue，必须使用 `GitHubRepoCard`，并包含用户名、项目名、项目功能和语言。如果两张或多张卡片解释同一个从句、对比、清单或工作流，方案必须让它们共存到该语义组结束，再作为一组退场或收纳。
 
 Present the draft to the user and wait for approval. Do not implement Remotion before approval.
 
@@ -457,6 +462,7 @@ Implementation requirements:
 - Use GSAP for animation easing/timeline calculations or element motion logic.
 - Use the approved packaging plan as the source of truth.
 - Drive overlay entrances, highlights, bounces, clicks, card collisions, and exits from the approved subtitle keyword cue times. Convert cue seconds to Remotion frames and use those frames as animation anchors.
+- Preserve the approved semantic group lifecycle. Do not unmount or fade out a card only because the next keyword cue starts if the approved plan says the cards are related or should coexist.
 - When the approved plan includes a matched asset, import or copy that image/element into the Remotion project asset folder and display it at the approved keyword cue. Preserve aspect ratio, clamp max size to the safe area, and use the approved style's card/frame treatment when needed.
 - When implementing connector, arrow, route, or flow-line effects, render the line as an SVG path and move the glow dot along that exact generated path. Use `getPointAtLength`, GSAP MotionPath, or equivalent path sampling from the same path data. Do not fake the motion with endpoint interpolation, fixed x/y animation, or blinking at the line ends.
 - When the approved plan includes `GitHubRepoCard`, implement it with text and vector/CSS elements rather than using the reference image as a flat bitmap unless the user explicitly asks for screenshot reuse. The card must expose editable fields for owner, repo, function, visibility, languages, and language percentages.
@@ -474,6 +480,7 @@ Implementation requirements:
 - 用 GSAP 负责动画缓动、时间线计算或元素运动逻辑。
 - 以用户确认的包装方案为唯一实现依据。
 - 按已确认方案中的字幕关键词落点驱动包装元素入场、高亮、弹跳、点击、卡片碰撞和退场。将 cue 秒数转换成 Remotion 帧，并以这些帧作为动画锚点。
+- 保留已确认方案中的语义组生命周期。如果方案说明卡片相关或需要共存，不要仅因为下一个关键词 cue 开始就卸载或淡出前一张卡。
 - 当确认方案包含匹配素材时，把该图片/元素导入或复制到 Remotion 项目素材目录，并在对应关键词 cue 展示。保持原始比例，把最大尺寸限制在安全区内，必要时套用已选风格的卡片/边框处理。
 - 实现连线、箭头、路径或流程线动效时，线条必须是 SVG path，光点必须沿这条实际生成的 path 运动。使用同一份 path 数据的 `getPointAtLength`、GSAP MotionPath 或等价路径采样方法；不要用端点插值、固定 x/y 动画或端点闪烁伪装沿线运动。
 - 当确认方案包含 `GitHubRepoCard` 时，优先用文字和矢量/CSS 元素实现，不要把参考图直接当作扁平截图贴上去，除非用户明确要求复用截图。卡片必须暴露可编辑字段：用户名、项目名、项目功能、公开/私有标记、语言和语言占比。
@@ -572,6 +579,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not skip the packaging timing bundle after fine-cut or user-provided edited-video handoff.
 - Do not treat user-provided SRT as word-level keyword timing unless it is accompanied by verified word-level timestamps.
 - Do not trigger every animation from generic scene starts, equal time slices, or hand-picked decorative timings; use subtitle keyword cue points.
+- Do not split every word into a separate animation segment. Use keyword cues as anchors, then decide card lifetime by semantic group completion.
 - Do not generate flat single-layer cards. Cards need glass material, gradient, semantic border, inner/outer shadows, icon container, and explicit typography hierarchy.
 - Do not use unselected optional styles. Default to `Remotion Native Material Cards`; use `Holographic Glass HUD`, `Frosted Glass Packaging`, or `Reference HUD Pattern` only when explicitly selected.
 - Do not ignore reference image(s) when the user provides them as the custom style source; extract a style brief first.
@@ -591,6 +599,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 精剪或用户提供成片交接后，不要跳过包装时间包。
 - 不要把用户提供的 SRT 当作词级关键词时间，除非同时有已验证的词级时间戳。
 - 不要用泛泛的场景开始时间、均分时间片或手选装饰时间触发所有动效；必须使用字幕关键词落点。
+- 不要把每个词都切成独立动效段。关键词只作为锚点，卡片生命周期要根据语义组是否完成来判断。
 - 不要生成单层扁平卡片。卡片需要玻璃材质、渐变、语义描边、内外阴影、图标容器和明确字体层级。
 - 不要混用未被选择的可选内置风格。默认使用 `Remotion Native Material Cards / Remotion 原生材质卡片`；只有明确选择时才使用 `Holographic Glass HUD / 全息玻璃 HUD`、`Frosted Glass Packaging / 毛玻璃包装` 或 `Reference HUD Pattern / 参考 HUD 信息图`。
 - 用户提供参考图片作为自定义风格来源时，不要忽略图片；必须先提取风格 brief。
