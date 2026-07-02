@@ -1,8 +1,8 @@
-# video-auto-edit
+# auto-video-edit
 
-`video-auto-edit` is a Codex skill for a confirmation-gated video workflow: optional fine-cut editing, SRT/timing generation, subtitle-keyword-anchored but semantic-group-driven visual packaging, Remotion + GSAP animation preview, and final export after user approval.
+`auto-video-edit` is a Codex skill for a confirmation-gated video workflow: optional fine-cut editing, SRT/timing generation, subtitle-keyword-anchored but semantic-group-driven visual packaging, Remotion + GSAP animation preview, and final export after user approval.
 
-`video-auto-edit` 是一个 Codex skill，用于把视频流程固定成：可选精剪、生成 SRT/时间包、以语音/字幕关键词作为锚点但按语义组控制生命周期的视觉包装、用 Remotion + GSAP 生成动效预览，并在用户确认后再导出。
+`auto-video-edit` 是一个 Codex skill，用于把视频流程固定成：可选精剪、生成 SRT/时间包、以语音/字幕关键词作为锚点但按语义组控制生命周期的视觉包装、用 Remotion + GSAP 生成动效预览，并在用户确认后再导出。
 
 ## Install / 安装
 
@@ -11,7 +11,7 @@ Install with the Codex skill installer:
 使用 Codex skill 安装器：
 
 ```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --repo DannyZZ2/auto-video-edit --path . --name video-auto-edit
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --repo DannyZZ2/auto-video-edit --path . --name auto-video-edit
 ```
 
 Manual install is also possible:
@@ -19,12 +19,12 @@ Manual install is also possible:
 也可以手动安装：
 
 ```bash
-git clone https://github.com/DannyZZ2/auto-video-edit.git ~/.codex/skills/video-auto-edit
+git clone https://github.com/DannyZZ2/auto-video-edit.git ~/.codex/skills/auto-video-edit
 ```
 
-The GitHub repository is named `auto-video-edit`; the installed skill name remains `video-auto-edit` for compatibility with existing `$video-auto-edit` prompts.
+The GitHub repository is named `auto-video-edit`; the installed skill name remains `auto-video-edit` for compatibility with existing `$auto-video-edit` prompts.
 
-GitHub 仓库名是 `auto-video-edit`；安装后的 skill 名称仍保留 `video-auto-edit`，以兼容现有 `$video-auto-edit` 调用方式。
+GitHub 仓库名是 `auto-video-edit`；安装后的 skill 名称仍保留 `auto-video-edit`，以兼容现有 `$auto-video-edit` 调用方式。
 
 ## Requirements / 依赖
 
