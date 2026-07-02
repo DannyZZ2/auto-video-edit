@@ -1,9 +1,9 @@
 ---
-name: video-auto-edit
+name: auto-video-edit
 description: Use when the user wants a reusable workflow for video editing decisions, subtitle-aligned visual packaging, keyword card animations, Remotion Studio preview, and final export using Remotion plus GSAP.
 ---
 
-# video-auto-edit
+# auto-video-edit
 
 # 视频自动剪辑包装工作流
 

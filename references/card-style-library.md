@@ -1,7 +1,7 @@
 # 暗色诊断 HUD 风格库 / Dark Diagnostic HUD Style Library
 
-> 用途：`$video-auto-edit` 的唯一内置风格库。旧风格已移除；生成包装时只能从下面的新风格族中选择。
-> Purpose: the only built-in style library for `$video-auto-edit`. Old styles are removed; packaging generation may only use the new style family below.
+> 用途：`$auto-video-edit` 的唯一内置风格库。旧风格已移除；生成包装时只能从下面的新风格族中选择。
+> Purpose: the only built-in style library for `$auto-video-edit`. Old styles are removed; packaging generation may only use the new style family below.
 
 ## 内置风格策略 / Built-In Style Policy
 

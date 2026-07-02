@@ -4,9 +4,9 @@
 
 **Dark Diagnostic HUD / 暗色诊断 HUD**
 
-这是 `$video-auto-edit` 的唯一默认包装风格。它来自已确认的参考视频效果：暗调实拍或屏幕录制作为底层画面，上方叠加像 AI 工具实时体检、扫描、评分和输出报告的 HUD 卡片。
+这是 `$auto-video-edit` 的唯一默认包装风格。它来自已确认的参考视频效果：暗调实拍或屏幕录制作为底层画面，上方叠加像 AI 工具实时体检、扫描、评分和输出报告的 HUD 卡片。
 
-This is the only default packaging style for `$video-auto-edit`. It is based on the approved reference-video effect: dark talking-head or screen-recording footage with HUD overlays that feel like an AI tool scanning, scoring, auditing, and reporting in real time.
+This is the only default packaging style for `$auto-video-edit`. It is based on the approved reference-video effect: dark talking-head or screen-recording footage with HUD overlays that feel like an AI tool scanning, scoring, auditing, and reporting in real time.
 
 ## 核心气质 / Core Feel
 

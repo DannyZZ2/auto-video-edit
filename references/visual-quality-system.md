@@ -1,7 +1,7 @@
 # 视觉质量系统 / Visual Quality System
 
-> 用途：约束 `$video-auto-edit` 的视频包装质感，重点解决字体普通、卡片廉价、层级不清、遮挡主体和动效过散的问题。  
-> Purpose: constrain `$video-auto-edit` packaging quality, especially typography, card polish, hierarchy, subject safety, and motion consistency.
+> 用途：约束 `$auto-video-edit` 的视频包装质感，重点解决字体普通、卡片廉价、层级不清、遮挡主体和动效过散的问题。
+> Purpose: constrain `$auto-video-edit` packaging quality, especially typography, card polish, hierarchy, subject safety, and motion consistency.
 
 ## 核心原则 / Core Principles
 

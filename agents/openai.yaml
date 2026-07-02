@@ -1,4 +1,4 @@
 interface:
-  display_name: "video-auto-edit"
+  display_name: "auto-video-edit"
   short_description: "剪辑确认到暗色诊断 HUD 动画包装预览"
-  default_prompt: "Use $video-auto-edit to edit, subtitle, visually package with the 5-style Dark Diagnostic HUD family, preview, and export my video with Remotion and GSAP."
+  default_prompt: "Use $auto-video-edit to edit, subtitle, visually package with the 5-style Dark Diagnostic HUD family, preview, and export my video with Remotion and GSAP."
