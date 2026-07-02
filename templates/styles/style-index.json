@@ -1,0 +1,73 @@
+{
+  "version": "1.0.0",
+  "defaultStyleId": "dark-diagnostic-hud",
+  "requiredFilesPerStyle": [
+    "tokens.json",
+    "theme.ts",
+    "components.tsx",
+    "example.tsx",
+    "agent-prompt.md"
+  ],
+  "styles": [
+    {
+      "id": "dark-diagnostic-hud",
+      "displayName": "Dark Diagnostic HUD",
+      "zhName": "暗色诊断 HUD",
+      "aliases": ["default", "diagnostic hud", "dark hud", "ai analysis", "暗色诊断", "默认风格"],
+      "directory": "templates/styles/dark-diagnostic-hud",
+      "useWhen": "AI analysis, diagnostic review, publishing checks, scoring, workflow automation, and tool-running moments.",
+      "avoidWhen": "The segment only needs a soft lightweight note or a non-technical emotional caption.",
+      "primaryComponents": ["HudLayer", "DiagnosticPanel", "StatusChip", "ScoreCard", "HudCorners"],
+      "motionProfile": "Precise panel entrance, weak glow pulse, status chip update, restrained scan/progress effects inside cards only.",
+      "safeZoneRule": "Keep panels outside face, mouth, active hand gestures, and subtitle-safe area."
+    },
+    {
+      "id": "signal-desk-overlay",
+      "displayName": "Signal Desk Overlay",
+      "zhName": "标准重点弹窗",
+      "aliases": ["overlay demo", "standard popup", "signal desk", "重点弹窗", "卡片弹窗"],
+      "directory": "templates/styles/signal-desk-overlay",
+      "useWhen": "General keyword popups, process callouts, quote cards, skill/file callouts, and short explanatory overlays.",
+      "avoidWhen": "The segment needs dense metrics, terminal execution, or very soft glass-only treatment.",
+      "primaryComponents": ["KeyPointPopup", "ProcessPopup", "QuotePopup", "SkillDropPopup", "StatPopup", "CalloutLabel"],
+      "motionProfile": "Keyword-timed pop, slide, spring settle, short emphasis pulse, and semantic group hold.",
+      "safeZoneRule": "Use side or upper-safe placement and avoid large center cards over faces or subtitles."
+    },
+    {
+      "id": "precision-hud-cards",
+      "displayName": "Precision HUD Cards",
+      "zhName": "精密 HUD 卡片",
+      "aliases": ["precision hud", "metrics", "status cards", "精密", "指标卡", "流程步骤"],
+      "directory": "templates/styles/precision-hud-cards",
+      "useWhen": "Precise status cards, metrics, comparisons, workflow steps, and compact engineering-like explanations.",
+      "avoidWhen": "The message is narrative, soft, or only needs one lightweight statement.",
+      "primaryComponents": ["PrecisionHudCard", "PrecisionHudExampleLayer"],
+      "motionProfile": "Tight row stagger, 1px border pulse, numeric/progress growth, and small metadata updates.",
+      "safeZoneRule": "Use compact side placement and keep grids away from face, mouth, gestures, and subtitles."
+    },
+    {
+      "id": "diagnostic-glass-cards",
+      "displayName": "Diagnostic Glass Cards",
+      "zhName": "诊断玻璃卡片",
+      "aliases": ["glass", "frosted glass", "soft card", "玻璃质感", "半透明", "轻量弹窗"],
+      "directory": "templates/styles/diagnostic-glass-cards",
+      "useWhen": "Lightweight overlays, soft key-point cards, side prompts, feature summaries, and ending skill/file callouts.",
+      "avoidWhen": "The segment needs dense logs, terminal rows, hard metrics, or strong diagnostic dashboard treatment.",
+      "primaryComponents": ["GlassCard", "GlassExampleLayer"],
+      "motionProfile": "Soft slide/fade, subtle rim highlight, local shine on entrance, and calm hold.",
+      "safeZoneRule": "Keep cards airy and outside subtitle, face, and mouth safe zones."
+    },
+    {
+      "id": "terminal-agent-hud",
+      "displayName": "Terminal Agent HUD",
+      "zhName": "终端 Agent HUD",
+      "aliases": ["terminal", "agent", "command", "verification", "终端", "命令", "执行过程", "agent执行"],
+      "directory": "templates/styles/terminal-agent-hud",
+      "useWhen": "Prompt, command, generation, verification, export, skill packaging, and AI agent execution moments.",
+      "avoidWhen": "The segment is not about a process, command, generation state, verification state, or automation step.",
+      "primaryComponents": ["TerminalAgentCard", "TerminalAgentExampleLayer"],
+      "motionProfile": "Short type-in, status dot pulse, row completion check, and restrained command-card updates.",
+      "safeZoneRule": "Use compact terminal cards; never create full-screen code rain or long real terminal dumps."
+    }
+  ]
+}

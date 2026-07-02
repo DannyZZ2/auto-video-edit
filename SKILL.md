@@ -84,6 +84,7 @@ Required style references:
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`: implementation prompt for agents generating this exact style in Remotion.
 - `references/visual-quality-system.md`: quality bar for typography, hierarchy, materials, safe zones, and QA.
 - `references/keyword-animation-effects.md`: keyword-triggered animation options.
+- `templates/styles/style-index.json` and `templates/styles/STYLE_INDEX.md`: built-in style IDs, aliases, routing rules, required files, and compatibility notes.
 - `templates/styles/dark-diagnostic-hud/`: complete default style pack with tokens, theme, components, example, and agent prompt.
 - `templates/styles/signal-desk-overlay/`: complete standard popup style pack with tokens, theme, component exports, example, and agent prompt.
 - `templates/styles/precision-hud-cards/`: complete precision HUD variant pack with tokens, theme, components, example, and agent prompt.
@@ -96,6 +97,7 @@ Required style references:
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`：让 Agent 在 Remotion 中复刻该风格的实现提示。
 - `references/visual-quality-system.md`：字体、层级、材质、安全区和 QA 的质量标准。
 - `references/keyword-animation-effects.md`：按字幕关键词触发的动效选项。
+- `templates/styles/style-index.json` 和 `templates/styles/STYLE_INDEX.md`：内置风格 ID、别名、路由规则、必需文件和兼容说明。
 - `templates/styles/dark-diagnostic-hud/`：完整默认风格包，包含 tokens、theme、components、example 和 agent prompt。
 - `templates/styles/signal-desk-overlay/`：完整标准弹窗风格包，包含 tokens、theme、component exports、example 和 agent prompt。
 - `templates/styles/precision-hud-cards/`：完整精密 HUD 变体包，包含 tokens、theme、components、example 和 agent prompt。
@@ -109,6 +111,7 @@ Style preservation rules:
 
 - Do not rely on a short prose summary when the template or token file exists. Load the source file and reuse its values.
 - Do not invent a new palette, border radius, typography scale, or entrance timing for a built-in style unless the approved plan explicitly overrides it.
+- Before resolving a built-in style name, read `templates/styles/style-index.json` or `templates/styles/STYLE_INDEX.md`; use the canonical `id` and directory from the index.
 - When implementing any built-in style, first load the matching `templates/styles/<style-name>/tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md`.
 - When implementing `Signal Desk Overlay`, use `templates/styles/signal-desk-overlay/` as the primary contract and `templates/remotion-overlay-kit/` as the shared component source.
 - When implementing `Dark Diagnostic HUD`, use `templates/styles/dark-diagnostic-hud/`, `dark-diagnostic-hud-style-system.md`, and `card-style-library.md` as the contract.
@@ -116,6 +119,7 @@ Style preservation rules:
 
 - 有模板或 token 文件时，不要只凭简短文字总结实现；必须加载源文件并复用其中数值。
 - 除非已确认方案明确覆盖，否则不要为内置风格发明新的配色、圆角、字号层级或入场时长。
+- 解析内置风格名称前，先读取 `templates/styles/style-index.json` 或 `templates/styles/STYLE_INDEX.md`；使用索引中的标准 `id` 和目录。
 - 实现任何内置风格时，先加载匹配的 `templates/styles/<style-name>/tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md`。
 - 实现 `Signal Desk Overlay / 标准重点弹窗` 时，以 `templates/styles/signal-desk-overlay/` 为主契约，并把 `templates/remotion-overlay-kit/` 作为共享组件来源。
 - 实现 `Dark Diagnostic HUD / 暗色诊断 HUD` 时，以 `templates/styles/dark-diagnostic-hud/`、`dark-diagnostic-hud-style-system.md` 和 `card-style-library.md` 为契约。
@@ -393,9 +397,9 @@ The main agent's role in this step is to prepare inputs for `$video-use`, includ
 
 此步骤中，主 Agent 的职责是为 `$video-use` 准备输入，包括包装时间包、已选择的风格 Markdown 或图片风格提取 brief、可用素材清单、可检测到的手势 cue、`references/visual-quality-system.md`，以及关键词动效参考。手势 cue 提取属于包装方案设计前置步骤，不是设计后再补。请求 `$video-use` 出方案前，必须确认时间包存在，并且指向最终剪辑视频。包装动效设计稿必须由 `$video-use` 返回。主 Agent 可以整理或转述该设计稿给用户，但不得用自己另写的包装方案替代它。
 
-Before drafting the packaging plan, read `references/visual-quality-system.md`, `references/card-style-library.md`, `references/keyword-animation-effects.md`, `references/dark-diagnostic-hud-style-system.md`, and `references/dark-diagnostic-hud-remotion-agent-prompt.md`. Then read the matching complete style pack under `templates/styles/<style-name>/`, including `tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md`. The default built-in style is `Dark Diagnostic HUD`, mapped to `templates/styles/dark-diagnostic-hud/`. The built-in variants map to `templates/styles/signal-desk-overlay/`, `templates/styles/precision-hud-cards/`, `templates/styles/diagnostic-glass-cards/`, and `templates/styles/terminal-agent-hud/`. Use a variant only when the user explicitly requests it or the approved design draft names it. A user-provided Markdown style or reference image may still be used as an explicit external custom style for that task.
+Before drafting the packaging plan, read `references/visual-quality-system.md`, `references/card-style-library.md`, `references/keyword-animation-effects.md`, `references/dark-diagnostic-hud-style-system.md`, `references/dark-diagnostic-hud-remotion-agent-prompt.md`, and `templates/styles/style-index.json` or `templates/styles/STYLE_INDEX.md`. Resolve the canonical style `id` from the index. Then read the matching complete style pack under `templates/styles/<style-name>/`, including `tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md`. The default built-in style is `Dark Diagnostic HUD`, mapped to `templates/styles/dark-diagnostic-hud/`. The built-in variants map to `templates/styles/signal-desk-overlay/`, `templates/styles/precision-hud-cards/`, `templates/styles/diagnostic-glass-cards/`, and `templates/styles/terminal-agent-hud/`. Use a variant only when the user explicitly requests it or the approved design draft names it. A user-provided Markdown style or reference image may still be used as an explicit external custom style for that task.
 
-设计包装方案前，先读取 `references/visual-quality-system.md`、`references/card-style-library.md`、`references/keyword-animation-effects.md`、`references/dark-diagnostic-hud-style-system.md` 和 `references/dark-diagnostic-hud-remotion-agent-prompt.md`。然后读取 `templates/styles/<style-name>/` 下匹配的完整风格包，包括 `tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md`。默认内置风格是 `Dark Diagnostic HUD / 暗色诊断 HUD`，对应 `templates/styles/dark-diagnostic-hud/`。内置变体分别对应 `templates/styles/signal-desk-overlay/`、`templates/styles/precision-hud-cards/`、`templates/styles/diagnostic-glass-cards/` 和 `templates/styles/terminal-agent-hud/`。只有用户明确要求或已确认设计稿指定时才使用变体。用户提供的风格 Markdown 或参考图片仍可作为该任务的外部自定义风格使用。
+设计包装方案前，先读取 `references/visual-quality-system.md`、`references/card-style-library.md`、`references/keyword-animation-effects.md`、`references/dark-diagnostic-hud-style-system.md`、`references/dark-diagnostic-hud-remotion-agent-prompt.md`，以及 `templates/styles/style-index.json` 或 `templates/styles/STYLE_INDEX.md`。先从索引解析标准风格 `id`。然后读取 `templates/styles/<style-name>/` 下匹配的完整风格包，包括 `tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md`。默认内置风格是 `Dark Diagnostic HUD / 暗色诊断 HUD`，对应 `templates/styles/dark-diagnostic-hud/`。内置变体分别对应 `templates/styles/signal-desk-overlay/`、`templates/styles/precision-hud-cards/`、`templates/styles/diagnostic-glass-cards/` 和 `templates/styles/terminal-agent-hud/`。只有用户明确要求或已确认设计稿指定时才使用变体。用户提供的风格 Markdown 或参考图片仍可作为该任务的外部自定义风格使用。
 
 The design draft must include, for every animation segment:
 
@@ -512,7 +516,7 @@ Implementation requirements:
 - Use Remotion for composition structure, video placement, timeline, Studio, and export.
 - Use GSAP for animation easing/timeline calculations or element motion logic.
 - Use the approved packaging plan as the source of truth.
-- Before writing new overlay components, copy or adapt the bundled implementation assets from the matching `templates/styles/<style-name>/` directory. Keep `tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md` together so spacing, radius, shadows, typography, and timing stay consistent.
+- Before writing new overlay components, resolve the built-in style through `templates/styles/style-index.json`, then copy or adapt the bundled implementation assets from the matching `templates/styles/<style-name>/` directory. Keep `tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md` together so spacing, radius, shadows, typography, and timing stay consistent.
 - Drive overlay entrances, highlights, bounces, clicks, card collisions, and exits from the approved subtitle keyword cue times. Convert cue seconds to Remotion frames and use those frames as animation anchors.
 - Preserve the approved semantic group lifecycle. Do not unmount or fade out a card only because the next keyword cue starts if the approved plan says the cards are related or should coexist.
 - When the approved plan includes a matched asset, import or copy that image/element into the Remotion project asset folder and display it at the approved keyword cue. Preserve aspect ratio, clamp max size to the safe area, and use the approved style's card/frame treatment when needed.
@@ -532,7 +536,7 @@ Implementation requirements:
 - 用 Remotion 负责合成结构、视频放置、时间线、Studio 和导出。
 - 用 GSAP 负责动画缓动、时间线计算或元素运动逻辑。
 - 以用户确认的包装方案为唯一实现依据。
-- 写新的 overlay 组件前，先复制或改造匹配的 `templates/styles/<style-name>/` 目录中随 skill 打包的实现资产。保持 `tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md` 一起使用，避免间距、圆角、阴影、字体和动效时间漂移。
+- 写新的 overlay 组件前，先通过 `templates/styles/style-index.json` 解析内置风格，再复制或改造匹配的 `templates/styles/<style-name>/` 目录中随 skill 打包的实现资产。保持 `tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md` 一起使用，避免间距、圆角、阴影、字体和动效时间漂移。
 - 按已确认方案中的字幕关键词落点驱动包装元素入场、高亮、弹跳、点击、卡片碰撞和退场。将 cue 秒数转换成 Remotion 帧，并以这些帧作为动画锚点。
 - 保留已确认方案中的语义组生命周期。如果方案说明卡片相关或需要共存，不要仅因为下一个关键词 cue 开始就卸载或淡出前一张卡。
 - 当确认方案包含匹配素材时，把该图片/元素导入或复制到 Remotion 项目素材目录，并在对应关键词 cue 展示。保持原始比例，把最大尺寸限制在安全区内，必要时套用已选风格的卡片/边框处理。
@@ -637,7 +641,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not split every word into a separate animation segment. Use keyword cues as anchors, then decide card lifetime by semantic group completion.
 - Do not generate flat single-layer cards. Cards need glass material, gradient, semantic border, inner/outer shadows, icon container, and explicit typography hierarchy.
 - Do not use removed or unselected styles. Default to `Dark Diagnostic HUD`; use `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, or `Terminal Agent HUD` only when explicitly selected.
-- Do not ignore bundled style fidelity files. If the built-in style is used, read the matching `references/` files and copy/adapt matching `templates/styles/<style-name>/` code before inventing components.
+- Do not ignore bundled style fidelity files. If the built-in style is used, read `templates/styles/style-index.json`, the matching `references/` files, and copy/adapt matching `templates/styles/<style-name>/` code before inventing components.
 - Do not ignore reference image(s) when the user provides them as the custom style source; extract a style brief first.
 - Do not ignore current-project content assets. If an asset filename, path segment, or filename-token alias matches a subtitle keyword, use it at that keyword cue or explicitly explain why it is unsafe or unsuitable. Do not use image content, OCR, labels inferred from pixels, or subject classification for matching.
 - Do not search for packaging assets in the uploaded video's folder by default. Use the current Codex project/workspace as the default asset source; only use the video folder if the user explicitly designates it as an asset source.
@@ -658,7 +662,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 不要把每个词都切成独立动效段。关键词只作为锚点，卡片生命周期要根据语义组是否完成来判断。
 - 不要生成单层扁平卡片。卡片需要玻璃材质、渐变、语义描边、内外阴影、图标容器和明确字体层级。
 - 不要混用已移除或未被选择的风格。默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`；只有明确选择时才使用 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片` 或 `Terminal Agent HUD / 终端 Agent HUD`。
-- 不要忽略随 skill 打包的风格保真文件。使用内置风格时，先读取匹配的 `references/` 文件，并先复制或改造匹配的 `templates/styles/<style-name>/` 代码，再考虑新写组件。
+- 不要忽略随 skill 打包的风格保真文件。使用内置风格时，先读取 `templates/styles/style-index.json`、匹配的 `references/` 文件，并先复制或改造匹配的 `templates/styles/<style-name>/` 代码，再考虑新写组件。
 - 用户提供参考图片作为自定义风格来源时，不要忽略图片；必须先提取风格 brief。
 - 不要忽略当前项目内容素材。只要素材文件名、路径片段或文件名分词别名匹配字幕关键词，就在该关键词 cue 使用，或明确说明为什么不安全/不适合。不要用图片内容、OCR、从像素推断的标签或主体分类做匹配。
 - 不要默认去用户上传视频所在文件夹里找包装素材。默认素材来源是当前 Codex 项目/工作区；只有用户明确指定时，才把视频所在目录当素材来源。

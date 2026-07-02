@@ -127,6 +127,7 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`: Remotion implementation prompt for the Dark Diagnostic HUD style.
 - `references/visual-quality-system.md`: typography, material, hierarchy, safe-zone, and QA standards.
 - `references/keyword-animation-effects.md`: keyword-triggered motion options.
+- `templates/styles/style-index.json` and `templates/styles/STYLE_INDEX.md`: built-in style IDs, aliases, routing rules, required files, and compatibility notes.
 - `templates/styles/dark-diagnostic-hud/`: complete default style pack with tokens, theme, components, example, and agent prompt.
 - `templates/styles/signal-desk-overlay/`: complete standard popup style pack with tokens, theme, components, example, and agent prompt.
 - `templates/styles/precision-hud-cards/`: complete precision HUD style pack with tokens, theme, components, example, and agent prompt.
@@ -139,6 +140,7 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`：Dark Diagnostic HUD 的 Remotion 实现提示。
 - `references/visual-quality-system.md`：字体、材质、层级、安全区和 QA 标准。
 - `references/keyword-animation-effects.md`：按关键词触发的动效选项。
+- `templates/styles/style-index.json` 和 `templates/styles/STYLE_INDEX.md`：内置风格 ID、别名、路由规则、必需文件和兼容说明。
 - `templates/styles/dark-diagnostic-hud/`：完整默认风格包，包含 tokens、theme、components、example 和 agent prompt。
 - `templates/styles/signal-desk-overlay/`：完整标准弹窗风格包，包含 tokens、theme、components、example 和 agent prompt。
 - `templates/styles/precision-hud-cards/`：完整精密 HUD 风格包，包含 tokens、theme、components、example 和 agent prompt。
@@ -163,6 +165,8 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `templates/remotion-overlay-kit/theme.ts`
 - `templates/remotion-overlay-kit/components/`
 - `templates/remotion-overlay-kit/examples/`
+- `templates/styles/style-index.json`
+- `templates/styles/STYLE_INDEX.md`
 - `templates/styles/dark-diagnostic-hud/tokens.json`
 - `templates/styles/dark-diagnostic-hud/theme.ts`
 - `templates/styles/dark-diagnostic-hud/components.tsx`
