@@ -13,6 +13,50 @@ Run this as a confirmation-gated workflow. Do not edit, package, render, or expo
 
 这是一个分阶段确认的工作流。未到对应确认节点前，不剪辑、不包装、不渲染、不导出。如果缺少必要工具，直接安装对应工具并保持用户指定技术栈；不要换成其它动画或视频方案。
 
+## Progressive Single-Choice Interaction / 渐进式单选交互
+
+Ask only one decision or unblocker at a time. Do not show future branch choices, optional settings, or irrelevant alternatives before the user's current answer makes them necessary.
+
+一次只询问一个决策或一个阻塞项。不要在用户当前回答使其变得必要之前，提前展示后续分支、可选设置或无关选项。
+
+Rules:
+
+规则：
+
+- Ask the current question in its smallest useful form, then wait for the answer.
+- If the user chooses a branch, show only the next required question for that branch.
+- Do not combine multiple choices in one prompt, such as transcription provider plus editing decision, editing decision plus edit style, or custom style plus style-source type.
+- Do not explain or list unused branches. Mention only the active branch and the next action.
+- Do not ask about optional controls that have defaults, such as project asset matching, extra asset paths, built-in optional styles, or subtitle burning, unless the user raises them or the current step cannot continue without that answer.
+- When a default is safe and already defined by this skill, apply it silently and state it briefly in the next progress update instead of turning it into a choice.
+
+- 每次只问当前最小但足够推进的问题，然后等待回答。
+- 用户选择某个分支后，只展示该分支下一步必须回答的问题。
+- 不要把多个选择合并到一句里，例如“转写方式 + 是否剪辑”、“是否剪辑 + 剪辑方案”、“是否自定义风格 + 风格来源类型”。
+- 不要解释或罗列未被使用的分支；只说明当前分支和下一步动作。
+- 对已有默认值的可选项不要主动提问，例如项目素材匹配、额外素材路径、可选内置风格、字幕烧录，除非用户主动提到，或当前步骤没有这个答案无法继续。
+- 如果默认策略安全且已在本 skill 中定义，直接采用，并在下一条进度说明里简短告知，不要把它变成选择题。
+
+Recommended question sequence:
+
+推荐询问顺序：
+
+1. Ask: "是否使用 ElevenLabs 转写？"
+2. If yes, ask upload consent. After consent, ask for API-key availability. If no, proceed with Whisper without asking more unless local setup is missing.
+3. Ask: "是否需要剪辑？"
+4. If yes, ask for the source video folder. After receiving it, ask normal edit or fine cut. If no, ask for the already-edited video file.
+5. After a final video exists, ask: "是否需要自定义包装风格？"
+6. If yes, ask for one style source type: Markdown or reference image. Then ask for the file/path. If no, use the default style.
+7. Generate the packaging design draft and ask for approval.
+
+1. 先问：“是否使用 ElevenLabs 转写？”
+2. 如果使用，再问是否同意上传音频；同意后再问 API key 是否可用。如果不使用，直接走 Whisper，除非本地环境缺失才继续询问。
+3. 再问：“是否需要剪辑？”
+4. 如果需要，先问源视频文件夹；拿到文件夹后再问默认剪辑还是精剪。如果不需要，只问剪辑好的视频文件。
+5. 拿到最终视频后，再问：“是否需要自定义包装风格？”
+6. 如果需要，再问风格来源类型：Markdown 或参考图片；然后再要对应文件/路径。如果不需要，直接使用默认风格。
+7. 生成包装动效设计稿后，再让用户确认。
+
 Required companion skills:
 
 - Use the installed `$video-use` skill for video analysis, cutting, SRT handling, and packaging-plan design. If `$video-use` is not installed or cannot be loaded, bootstrap it automatically before continuing.
@@ -61,14 +105,14 @@ If the user chooses ElevenLabs:
 
 如果用户选择 ElevenLabs：
 
-1. Tell the user that ElevenLabs transcription uploads the video's audio to an external ElevenLabs service, then ask for explicit consent to upload the audio.
-2. Ask the user to provide an ElevenLabs API key or confirm that `ELEVENLABS_API_KEY` is already available in the environment.
+1. Tell the user that ElevenLabs transcription uploads the video's audio to an external ElevenLabs service, then ask only for explicit consent to upload the audio.
+2. After consent is confirmed, ask the user to provide an ElevenLabs API key or confirm that `ELEVENLABS_API_KEY` is already available in the environment.
 3. Use ElevenLabs/Scribe transcription with word-level timestamps only after both consent and API-key availability are confirmed.
 4. Use word-level timestamps as the preferred source for cut boundaries, SRT timing, keyword animation timing, and subtitle-aligned packaging.
 5. Keep the key out of logs and code. If it must be persisted for helper compatibility, store it only in the local tool's ignored `.env` file with restrictive permissions.
 
-1. 告知用户 ElevenLabs 转写会把视频音频上传到外部 ElevenLabs 服务，然后明确询问是否同意上传音频。
-2. 让用户提供 ElevenLabs API key，或确认环境变量 `ELEVENLABS_API_KEY` 已经可用。
+1. 告知用户 ElevenLabs 转写会把视频音频上传到外部 ElevenLabs 服务，然后只询问是否同意上传音频。
+2. 用户确认同意后，再让用户提供 ElevenLabs API key，或确认环境变量 `ELEVENLABS_API_KEY` 已经可用。
 3. 只有在用户同意上传且 API key 可用后，才使用 ElevenLabs/Scribe 转写和词级时间戳。
 4. 优先用词级时间戳作为剪辑边界、SRT 时间、关键词动画时间和字幕对齐包装的依据。
 5. 不把 key 写入日志或代码。如果为了 helper 兼容必须持久化，只能写入本地工具被忽略的 `.env`，并设置严格权限。
@@ -151,10 +195,10 @@ Start by asking whether the user wants to use ElevenLabs for transcription.
 
 首先询问用户是否使用 ElevenLabs 进行转写。
 
-- If yes: tell the user that the video's audio will be uploaded to the external ElevenLabs service, ask for explicit upload consent, then ask the user to provide an ElevenLabs API key or confirm that `ELEVENLABS_API_KEY` is already available in the environment. Use ElevenLabs/Scribe word-level timestamps only after consent and key availability are confirmed.
+- If yes: tell the user that the video's audio will be uploaded to the external ElevenLabs service, then ask only for explicit upload consent. After consent is confirmed, ask for an ElevenLabs API key or confirmation that `ELEVENLABS_API_KEY` is already available in the environment. Use ElevenLabs/Scribe word-level timestamps only after consent and key availability are confirmed.
 - If no: use Whisper-compatible local transcription.
 
-- 如果使用：告知用户视频音频会上传到外部 ElevenLabs 服务，明确询问是否同意上传，然后让用户提供 ElevenLabs API key，或确认环境变量 `ELEVENLABS_API_KEY` 已可用。只有同意上传且 key 可用后，才使用 ElevenLabs/Scribe 的词级时间戳。
+- 如果使用：告知用户视频音频会上传到外部 ElevenLabs 服务，然后只询问是否同意上传。用户确认同意后，再让用户提供 ElevenLabs API key，或确认环境变量 `ELEVENLABS_API_KEY` 已可用。只有同意上传且 key 可用后，才使用 ElevenLabs/Scribe 的词级时间戳。
 - 如果不使用：使用 Whisper 兼容的本地转写方案。
 
 Keep this choice for the full workflow, including editing analysis, SRT generation, packaging timing, and keyword animation timing.
@@ -167,10 +211,10 @@ Start by asking whether the user needs the raw footage edited.
 
 先问用户是否需要对原始素材进行剪辑。
 
-- If yes: ask for the source video folder and ask whether to use the normal edit plan or the fine-cut plan below. Then invoke `$video-use` to inspect, transcribe, propose an edit strategy, wait for confirmation, and produce the edited video or edit preview according to `video-use` rules.
+- If yes: ask only for the source video folder. After receiving the folder, ask one separate question about whether to use the normal edit plan or the fine-cut plan below. Then invoke `$video-use` to inspect, transcribe, propose an edit strategy, wait for confirmation, and produce the edited video or edit preview according to `video-use` rules.
 - If no: ask the user to provide the already-edited video file.
 
-- 如果需要：让用户提供需要剪辑的视频文件夹，并询问使用“默认剪辑方案”还是下面的“精剪方案”。然后调用 `$video-use` 检查素材、转写、提出剪辑策略、等待确认，并按 `video-use` 规则产出剪辑版本或预览。
+- 如果需要：只先让用户提供需要剪辑的视频文件夹。拿到文件夹后，再单独询问使用“默认剪辑方案”还是下面的“精剪方案”。然后调用 `$video-use` 检查素材、转写、提出剪辑策略、等待确认，并按 `video-use` 规则产出剪辑版本或预览。
 - 如果不需要：让用户提供已经剪辑好的视频文件。
 
 Do not proceed without a concrete video asset from one of these branches.
@@ -236,15 +280,14 @@ Use this handoff shape:
 
 下一步进入视觉包装流程：
 1. 我会基于这条精剪视频生成独立 SRT，默认不烧录字幕。
-2. 接下来需要确认包装风格：使用自定义风格 Markdown，还是使用默认 DESIGN.md / 默认风格？
-3. 风格确认后，我会用 video-use 生成包装动效设计稿，只出方案，不渲染。
+2. 接下来只需要先确认是否继续做视觉包装。
 
-请确认：继续做视觉包装吗？如果继续，请选择“自定义风格”或“默认风格”。
+请确认：继续做视觉包装吗？
 ```
 
-If the user already selected a style earlier, skip the style question and ask for approval to generate the packaging motion design draft from the edited video, transcript/SRT, EDL, selected style, and keyword-animation reference.
+If the user confirms packaging, continue with the next single required decision. If the user already selected a style earlier, skip the style question and ask for approval to generate the packaging motion design draft from the edited video, transcript/SRT, EDL, selected style, and keyword-animation reference.
 
-如果用户前面已经确认过风格，不要重复询问风格；直接询问是否基于剪辑后视频、转写/SRT、EDL、已选风格和关键词动效参考生成包装动效设计稿。
+如果用户确认继续包装，再进入下一个单独的必要决策。如果用户前面已经确认过风格，不要重复询问风格；直接询问是否基于剪辑后视频、转写/SRT、EDL、已选风格和关键词动效参考生成包装动效设计稿。
 
 Before asking for packaging approval, create or update the packaging timing bundle from the final fine-cut video. The next-step handoff should refer to this bundle rather than separate transcript, SRT, and EDL files.
 
@@ -256,14 +299,14 @@ After receiving the edited video, ask whether the user wants a custom visual sty
 
 拿到剪辑好视频后，询问用户是否需要自定义视觉风格。
 
-- If yes: ask the user to upload or point to either a style Markdown file or one or more reference images.
+- If yes: next ask one separate question about the custom style source type: style Markdown or reference image(s). After the user chooses that source type, ask for the matching file or path.
 - If no: use the project/default `DESIGN.md`. If no usable `DESIGN.md` exists, read `references/default-design.md` from this skill and use `Remotion Native Material Cards` as the default visual style brief.
-- Use current Codex project/workspace assets by default for packaging. Scan the current Codex project files for images, logos, UI screenshots, product pictures, transparent PNGs, icons, stickers, or element folders, then build the asset manifest. Ask only whether the user wants to add extra asset paths or disable project-asset matching.
+- Use current Codex project/workspace assets by default for packaging. Scan the current Codex project files for images, logos, UI screenshots, product pictures, transparent PNGs, icons, stickers, or element folders, then build the asset manifest. Do not ask about extra asset paths or disabling project-asset matching unless the user mentions assets or the current step cannot continue without that answer.
 - Do not use the uploaded video's source folder as the default asset search root. If the edited video is outside the current Codex project, treat it only as the video input, not as an asset directory.
 
-- 如果需要：让用户上传或指定风格 Markdown 文件，或上传一张/多张参考图片。
+- 如果需要：下一步只单独询问自定义风格来源类型：风格 Markdown 或参考图片。用户选定来源类型后，再索取对应文件或路径。
 - 如果不需要：使用项目或默认的 `DESIGN.md`。如果没有可用的 `DESIGN.md`，读取本 skill 的 `references/default-design.md`，并使用 `Remotion Native Material Cards / Remotion 原生材质卡片` 作为默认视觉风格简报。
-- 默认使用当前 Codex 项目/工作区里的素材做包装。扫描当前 Codex 项目文件中的图片、logo、UI 截图、产品图、透明 PNG、图标、贴纸或元素文件夹，并生成素材清单。只询问用户是否要额外补充素材路径，或是否关闭项目素材匹配。
+- 默认使用当前 Codex 项目/工作区里的素材做包装。扫描当前 Codex 项目文件中的图片、logo、UI 截图、产品图、透明 PNG、图标、贴纸或元素文件夹，并生成素材清单。不要主动询问是否补充额外素材路径或关闭项目素材匹配，除非用户提到素材，或当前步骤缺少该答案无法继续。
 - 不要把用户上传视频所在的源文件夹作为默认素材搜索根目录。如果剪辑视频在当前 Codex 项目之外，只把它当作视频输入，不把其所在目录当素材目录。
 
 Read the selected style source before designing packaging. Carry forward hard constraints such as safe zones, colors, typography, and forbidden transitions.
@@ -502,14 +545,14 @@ Prefer explicit artifacts:
 
 ## Confirmation Gates / 确认节点
 
-Never skip these gates:
+Never skip these gates, but present them progressively. Show only the current gate. Do not list later gates or ask later-gate questions until the active gate is resolved.
 
-不要跳过这些确认点：
+不要跳过这些确认点，但必须渐进展示。每次只展示当前确认点。当前确认点解决前，不要列出后续确认点，也不要提前询问后续确认点的问题。
 
 1. Confirm whether to use ElevenLabs or Whisper for transcription.
 2. Confirm whether editing is needed.
-3. If editing is needed, confirm the edit strategy before touching cuts.
-4. Confirm whether custom style is needed, and if yes whether the source is a style Markdown file or reference image(s).
+3. If editing is needed, first ask for the source folder, then confirm the edit strategy before touching cuts.
+4. Confirm whether custom style is needed. If yes, ask the style source type in a separate follow-up question, then ask for the matching file/path.
 5. Confirm the packaging motion design before Remotion implementation.
 6. Confirm Studio preview before final export.
 
