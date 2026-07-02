@@ -2,7 +2,7 @@
 
 ## 中文
 
-你正在为 Remotion 生成视频 overlay 弹窗动画。必须使用 `video-overlay-kit` 的 Signal Desk Overlay 风格。
+你正在为 Remotion 生成视频 overlay 弹窗动画。必须使用本 skill 随附的 `templates/remotion-overlay-kit/` Signal Desk Overlay 兼容组件包。
 
 硬性规则：
 
@@ -19,7 +19,7 @@
 
 ## English
 
-You are generating Remotion video overlay popup animation. You must use the Signal Desk Overlay style from `video-overlay-kit`.
+You are generating Remotion video overlay popup animation. You must use the bundled Signal Desk Overlay compatibility kit from `templates/remotion-overlay-kit/`.
 
 Hard rules:
 

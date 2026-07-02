@@ -42,7 +42,7 @@ Avoid using this kit as a full-screen presentation system. Each popup should car
 
 ```tsx
 import {Sequence} from "remotion";
-import {KeyPointPopup} from "./video-overlay-kit/components";
+import {KeyPointPopup} from "./components";
 
 export const MyVideo = () => {
   return (
