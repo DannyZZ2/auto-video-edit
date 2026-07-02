@@ -27,14 +27,14 @@ Rules:
 - If the user chooses a branch, show only the next required question for that branch.
 - Do not combine multiple choices in one prompt, such as transcription provider plus editing decision, editing decision plus edit style, or custom style plus style-source type.
 - Do not explain or list unused branches. Mention only the active branch and the next action.
-- Do not ask about optional controls that have defaults, such as project asset matching, extra asset paths, built-in optional styles, or subtitle burning, unless the user raises them or the current step cannot continue without that answer.
+- Do not ask about optional controls that have defaults, such as project asset matching, extra asset paths, Dark Diagnostic HUD variants, or subtitle burning, unless the user raises them or the current step cannot continue without that answer.
 - When a default is safe and already defined by this skill, apply it silently and state it briefly in the next progress update instead of turning it into a choice.
 
 - 每次只问当前最小但足够推进的问题，然后等待回答。
 - 用户选择某个分支后，只展示该分支下一步必须回答的问题。
 - 不要把多个选择合并到一句里，例如“转写方式 + 是否剪辑”、“是否剪辑 + 剪辑方案”、“是否自定义风格 + 风格来源类型”。
 - 不要解释或罗列未被使用的分支；只说明当前分支和下一步动作。
-- 对已有默认值的可选项不要主动提问，例如项目素材匹配、额外素材路径、可选内置风格、字幕烧录，除非用户主动提到，或当前步骤没有这个答案无法继续。
+- 对已有默认值的可选项不要主动提问，例如项目素材匹配、额外素材路径、Dark Diagnostic HUD 变体、字幕烧录，除非用户主动提到，或当前步骤没有这个答案无法继续。
 - 如果默认策略安全且已在本 skill 中定义，直接采用，并在下一条进度说明里简短告知，不要把它变成选择题。
 
 Recommended question sequence:
@@ -300,12 +300,12 @@ After receiving the edited video, ask whether the user wants a custom visual sty
 拿到剪辑好视频后，询问用户是否需要自定义视觉风格。
 
 - If yes: next ask one separate question about the custom style source type: style Markdown or reference image(s). After the user chooses that source type, ask for the matching file or path.
-- If no: use the project/default `DESIGN.md`. If no usable `DESIGN.md` exists, read `references/default-design.md` from this skill and use `Remotion Native Material Cards` as the default visual style brief.
+- If no: use the project/default `DESIGN.md`. If no usable `DESIGN.md` exists, read `references/default-design.md` from this skill and use `Dark Diagnostic HUD` as the default visual style brief.
 - Use current Codex project/workspace assets by default for packaging. Scan the current Codex project files for images, logos, UI screenshots, product pictures, transparent PNGs, icons, stickers, or element folders, then build the asset manifest. Do not ask about extra asset paths or disabling project-asset matching unless the user mentions assets or the current step cannot continue without that answer.
 - Do not use the uploaded video's source folder as the default asset search root. If the edited video is outside the current Codex project, treat it only as the video input, not as an asset directory.
 
 - 如果需要：下一步只单独询问自定义风格来源类型：风格 Markdown 或参考图片。用户选定来源类型后，再索取对应文件或路径。
-- 如果不需要：使用项目或默认的 `DESIGN.md`。如果没有可用的 `DESIGN.md`，读取本 skill 的 `references/default-design.md`，并使用 `Remotion Native Material Cards / Remotion 原生材质卡片` 作为默认视觉风格简报。
+- 如果不需要：使用项目或默认的 `DESIGN.md`。如果没有可用的 `DESIGN.md`，读取本 skill 的 `references/default-design.md`，并使用 `Dark Diagnostic HUD / 暗色诊断 HUD` 作为默认视觉风格简报。
 - 默认使用当前 Codex 项目/工作区里的素材做包装。扫描当前 Codex 项目文件中的图片、logo、UI 截图、产品图、透明 PNG、图标、贴纸或元素文件夹，并生成素材清单。不要主动询问是否补充额外素材路径或关闭项目素材匹配，除非用户提到素材，或当前步骤缺少该答案无法继续。
 - 不要把用户上传视频所在的源文件夹作为默认素材搜索根目录。如果剪辑视频在当前 Codex 项目之外，只把它当作视频输入，不把其所在目录当素材目录。
 
@@ -347,9 +347,9 @@ The main agent's role in this step is to prepare inputs for `$video-use`, includ
 
 此步骤中，主 Agent 的职责是为 `$video-use` 准备输入，包括包装时间包、已选择的风格 Markdown 或图片风格提取 brief、可用素材清单、可检测到的手势 cue、`references/visual-quality-system.md`，以及关键词动效参考。手势 cue 提取属于包装方案设计前置步骤，不是设计后再补。请求 `$video-use` 出方案前，必须确认时间包存在，并且指向最终剪辑视频。包装动效设计稿必须由 `$video-use` 返回。主 Agent 可以整理或转述该设计稿给用户，但不得用自己另写的包装方案替代它。
 
-Before drafting the packaging plan, read `references/visual-quality-system.md`, `references/card-style-library.md`, and `references/keyword-animation-effects.md`. The default built-in style is `Remotion Native Material Cards`. Optional built-in styles include `Holographic Glass HUD`, `Frosted Glass Packaging`, and `Reference HUD Pattern`; use them only when the user explicitly requests one, provides a matching reference, or the approved design draft names that style. A user-provided Markdown style or reference image may still be used as an explicit external custom style for that task.
+Before drafting the packaging plan, read `references/visual-quality-system.md`, `references/card-style-library.md`, and `references/keyword-animation-effects.md`. The default built-in style is `Dark Diagnostic HUD`. The built-in variants are `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, and `Terminal Agent HUD`; use a variant only when the user explicitly requests it or the approved design draft names it. A user-provided Markdown style or reference image may still be used as an explicit external custom style for that task.
 
-设计包装方案前，先读取 `references/visual-quality-system.md`、`references/card-style-library.md` 和 `references/keyword-animation-effects.md`。默认内置风格是 `Remotion Native Material Cards / Remotion 原生材质卡片`。可选内置风格包括 `Holographic Glass HUD / 全息玻璃 HUD`、`Frosted Glass Packaging / 毛玻璃包装`、`Reference HUD Pattern / 参考 HUD 信息图`；只有在用户明确要求、提供匹配参考，或已确认设计稿指定时才使用。用户提供的风格 Markdown 或参考图片仍可作为该任务的外部自定义风格使用。
+设计包装方案前，先读取 `references/visual-quality-system.md`、`references/card-style-library.md` 和 `references/keyword-animation-effects.md`。默认内置风格是 `Dark Diagnostic HUD / 暗色诊断 HUD`。内置变体是 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片`、`Terminal Agent HUD / 终端 Agent HUD`；只有用户明确要求或已确认设计稿指定时才使用变体。用户提供的风格 Markdown 或参考图片仍可作为该任务的外部自定义风格使用。
 
 The design draft must include, for every animation segment:
 
@@ -405,7 +405,7 @@ The packaging motion design draft must use this exact Markdown block format. Do 
 手势锚点：none。
 已应用的风格约束：引用所选风格 Markdown 或图片风格提取 brief 中实际采用的颜色、字体、卡片、安全区或禁用项。
 字体：Source Han Sans Heavy / Inter Black，56-72px，line-height 0.96，fallback PingFang SC Heavy。
-组件：PremiumKeywordPanel + KeywordChip。
+组件：HudSectionLabel + DiagnosticPanel。
 质量风险：注意不要变成整句大字；标题卡不得压到脸部或字幕区。
 语义组生命周期：开始“发布信息”组；本卡保留到 1.55s，与下一段模式芯片不重叠。
 
@@ -420,7 +420,7 @@ The packaging motion design draft must use this exact Markdown block format. Do 
 手势锚点：pointing-right @ upper-left-safe-zone，confidence=estimated；贴片放在指向终点右侧 32px，避开手部。
 已应用的风格约束：引用所选风格 Markdown 或图片风格提取 brief 中实际采用的约束。
 字体：Inter ExtraBold / PingFang SC Semibold，28-36px，line-height 1.18。
-组件：RemotionModularCard / KeywordChip。
+组件：DiagnosticPanel + StatusChip。
 质量风险：两枚芯片不要同时遮挡人物手势；边框发光不能过曝。
 语义组生命周期：开始“模式说明”组；两枚芯片在同一组内共存到 3.20s，再一起收纳或退场。
 
@@ -468,7 +468,7 @@ Implementation requirements:
 - When the approved plan includes `GitHubRepoCard`, implement it with text and vector/CSS elements rather than using the reference image as a flat bitmap unless the user explicitly asks for screenshot reuse. The card must expose editable fields for owner, repo, function, visibility, languages, and language percentages.
 - When the approved plan includes a gesture anchor, place the matched asset or animation at the gesture-derived region first, then apply the recorded safety offset. Do not recenter it into a generic layout unless gesture placement would block the face, mouth, subtitles, or key hand motion.
 - Use `references/visual-quality-system.md` as the implementation quality bar for typography, components, hierarchy, spacing, and motion polish.
-- Use `references/card-style-library.md` as the unified implementation reference for the selected built-in or custom style. Default to `Remotion Native Material Cards`; use optional built-in styles only when explicitly selected in the approved plan.
+- Use `references/card-style-library.md` as the unified implementation reference for the selected built-in or custom style. Default to `Dark Diagnostic HUD`; use `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, or `Terminal Agent HUD` only when explicitly selected in the approved plan.
 - Keep video and audio aligned to the edited video.
 - Keep overlays outside face/mouth and subtitle-safe zones unless the approved plan explicitly says otherwise.
 - Explicitly set `fontFamily`, weight, size, line height, and fallback for every text component; do not rely on browser default fonts.
@@ -486,7 +486,7 @@ Implementation requirements:
 - 当确认方案包含 `GitHubRepoCard` 时，优先用文字和矢量/CSS 元素实现，不要把参考图直接当作扁平截图贴上去，除非用户明确要求复用截图。卡片必须暴露可编辑字段：用户名、项目名、项目功能、公开/私有标记、语言和语言占比。
 - 当确认方案包含手势锚点时，优先把匹配素材或动画放到手势推导区域，再应用记录的安全偏移。除非手势位置会挡脸、挡嘴、挡字幕或关键手部动作，否则不要改成通用居中布局。
 - 使用 `references/visual-quality-system.md` 作为字体、组件、层级、间距和动效质感的实现质量标准。
-- 使用 `references/card-style-library.md` 作为已选内置或自定义风格的统一实现参考。默认使用 `Remotion Native Material Cards / Remotion 原生材质卡片`；只有在确认方案明确选择时才使用可选内置风格。
+- 使用 `references/card-style-library.md` 作为已选内置或自定义风格的统一实现参考。默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`；只有在确认方案明确选择时才使用 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片` 或 `Terminal Agent HUD / 终端 Agent HUD`。
 - 保持视频与音频和剪辑后视频对齐。
 - 除非方案明确允许，否则包装元素必须避开脸部、嘴部和字幕安全区。
 - 每个文字组件都必须显式设置 `fontFamily`、字重、字号、行高和 fallback；不要依赖浏览器默认字体。
@@ -581,7 +581,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not trigger every animation from generic scene starts, equal time slices, or hand-picked decorative timings; use subtitle keyword cue points.
 - Do not split every word into a separate animation segment. Use keyword cues as anchors, then decide card lifetime by semantic group completion.
 - Do not generate flat single-layer cards. Cards need glass material, gradient, semantic border, inner/outer shadows, icon container, and explicit typography hierarchy.
-- Do not use unselected optional styles. Default to `Remotion Native Material Cards`; use `Holographic Glass HUD`, `Frosted Glass Packaging`, or `Reference HUD Pattern` only when explicitly selected.
+- Do not use removed or unselected styles. Default to `Dark Diagnostic HUD`; use `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, or `Terminal Agent HUD` only when explicitly selected.
 - Do not ignore reference image(s) when the user provides them as the custom style source; extract a style brief first.
 - Do not ignore current-project content assets. If an asset filename, path segment, or filename-token alias matches a subtitle keyword, use it at that keyword cue or explicitly explain why it is unsafe or unsuitable. Do not use image content, OCR, labels inferred from pixels, or subject classification for matching.
 - Do not search for packaging assets in the uploaded video's folder by default. Use the current Codex project/workspace as the default asset source; only use the video folder if the user explicitly designates it as an asset source.
@@ -601,7 +601,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 不要用泛泛的场景开始时间、均分时间片或手选装饰时间触发所有动效；必须使用字幕关键词落点。
 - 不要把每个词都切成独立动效段。关键词只作为锚点，卡片生命周期要根据语义组是否完成来判断。
 - 不要生成单层扁平卡片。卡片需要玻璃材质、渐变、语义描边、内外阴影、图标容器和明确字体层级。
-- 不要混用未被选择的可选内置风格。默认使用 `Remotion Native Material Cards / Remotion 原生材质卡片`；只有明确选择时才使用 `Holographic Glass HUD / 全息玻璃 HUD`、`Frosted Glass Packaging / 毛玻璃包装` 或 `Reference HUD Pattern / 参考 HUD 信息图`。
+- 不要混用已移除或未被选择的风格。默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`；只有明确选择时才使用 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片` 或 `Terminal Agent HUD / 终端 Agent HUD`。
 - 用户提供参考图片作为自定义风格来源时，不要忽略图片；必须先提取风格 brief。
 - 不要忽略当前项目内容素材。只要素材文件名、路径片段或文件名分词别名匹配字幕关键词，就在该关键词 cue 使用，或明确说明为什么不安全/不适合。不要用图片内容、OCR、从像素推断的标签或主体分类做匹配。
 - 不要默认去用户上传视频所在文件夹里找包装素材。默认素材来源是当前 Codex 项目/工作区；只有用户明确指定时，才把视频所在目录当素材来源。

@@ -2,143 +2,204 @@
 
 ## 风格名称 / Style Name
 
-**Remotion Native Material Cards / Remotion 原生材质卡片**
+**Dark Diagnostic HUD / 暗色诊断 HUD**
 
-这是 `$video-auto-edit` 的唯一默认视觉包装风格。它不使用旧式科技仪表盘、全屏系统框、扫描网格、仪表盘外壳或整条视频进度条，而是以 Remotion + React + GSAP 可直接复刻的模块卡片、关键词排版卡和信息图环绕卡来解释口播关键词。
+这是 `$video-auto-edit` 的唯一默认包装风格。它来自已确认的参考视频效果：暗调实拍或屏幕录制作为底层画面，上方叠加像 AI 工具实时体检、扫描、评分和输出报告的 HUD 卡片。
 
-This is the only default visual packaging style for `$video-auto-edit`. It does not use old tech dashboard styling, full-screen frames, scan grids, dashboard shells, or global video progress bars. It uses Remotion-native modular cards, kinetic type cards, and infographic orbit cards that can be rebuilt directly with Remotion, React, and GSAP.
+This is the only default packaging style for `$video-auto-edit`. It is based on the approved reference-video effect: dark talking-head or screen-recording footage with HUD overlays that feel like an AI tool scanning, scoring, auditing, and reporting in real time.
 
 ## 核心气质 / Core Feel
 
-- 非仪表盘、非扫描系统感、非全屏系统框。
-- 像高级视频包装组件，而不是后台数据面板。
-- 卡片有材质、阴影、边框和层级，但结构必须能用 React `div`、SVG、CSS 渐变和 GSAP 复刻。
-- 每句话只围绕 1 个字幕关键词或短语触发包装，不把整句字幕做成大字卡。
-- 人物视频优先保护脸部、嘴部、手势和中下方字幕安全区。
+- 暗调、可信、工具化，不做随机科幻装饰。
+- 像创作者工具的实时诊断界面，而不是后台仪表盘截图。
+- 每个镜头只表达一个主要信息：体检报告、文档扫描、评分、清单、导出状态或 Agent 执行步骤。
+- 卡片要能被 Remotion + React + GSAP 直接复刻：`div`、SVG、渐变、描边、滤镜、帧驱动动画。
+- 保护人物脸部、嘴部、手势和中下方字幕安全区。
 
-- Non-dashboard, non-scanning-system, non-fullscreen-frame feel.
-- Premium video packaging components rather than backend analytics panels.
-- Cards have material, shadows, borders, and hierarchy, while remaining reproducible with React `div`, SVG, CSS gradients, and GSAP.
-- Each spoken sentence triggers packaging around one subtitle keyword or short phrase, not full sentence text.
-- Speaker footage must protect the face, mouth, gestures, and lower-center subtitle safe zone.
+- Dark, credible, tool-like, not random sci-fi decoration.
+- Feels like a real-time creator-tool diagnostic interface, not a backend dashboard screenshot.
+- Each shot communicates one main idea: health report, document scan, score, checklist, export state, or agent execution step.
+- Cards must be reproducible with Remotion, React, and GSAP: `div`, SVG, gradients, strokes, filters, and frame-driven animation.
+- Protect the face, mouth, gestures, and lower subtitle safe zone.
 
-## 默认组件 / Default Components
-
-### 1. Remotion Modular Cards / 模块卡片
-
-适用：
-
-- 工具名、步骤、状态、能力点、短概念解释。
-- 需要清晰但不抢脸的侧边信息。
-
-结构：
-
-- 1-2 张半哑光深色卡片，放在左侧、右侧或上半区。
-- 圆角 14-24px，透明渐变边框，轻微颗粒，软阴影。
-- 卡片内包含线性图标、英文短标签、中文关键词。
-- 单张主卡宽度建议为画面宽度 18%-32%，不横跨人物脸部。
-
-动效：
-
-- `cueFrame - 6` 卡片从 `y: 24, opacity: 0, scale: .96` 入场。
-- `cueFrame` 关键词文字完成入场并轻微 pop。
-- `cueFrame + 4` 边框或关键词区域弱发光一次。
-- SVG 连接线可用 `strokeDashoffset` 绘制，必要时带循环光晕点。
-
-### 2. Kinetic Type Cards / 动态关键词排版卡
-
-适用：
-
-- 强调观点词、反问词、结论词、教程关键动作。
-- 需要比普通字幕更有节奏的关键词强化。
-
-结构：
-
-- 大号关键词 + pill 高亮 + 下划线/短色条 + 小贴纸标签。
-- 主词使用 44-68px 横屏字号或 38-58px 竖屏字号，`font-weight: 850-950`。
-- 关键词卡放在左右留白，不放到嘴部或字幕安全区。
-
-动效：
-
-- 关键词用 `clip-path` 或遮罩横向揭示。
-- pill 从词中心扩张，跟随关键词落点出现。
-- 下划线用 `scaleX` 从左到右绘制。
-- 小标签带 4-8 度旋转回正，落点轻微弹跳。
-
-### 3. Infographic Orbit Cards / 信息图环绕卡
-
-适用：
-
-- 一个来源分出多个方向、三种方案、流程路径、概念关系。
-- 需要展示关联和传输，而不是单张静态卡片。
-
-结构：
-
-- 左侧或右侧源节点卡 + 2-3 条 SVG 曲线 + 目标 pill 标签。
-- 曲线从源节点边缘连接到目标卡边缘，长度根据卡片实际位置计算。
-- 目标卡包含图标、英文短标签、中文短词。
-
-动效：
-
-- 源节点先出现。
-- 曲线按关键词逐条绘制。
-- 每条连线上必须有柔和光晕点沿线循环移动，显性表现关联与传输。
-- 光点接近目标卡时，目标卡点亮或 pop 入场。
-
-## 字体 / Typography
+## 视觉公式 / Visual Formula
 
 ```text
-主标题：Arial Black / HarmonyOS Sans SC Black / Source Han Sans Heavy / PingFang SC Heavy。
-关键词：HarmonyOS Sans SC Bold / Source Han Sans Heavy / PingFang SC Heavy / Inter ExtraBold。
-辅助标签：PingFang SC Semibold / Inter SemiBold / IBM Plex Sans SemiBold。
-代码或技术标签：JetBrains Mono / SF Mono / Menlo。
+dark talking-head or screen footage
++ cinematic black scrim
++ blue/green or blue/purple color wash
++ top-left HUD section label
++ one main diagnostic panel
++ 1-3 small status chips
++ bottom bilingual subtitles
 ```
 
-规则：
-
-- Remotion 组件必须显式设置 `fontFamily`。
-- 中文关键词最多 2 行，每行 1-8 个字。
-- 英文标签只做短识别符，例如 `PROMPT`、`OUTPUT`、`KEY`、`WEB`。
-- 字距不能为负值；技术标签可用 `letter-spacing: 0.06em-0.14em`。
+```text
+暗调真人口播或屏幕录制
++ 电影感黑色遮罩
++ 蓝绿或蓝紫氛围光
++ 左上角 HUD 章节标签
++ 一张主诊断面板
++ 1-3 个小状态 chip
++ 底部双语字幕
+```
 
 ## 颜色 / Color
 
 ```text
-background overlay: rgba(3,5,10,0.20-0.62)
-card fill: rgba(8,12,20,0.60-0.84)
-primary blue: #37A6FF / #2F7CFF
-green: #35E982
-coral: #FF6B7A
-yellow: #FFCC4A
-white: #FFFFFF / #F4F8FF
-border: rgba(255,255,255,0.14-0.24) or semantic accent 45%-65%
+deep black: #05070B
+panel black: rgba(8,14,22,0.78)
+soft panel: rgba(12,20,32,0.64)
+text white: #F5F8FF
+text muted: rgba(220,232,255,0.68)
+diagnostic blue: #2DA8FF
+health green: #36E07D
+warning amber: #FFB84D
+risk red: #FF4F64
+agent purple: #8A5CFF
 ```
 
-整条视频最多使用 1 个主色 + 2 个语义强调色。不要做单一蓝色系统面板，也不要让发光铺满全屏。
+颜色语义固定：
 
-Use at most one primary color plus two semantic accent colors in one video. Do not make a single-blue system-panel look, and do not let glow cover the whole screen.
+- 蓝色：系统、扫描、评分、主路径。
+- 绿色：通过、完成、建议、就绪。
+- 琥珀色：注意、待检查、警告。
+- 红色：只用于风险或失败。
+- 紫色：Agent、自动化、模型执行。
 
-## 材质 / Material
+Semantic colors:
 
-- 默认卡片：半哑光深色卡片，透明渐变边框，轻微颗粒，内高光和外阴影。
-- 关键词卡：半透明深色底 + 彩色 pill + 手绘感下划线或短色条。
-- 信息图线条：SVG 曲线，圆头线帽，柔和 `drop-shadow`，移动光晕点。
-- 不使用旧式科技角框、扫描网格、全局进度条、雷达仪表盘外壳。
+- Blue: system, scan, score, main path.
+- Green: pass, complete, suggestion, ready.
+- Amber: attention, checklist, warning.
+- Red: risk or failure only.
+- Purple: agent, automation, model execution.
+
+## 字体 / Typography
+
+```text
+Display: Inter, SF Pro Display, PingFang SC, Microsoft YaHei, sans-serif
+Body: Inter, SF Pro Text, PingFang SC, Microsoft YaHei, sans-serif
+Mono: SF Mono, JetBrains Mono, Menlo, monospace
+```
+
+字号建议：
+
+- 巨型中文标题：`92-132px`，ExtraBold/Black。
+- HUD 英文标签：`18-24px`，mono，全大写，可少量正字距。
+- 中文副标题：`24-32px`，Bold。
+- 面板标题：`32-44px`，Bold。
+- 面板正文：`22-28px`，Medium/Semibold。
+- 小型元信息：`14-18px`，Mono。
+- 中文字幕：`34-44px`，Bold，底部居中。
+- 英文字幕：`18-24px`，Medium，位于中文下方。
+
+Typography rules:
+
+- Remotion components must set `fontFamily` explicitly.
+- Do not use negative letter spacing for Chinese.
+- Body text must fit inside the card; use adaptive sizing or shorter copy.
+- Subtitles need high contrast, shadow, or stroke.
 
 ## 布局与安全区 / Layout and Safe Zones
 
-- 人脸、嘴部、眼睛、胸前麦克风和手势优先级最高。
-- 卡片优先放左侧、右侧或上半区。
-- 中下方字幕安全区默认不放大卡片。
-- 单句最多 1 张主卡 + 2 个标签；多元素必须错峰出现。
-- 如果需要在人物中间做图形，先做人像遮罩，让包装位于人物下方或后方。
+- 左侧 HUD 边距：`64-88px`。
+- 顶部标签边距：`48-72px`。
+- 底部字幕区域：预留 `130-170px`。
+- 人脸、嘴部、眼睛、胸前麦克风和主要手势优先级最高。
+- 主面板优先放左侧、右侧或上半区；不要压住口型和字幕。
+- 单镜头最多 1 张主面板 + 3 个状态 chip；超过则分批出现或按语义组收纳。
+
+- Left HUD margin: `64-88px`.
+- Top label margin: `48-72px`.
+- Bottom subtitle area: reserve `130-170px`.
+- Face, mouth, eyes, mic, and main gestures have highest priority.
+- Main panels prefer left, right, or upper regions; avoid mouth and subtitles.
+- One shot should have at most 1 main panel plus 3 status chips; otherwise stagger or collapse by semantic group.
+
+## 默认组件 / Default Components
+
+### `HudSectionLabel`
+
+左上角章节标签：英文大写 + 中文副标题。
+
+Top-left section label: uppercase English plus Chinese subtitle.
+
+```text
+AI HEALTH REPORT
+发布前体检
+```
+
+### `StatusChipStack`
+
+左侧或面板旁的状态 chip 组。每个 chip 包含状态点、英文短标签、中文短标签和语义色。
+
+Left-side or panel-adjacent status chips. Each chip includes a status dot, short English label, short Chinese label, and semantic color.
+
+### `DiagnosticPanel`
+
+主诊断面板。用于文档扫描、体检报告、预审清单、自动化结果、工具输出。必须包含暗色半透明底、细描边、内阴影、弱 glow 和清晰标题。
+
+Main diagnostic panel for document scans, health reports, audit checklists, automation results, and tool output. It must include a dark translucent fill, thin border, inner shadow, weak glow, and readable title.
+
+### `ScanCard`
+
+扫描态卡片。包含 `SCANNING`、`CHECKING`、`READY` 等状态、2-4 行进度条和一条移动扫描线。扫描线只在卡片内部移动。
+
+Scanning-state card with statuses such as `SCANNING`, `CHECKING`, or `READY`, 2-4 progress rows, and one moving scan line. The scan line only moves inside the card.
+
+### `ScoreGauge`
+
+圆形或半圆评分仪表。每个镜头最多一个，数值必须大而清楚，例如 `82/100`。
+
+Circular or semi-circular score gauge. Use at most one per shot, with a large readable value such as `82/100`.
+
+### `TerminalAgentCard`
+
+短终端/Agent 执行卡。只显示 2-4 行关键步骤，不打整段长命令。
+
+Short terminal or agent execution card. Show only 2-4 key steps, not long command dumps.
+
+### `BilingualSubtitle`
+
+底部双语字幕。中文为主，英文小一号在下方。字幕不可被 overlay 遮挡。
+
+Bottom bilingual subtitles. Chinese is dominant; English is smaller underneath. Overlays must not cover subtitles.
+
+## 动效 / Motion
+
+- 小 chip 入场：`8-12` 帧。
+- 主面板入场：`14-22` 帧。
+- 大标题揭示：`18-28` 帧。
+- 行项目错峰：`4-6` 帧。
+- 扫描线循环：`60-120` 帧。
+- 分数增长：`18-36` 帧。
+- 退场：`8-14` 帧，淡出或轻微位移，不闪白。
+
+- Small chip enter: `8-12` frames.
+- Main panel enter: `14-22` frames.
+- Large title reveal: `18-28` frames.
+- Row stagger: `4-6` frames.
+- Scan line loop: `60-120` frames.
+- Score count-up: `18-36` frames.
+- Exit: `8-14` frames, fade or slight offset, no white flash.
+
+所有动画必须由 Remotion 帧驱动：`useCurrentFrame()`、`interpolate()`、`spring()`、`Sequence`，或 GSAP 仅用于根据帧计算缓动/路径状态。不要使用 CSS transition、CSS animation、keyframes 或 Tailwind animation class。
+
+All motion must be frame-driven by Remotion: `useCurrentFrame()`, `interpolate()`, `spring()`, `Sequence`, or GSAP only for frame-based easing/path state. Do not use CSS transitions, CSS animations, keyframes, or Tailwind animation classes.
 
 ## 禁用 / Do Not
 
-- 不使用旧式科技仪表盘包装。
-- 不生成全屏系统框、扫描线、网格、雷达图、仪表盘外壳。
-- 不生成顶部或底部整条视频全局进度条。
-- 不使用大面积扫光、闪白或强转场光效。
+- 不复用任何已移除的旧包装风格。
+- 不生成整条视频顶部/底部全局进度条。
+- 不做无意义粒子、随机赛博图标、全屏扫描光或强闪白。
+- 不把完整口播句子做成大字卡。
 - 不让卡片遮挡脸、嘴、字幕和主要手势。
-- 不把完整口播句子作为大字卡片。
-- 不把所有元素一次性全部出现；必须按字幕关键词落点触发。
+- 不复制参考视频的品牌名、专有文案或 logo；只复用视觉方法。
+
+- Do not reuse any removed legacy packaging style.
+- Do not generate global top/bottom video progress bars.
+- Do not add meaningless particles, random cyber icons, full-screen scan light, or white flashes.
+- Do not turn full transcript sentences into giant type cards.
+- Do not cover the face, mouth, subtitles, or main gestures.
+- Do not copy a reference video's brand name, proprietary wording, or logo; reuse the visual method only.

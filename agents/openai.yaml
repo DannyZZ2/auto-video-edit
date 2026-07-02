@@ -1,4 +1,4 @@
 interface:
   display_name: "video-auto-edit"
-  short_description: "剪辑确认到 Remotion 动画包装预览"
-  default_prompt: "Use $video-auto-edit to edit, subtitle, visually package, preview, and export my video with Remotion and GSAP."
+  short_description: "剪辑确认到暗色诊断 HUD 动画包装预览"
+  default_prompt: "Use $video-auto-edit to edit, subtitle, visually package with the 5-style Dark Diagnostic HUD family, preview, and export my video with Remotion and GSAP."

@@ -1,240 +1,216 @@
-# 默认卡片风格库 / Default Card Style Library
+# 暗色诊断 HUD 风格库 / Dark Diagnostic HUD Style Library
 
-> 用途：`$video-auto-edit` 的内置风格库。默认只使用一个主风格；用户明确指定时，可切换到其它内置风格。  
-> Purpose: built-in style library for `$video-auto-edit`. Use one default primary style unless the user explicitly selects another built-in style.
+> 用途：`$video-auto-edit` 的唯一内置风格库。旧风格已移除；生成包装时只能从下面的新风格族中选择。
+> Purpose: the only built-in style library for `$video-auto-edit`. Old styles are removed; packaging generation may only use the new style family below.
 
-## Built-In Style Policy / 内置风格策略
+## 内置风格策略 / Built-In Style Policy
 
 Built-in styles:
 
 内置风格：
 
 ```text
-Default: Remotion Native Material Cards / Remotion 原生材质卡片
-Optional: Holographic Glass HUD / 全息玻璃 HUD
-Optional: Frosted Glass Packaging / 毛玻璃包装
-Optional: Reference HUD Pattern / 参考 HUD 信息图
+Default: Dark Diagnostic HUD / 暗色诊断 HUD
+Variant: Signal Desk Overlay / 标准重点弹窗
+Variant: Precision HUD Cards / 精密 HUD 卡片
+Variant: Diagnostic Glass Cards / 诊断玻璃卡片
+Variant: Terminal Agent HUD / 终端 Agent HUD
 ```
 
-Use `Remotion Native Material Cards` by default. Use optional built-in styles only when the user explicitly asks for them, provides a matching reference, or the approved packaging plan names that style. Do not generate full-screen system frames, radar dashboards, global progress bars, or analytics-panel shells unless they are part of the explicitly selected style.
+默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`。只有用户明确要求或包装方案明确指定时，才在同一风格族内切换到 `Signal Desk Overlay`、`Precision HUD Cards`、`Diagnostic Glass Cards` 或 `Terminal Agent HUD`。不要回退到任何已移除的旧包装风格。
 
-默认使用 `Remotion Native Material Cards / Remotion 原生材质卡片`。只有用户明确要求、提供匹配参考，或已确认包装方案指定时，才使用可选内置风格。不要生成全屏系统框、雷达仪表盘、全局进度条或数据分析面板外壳，除非它们属于已明确选择的风格。
+Use `Dark Diagnostic HUD` by default. Switch within the same style family to `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, or `Terminal Agent HUD` only when the user explicitly asks or the approved plan names that variant. Do not fall back to any removed legacy packaging style.
 
-If the user provides a custom Markdown style or reference image, treat it as an external style brief for that task only. It is not added to the built-in style library unless the user explicitly asks to update the skill.
+用户提供自定义 Markdown 或参考图时，只把它作为本次任务的外部 brief；除非用户明确要求更新 skill，否则不加入内置风格库。
 
-如果用户提供自定义风格 Markdown 或参考图片，只把它作为该任务的外部风格 brief；除非用户明确要求更新 skill，否则不加入内置风格库。
+If the user provides a custom Markdown style or reference image, treat it as an external brief for that task only. Do not add it to the built-in library unless the user explicitly asks to update the skill.
 
-## Default Style / 默认风格
+## 默认风格 / Default Style
 
-### Remotion Native Material Cards / Remotion 原生材质卡片
-
-适合：
-
-- AI 工具讲解、剪辑包装、教程步骤、关键词强化、流程说明、观点解释。
-- 需要轻量、清晰、可按字幕关键词锚定入场/强调，但按语义组控制停留和退场的包装。
-- 需要用 Remotion + React + GSAP 直接复刻，而不是依赖复杂位图或不可控生成图。
-
-视觉结构：
-
-- 实拍画面上叠加材质化包装卡片。
-- 组件以模块卡片、动态关键词排版卡、信息图环绕卡为主。
-- 卡片放左右侧、上半区或空白墙面，避开脸、嘴、麦克风、手势和字幕安全区。
-- 卡片有半透明深色底、渐变边框、轻微颗粒、内高光、外阴影和明确字体层级。
-- 连线类动效必须使用 SVG 曲线和循环移动的柔和光晕点。
-- 关键信息按短视频快速读取放大，不能使用偏小的桌面科技 UI 比例。
-
-## Optional Built-In Style / 可选内置风格
-
-### Holographic Glass HUD / 全息玻璃 HUD
+### Dark Diagnostic HUD / 暗色诊断 HUD
 
 适合：
 
-- prompt、命令、AI task、生成状态、工具面板。
-- 需要蓝紫全息、命令面板、状态 chip、短任务提示的片段。
-- 用户明确要求“全息玻璃 HUD”或提供同类参考图时。
+- AI 工具讲解、视频体检、发布前预审、评分、自动化工作流、产品分析。
+- 需要在实拍或屏幕录制上叠加“正在被 AI 工具分析”的感觉。
+- 需要稳定复用到不同字幕和不同口播内容的短视频包装。
 
 视觉结构：
 
-- 黑色/深蓝黑玻璃主卡，青色和紫色双层描边。
-- 小型状态 chip、命令行短文本、角标线框。
-- 背景可有极淡网格和点阵，但不做全局进度条。
-- 图标使用简单线性 SVG，不使用复杂图片图标。
-- 单屏优先 1 张主面板 + 1-2 个状态 chip，避免压住人物脸部和嘴部。
-- HUD 主卡、状态结果、关键词和任务名必须放大到短视频扫读尺寸；不要做成小字号密集仪表盘。
+- 暗调底层画面 + 黑色遮罩 + 蓝绿/蓝紫氛围光。
+- 左上角固定 `HudSectionLabel`，英文大写 + 中文副标题。
+- 一张主 `DiagnosticPanel`，搭配 1-3 个 `StatusChip`。
+- 按语义显示扫描线、进度条、分数、清单行或输出文件卡。
+- 底部保留 `BilingualSubtitle`，中文大、英文小。
 
 Remotion 实现：
 
 ```text
-container: backdrop-filter blur(10px-16px), dark blue-black glass gradient
-border: cyan/violet double stroke
-shadow: weak outer glow + inset highlight
-text: Inter Black / JetBrains Mono / Source Han Sans Heavy
-key text: 42-72px landscape, 34-56px portrait
-secondary text: 26-40px landscape, 22-34px portrait
-motion: corner frame draw -> panel slide -> chip pop -> mono text type-in
+base: dark scrim + subtle vignette + cool color wash
+header: uppercase mono label + Chinese bold subtitle
+panel: rgba(8,14,22,0.72-0.86) + 1px semantic border + weak glow + inset shadow
+text: Inter / PingFang SC / Microsoft YaHei / SF Mono
+motion: section reveal -> panel draw/slide -> rows stagger -> scan/progress/score emphasis
 ```
 
 动效建议：
 
-- 关键词 cue 前 4-6 帧绘制角标线框。
-- cue 点主卡轻微透视滑入，`scale 0.96 -> 1`。
-- 命令文字可用 6-12 帧打字机，但不要打完整长句。
-- 状态 chip 在关键词后 8-14 帧 pop。
-- 待机只做边框弱呼吸和光标闪烁。
+- 关键词 cue 前 4-8 帧出现左上 HUD label。
+- 主面板在 cue 点附近用轻微位移、透明度和 scale 入场。
+- 行项目按 4-6 帧错峰出现。
+- 扫描线只在卡片内部移动，不做全屏扫描。
+- 分数、状态和关键结果在 cue 点后 6-12 帧强调一次。
 
-禁用：
+## 风格变体 / Style Variants
 
-- 不做整屏扫描光。
-- 不做顶部/底部全局进度条。
-- 不把卡片做成纯色扁平矩形。
-- 不遮挡脸、嘴、字幕安全区。
-
-### Frosted Glass Packaging / 毛玻璃包装
+### Signal Desk Overlay / 标准重点弹窗
 
 适合：
 
-- 口播、教程、访谈、AI 工具讲解中需要高级但不强科技感的轻包装。
-- 左侧竖向信息卡、右侧小提示卡、底部身份条、能力点摘要。
-- 用户明确要求“毛玻璃”“透明玻璃”“明亮玻璃卡片”或提供同类参考图时。
+- 关键内容弹窗、短结论、数字提示、流程小卡、评论区 skill 提示。
+- 底层视频已经足够清楚，只需要 2-4 秒的重点增强。
+- 希望保持轻量，不进入完整诊断报告或评分仪表的镜头。
 
 视觉结构：
 
-- 清透毛玻璃卡片叠在实拍画面上，透明但文字必须清楚。
-- 左侧可用一张竖向主卡，右侧放 1-2 张小卡，底部可放短身份条或主题条。
-- 使用白色、浅蓝、淡粉边缘光，避免过重雾面、脏噪点和大片灰蒙蒙遮罩。
-- 不使用卡片里的白点颗粒；扫光只允许入场后一次，不循环。
-- 卡片避开脸、嘴、麦克风和字幕区，优先贴左右空白区域。
+- 紧凑卡片弹窗，优先放左右侧、上半区或不挡脸的位置。
+- 一张卡只表达一个重点：一句结论、一个数字、一个步骤或一个提示。
+- 暗色诊断语义仍保留：黑色半透明底、语义色侧边线/小标签、弱阴影。
+- 不做整屏 PPT，不堆叠超过两张弹窗。
 
 Remotion 实现：
 
 ```text
-container: backdrop-filter blur(8px-14px) saturate(1.35-1.55) contrast(1.04-1.08)
-fill: rgba(255,255,255,0.035-0.15) + subtle blue/rose transparent gradient
-border: rgba(255,255,255,0.38-0.55) + cyan/rose rim glow
-shadow: soft outer shadow + subtle inset highlight
-icon: translucent rounded square with semantic glow
-motion: card slide/pop -> one-shot shine sweep -> icon/text stagger -> subtle idle float
+container: compact dark card, 8-12px radius, semantic accent rail, soft shadow
+text: bold Chinese title, short body, optional mono label
+motion: quick pop/slide, 10-14 frame enter, 8-10 frame exit, 4 frame row stagger
 ```
 
-动效建议：
-
-- 卡片从画面边缘滑入并轻微 `scale 0.96 -> 1`。
-- 入场完成后做一次 12-24 帧斜向扫光，之后停止。
-- 图标、标题、说明文字错峰 3-6 帧进入。
-- 待机只做 1-2px 轻微漂浮和弱边缘呼吸。
-- 退场淡出或侧滑，不做闪白和强扫描。
-
-禁用：
-
-- 不做旧式 HUD 雷达、命令行扫描或全屏系统框。
-- 不做循环扫光。
-- 不在卡片上生成白点颗粒。
-- 不把玻璃层做得灰雾厚重导致人物和文字都发糊。
-
-### Reference HUD Pattern / 参考 HUD 信息图
+### Precision HUD Cards / 精密 HUD 卡片
 
 适合：
 
-- 信息图式解释：体检报告、评分、合规检查、最小改动、分支流向、终端步骤、自动报告。
-- 需要把一句话拆成“报告/图表/表格/路径/流程”的讲解段。
-- 用户明确要求参考 `ReferenceHudPatternDemo`、参考 HUD 信息图、流量评分、合规表格、路径分流等效果时。
+- 流程分解、指标拆解、状态判断、对比结论。
+- 需要更克制、更锐利、更像信息工程图的镜头。
 
 视觉结构：
 
-- 深蓝黑背景或暗色玻璃面板，左上角使用竖向发光条 + 英文标题 + 中文副标题。
-- 面板以 SVG 图表、表格、终端、分支路径为核心，不用整屏扫描光。
-- 语义色固定：蓝=信息/主路径，绿=通过/正确，黄=警告/评分，红=风险/错误。
-- 连线必须使用 SVG path，线条中间有循环移动的柔和光晕点，用来显性表现关联与传输。
-- 比默认风格信息密度更高，只在用户明确选择时使用。
-- 虽然信息密度更高，但仍按短视频快速读取放大卡片和关键文字；不要缩成小型软件仪表盘。
+- 深色半透明卡片，边缘使用 1px 蓝/绿语义描边。
+- 大标题 + 小型 mono 元信息 + 2-4 行结构化信息。
+- 线条、刻度、进度条都必须服务内容，不做纯装饰。
 
 Remotion 实现：
 
 ```text
-header: vertical glow bar + uppercase label + Chinese subtitle
-panel: dark glass gradient + semantic stroke + weak glow
-chart: SVG radar/gauge/table/branch/terminal primitives
-connector: strokeDashoffset draw + frame-driven moving glow dot
-text: Inter Black / JetBrains Mono / Source Han Sans Heavy
-key text: 42-72px landscape, 34-56px portrait
-secondary text: 26-40px landscape, 22-34px portrait
-motion: header reveal -> panel draw -> rows/cards/charts by keyword cue -> connector glow dot loop
+container: dark glass, 8-12px radius, thin semantic border
+accent: blue for active path, green for pass, amber for caution
+layout: tight grid, clear alignment, no dense dashboard table
+motion: snap-in, row stagger, border pulse, numeric count-up
 ```
 
-动效建议：
+### Diagnostic Glass Cards / 诊断玻璃卡片
 
-- 标题先出现，主面板 6-10 帧后描边绘制。
-- 表格行、雷达角标、终端步骤按字幕关键词逐项点亮。
-- 连线先绘制，再让光晕点沿实际 SVG path 循环运动；光点不能停在终点，也不能用两端点直线插值代替曲线路径。
-- 仪表盘数值从 0 增长时，0 帧状态不能提前显示右侧进度。
-- 卡片间距、连线长度和目标卡宽度必须由内容尺寸决定，避免视觉间距不一致。
+适合：
 
-禁用：
+- 口播重点弹窗、轻量功能摘要、侧边提示、结尾 skill/文件提示。
+- 需要比默认 HUD 更透明、更轻，但仍保留诊断语义色的镜头。
 
-- 不做整条视频顶部/底部全局进度条。
-- 不把标签放在雷达图内部；雷达标签应贴近最外侧多边形角点。
-- 不让大面板遮挡人物脸、嘴或字幕区。
+视觉结构：
 
-## Typography / 字体
+- 半透明玻璃卡片，低饱和蓝/绿/紫边缘光。
+- 文字区域保持高对比，不让背景干扰可读性。
+- 允许一次性局部扫光，但不能循环扫光或铺满全屏。
+
+Remotion 实现：
 
 ```text
-主标题：Arial Black / HarmonyOS Sans SC Black / Source Han Sans Heavy / PingFang SC Heavy，44-68px。
-关键词：HarmonyOS Sans SC Bold / Source Han Sans Heavy / PingFang SC Heavy / Inter ExtraBold，38-68px。
-辅助说明：PingFang SC Semibold / Inter SemiBold，18-30px。
-技术标签：JetBrains Mono / SF Mono / Menlo，16-24px。
+container: backdrop-filter blur(8px-14px) saturate(1.25-1.45)
+fill: rgba(255,255,255,0.04-0.12) over dark scrim
+border: rgba(255,255,255,0.28-0.44) + semantic rim glow
+motion: card slide/pop -> one-shot local shine -> icon/text stagger -> subtle idle float
+```
+
+### Terminal Agent HUD / 终端 Agent HUD
+
+适合：
+
+- prompt、命令、自动生成、skill、Agent 执行、文件输出。
+- 需要表达“AI 正在执行步骤”的镜头。
+
+视觉结构：
+
+- 短终端卡或 Agent 执行卡，不做大段真实终端。
+- 2-4 行关键状态：`ANALYZE`、`GENERATE`、`VERIFY`、`EXPORT`。
+- 使用紫色表示 Agent/模型，绿色表示完成，琥珀色表示待检查。
+
+Remotion 实现：
+
+```text
+container: dark panel + mono header + status dots + short command rows
+text: SF Mono / JetBrains Mono for labels, PingFang SC for Chinese result
+motion: header draw -> short type-in -> status dot pulse -> completed row check
+```
+
+## 组件库 / Component Variants
+
+| Component | 用途 | 结构 | 动效 |
+|---|---|---|---|
+| `HudSectionLabel` | 章节身份、当前诊断模式 | 英文大写 mono + 中文副标题 + 左侧发光条 | 轻微横向揭示，发光条点亮 |
+| `StatusChip` | 状态、标签、来源、阶段 | 状态点 + 英文短标签 + 中文短标签 | pop 入场，状态点弱脉冲 |
+| `DiagnosticPanel` | 体检报告、预审清单、分析结果 | 标题 + 语义描边 + 内部 rows/cards | 面板滑入，描边点亮，行错峰 |
+| `ScanCard` | 扫描、检查、读取文档 | 状态头 + 进度行 + 内部扫描线 | 扫描线循环，进度条增长 |
+| `ScoreGauge` | 流量评分、质量分、风险分 | 半圆或圆形 SVG 仪表 + 大数字 | path draw，数字递增，结果高亮 |
+| `ChecklistPanel` | 发布前检查、合规项、执行步骤 | checkbox/序号 + 文案 + 状态色 | 行入场，勾选或警告点亮 |
+| `DocumentPanel` | 文案提取、脚本扫描、报告页面 | 半透明文档卡 + 高亮行 + 扫描遮罩 | 文档浮入，行高亮，局部扫描 |
+| `TerminalAgentCard` | prompt、Agent、skill、导出文件 | mono header + 2-4 行状态 + 完成 chip | 短打字机，状态点 pulse，完成行 check |
+| `ExportFileCard` | SRT、REPORT、PROMPT、SKILL | 文件图标 + 类型标签 + 中文说明 | 文件卡弹出，类型标签点亮 |
+| `KeyPointPopup` | 关键结论、短提示、重点句 | 紧凑标题 + 短正文 + 语义色侧边线 | 快速 pop/slide，短暂停留，轻退场 |
+| `StatPopup` | 数字、评分、效率提升 | 大数字 + 单句解释 + 状态标签 | 数字递增，标签点亮 |
+| `ProcessPopup` | 2-4 步流程、前后变化 | 步骤列表 + 当前行高亮 | 行错峰，当前步骤 pulse |
+| `SkillDropPopup` | 评论区、skill、文件落点提示 | 文件/skill 标签 + 位置提示 | 文件卡弹出，类型标签点亮 |
+| `BilingualSubtitle` | 底部字幕 | 中文主行 + 英文副行 + 阴影/描边 | 随字幕 timing 切换，不做遮挡 |
+| `GitHubRepoCard` | 仓库、开源项目、代码项目 | GitHub 图标 + owner/repo + 功能说明 + language bar | 卡片滑入，repo 高亮，语言条增长 |
+
+## 字体 / Typography
+
+```text
+Display: Inter Black / SF Pro Display Heavy / PingFang SC Heavy / Microsoft YaHei Bold
+Body: Inter SemiBold / SF Pro Text / PingFang SC Semibold / Microsoft YaHei
+Mono: SF Mono / JetBrains Mono / Menlo
 ```
 
 规则：
 
-- 必须显式设置 `fontFamily`，不要依赖浏览器默认字体。
-- 中文关键词必须短，每行优先 1-8 个字。
-- 英文标签只做识别符，不写完整句子。
-- 不使用负字距。
+- 必须显式设置 `fontFamily`。
+- 中文关键词最多 2 行，每行 1-8 个字。
+- 英文标签只做短识别符，例如 `SCAN`、`READY`、`SCORE`、`EXPORT`。
+- 不使用负字距；mono 标签可以使用 `letter-spacing: 0.06em-0.14em`。
+- HUD 主信息必须按短视频扫读尺寸放大，不要做成小型桌面软件 UI。
 
-## Component Variants / 组件变体
+## 材质 / Material
 
-| Component | 用途 | 结构 | 动效 |
-|---|---|---|---|
-| `RemotionModularCard` | 工具名、步骤、状态、能力点 | 图标容器 + 英文标签 + 中文关键词 + 半哑光卡片 | y 位移淡入，轻微 scale pop，边框弱发光 |
-| `KineticTypeCard` | 观点词、结论词、动作词 | 大关键词 + pill 高亮 + 下划线 + 小贴纸 | clip-path 揭示，pill 扩张，下划线 scaleX 绘制 |
-| `InfographicOrbitCard` | 多方向路径、流程关系 | 源节点 + SVG 曲线 + 目标 pill 标签 | 路径绘制，光晕点沿线循环，目标卡点亮 |
-| `KeywordChip` | 工具名、概念词、分类 | 小胶囊标签，语义色描边 | 弹出、吸附、短暂 glow pulse |
-| `IconInfoCard` | 功能、模块、能力点 | 线性图标 + 双语短标签 | 图标先入，文字后入，边框点亮 |
-| `ComparisonSwapCard` | 旧词到新词、错误到正确 | 左红词 + 箭头 + 右绿词 | 红词轻震，箭头绘制，新词弹入 |
-| `MouseClickCallout` | 操作演示、点击动作 | 鼠标指针 + 光圈 + 小标签 | 指针移动，点击光圈 6-10 帧扩散 |
-| `MiniTerminalTag` | prompt、命令、工具状态 | 短命令条，不做大终端面板 | 短打字机，光标闪烁，局部高亮 |
-| `HolographicGlassPanel` | prompt、命令、AI task、生成状态 | 深色玻璃主卡 + 青紫双层描边 + 状态 chip + mono 短命令 | 角标绘制，面板滑入，chip pop，mono 打字 |
-| `FrostedGlassPanel` | focus、身份条、功能摘要、侧边提示 | 清透毛玻璃卡 + 浅色渐变边缘光 + 图标容器 + 短标题 | 侧滑/弹入，一次扫光，图标文字错峰，轻微待机漂浮 |
-| `ReferenceHudInfoPanel` | 报告、评分、合规、流程、终端步骤 | 左上标题系统 + 深色玻璃面板 + SVG 图表/表格/路径 | 面板描边绘制，行/图表错峰，连线光晕点循环 |
-| `GitHubRepoCard` | GitHub 仓库、repo、开源项目、代码项目 | GitHub 图标 + owner/repo + 功能说明 + visibility badge + 语言占比条 | 卡片滑入，repo 语义色高亮，badge pop，语言条 scaleX 增长 |
+- 主面板：暗色半透明底、1px 语义描边、弱外发光、内阴影。
+- 玻璃变体：透明玻璃底、边缘高光、一次性局部扫光。
+- 终端变体：暗色面板、mono 标签、状态点、短命令行。
+- 连线：SVG path + 圆头线帽 + 弱 `drop-shadow` + 沿实际路径移动的光点。
+- 进度条：只存在于卡片内部，表示内容状态，不表示整条视频播放进度。
 
-## Remotion Implementation / Remotion 实现
+## 动效规则 / Motion Rules
 
-```text
-card: React div + CSS gradient border + backdrop-filter or translucent fill
-icon: inline SVG or lucide icon
-connector: SVG path with strokeDashoffset draw
-moving dot: frame-driven point along the exact generated SVG/cubic path, rendered as soft glow circle; use getPointAtLength, MotionPath, or equivalent path sampling
-keyword reveal: clip-path / mask / scaleX
-motion timing: cueFrame - 6 entry, cueFrame highlight, cueFrame + 8 settle
-```
+- 动效必须锚定字幕关键词 cue，但卡片生命周期按语义组决定。
+- 同一语义组内相关卡片应共存到句子、从句、清单或流程步骤完成。
+- 入场 `180-360ms`，使用 `power2.out`、`back.out(1.2)` 或 Remotion `spring()`。
+- 强调 `80-160ms`，可用结果 pop、描边点亮、状态 chip pulse。
+- 待机只允许弱边框呼吸、状态点 pulse、扫描线或路径光点循环。
+- 退场 `120-240ms`，淡出或轻微位移，不做闪白。
+- 同组元素错峰 `3-8` 帧。
+- 连线光点必须沿实际 SVG path 运动，不能用端点闪烁或直线插值伪装。
 
-## Motion Rules / 动效规则
+## 禁用 / Do Not
 
-- 每个有意义句子按字幕关键词选择一个匹配组件。
-- 所有包装动效必须由关键词 cue 锚定入场或强调，不按均分时间随机出现。
-- 不要把每个词都切成独立场景；一个句子、从句、清单、对比或流程步骤可以包含多个关键词 cue，但属于同一个语义组时，卡片要共存到语义组完成。
-- 入场 180-360ms，使用 `power2.out` 或 `back.out(1.2)`。
-- 强调 80-160ms，关键词 pop、描边点亮或下划线绘制。
-- 待机只允许轻微呼吸、弱边框脉冲、光点循环或小标签漂浮。
-- 退场 120-240ms，淡出或轻微位移，不做强闪光转场；退场由语义组完成触发，不由下一个相关关键词 cue 自动触发。
-- 同组元素错峰 3-8 帧。
-
-## Do Not / 禁用
-
-- 不使用旧式科技仪表盘包装。
-- 不生成顶部/底部整条视频全局进度条。
-- 不生成全屏系统框、雷达仪表盘或分析报告大面板。
+- 不使用任何已移除的旧包装风格。
+- 不生成顶部或底部整条视频全局进度条。
+- 不生成全屏系统框、随机粒子、无意义赛博图标或强扫描光。
 - 不把卡片做成纯色扁平矩形。
 - 不把完整口播句子作为大字卡片。
 - 不按每个词机械切换卡片；相关卡片必须按信息组共存。

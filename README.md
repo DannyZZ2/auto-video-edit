@@ -52,7 +52,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 8. Match current-project asset filenames, path segment names, and filename-token aliases to subtitle keywords. Do not inspect image contents, OCR visible text, or classify the image subject for matching. When a subtitle keyword matches an asset name, show that asset at the keyword cue unless safety or style constraints prevent it. Do not scan the uploaded video's source folder by default.
 9. If a reference image file name contains `github`, or the explicitly provided reference image contains a GitHub repository pattern, parse it into a `GitHubRepoCard`. For ordinary content assets, create GitHub cards only from filename tokens or user-provided metadata, not from image-content understanding.
 10. Before packaging design, inspect the final video for pointing, dragging, swiping, circling, or line-drawing gestures. If gestures are visible near a cue, pass them to `$video-use` and use the gesture position as the preferred image/animation anchor.
-11. If no custom style is provided, use the default `Remotion Native Material Cards` style. Optional built-in styles are available when explicitly selected: `Holographic Glass HUD`, `Frosted Glass Packaging`, and `Reference HUD Pattern`.
+11. If no custom style is provided, use the default `Dark Diagnostic HUD` style. The built-in variants are `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, and `Terminal Agent HUD`, and they are used only when explicitly selected.
 12. Use `$video-use` to generate a packaging motion design draft from the final video, timing bundle, selected style, asset manifest, gesture cues, card style library, and keyword animation library.
 13. Wait for user confirmation.
 14. Implement the approved design with Remotion + GSAP.
@@ -69,7 +69,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 8. 用当前项目素材文件名、路径片段名称和文件名分词别名匹配字幕关键词。不要理解图片内容，不要 OCR 可见文字，不要根据图片主体分类做匹配。字幕关键词匹配到素材名称时，在该关键词 cue 展示素材，除非安全区或风格约束不允许。默认不要扫描用户上传视频所在的源文件夹。
 9. 如果参考图文件名包含 `github`，或用户明确提供的参考图中有 GitHub 仓库结构，解析为 `GitHubRepoCard`。普通内容素材只能从文件名分词或用户提供的元数据生成 GitHub 卡片，不根据图片内容理解生成。
 10. 包装设计前先检查最终视频中是否有指、拖、划、圈选或画线手势。如果 cue 附近有手势，把手势 cue 传给 `$video-use`，并优先使用手势位置作为图片/动画锚点。
-11. 如果没有自定义风格，默认使用 `Remotion Native Material Cards / Remotion 原生材质卡片`。明确选择时，也可以使用可选内置风格：`Holographic Glass HUD / 全息玻璃 HUD`、`Frosted Glass Packaging / 毛玻璃包装`、`Reference HUD Pattern / 参考 HUD 信息图`。
+11. 如果没有自定义风格，默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`。内置变体是 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片`、`Terminal Agent HUD / 终端 Agent HUD`，且只有明确选择时才使用。
 12. 调用 `$video-use`，基于最终视频、时间包、风格、素材清单、手势 cue、卡片风格库和关键词动效库生成包装动效设计稿。
 13. 等用户确认。
 14. 用 Remotion + GSAP 实现确认后的动效。

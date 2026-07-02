@@ -10,7 +10,7 @@
 3. 一条视频只允许 1 个主视觉方向、1 套字体组合、1-2 个强调色和 3-5 个组件类型。
 4. 任何包装方案都必须写明：字体、字重、字号区间、组件类型、颜色、层级、安全区和退场方式。
 5. Remotion 实现后必须做截图验收；发现字体 fallback、遮挡脸嘴、文字过大或卡片过密，要先修正再让用户看。
-6. 如果用户没有提供更强的自定义风格，默认使用 `card-style-library.md` 中的 `Remotion Native Material Cards`，再按字幕语义选择模块卡片、关键词排版卡或信息图环绕卡。只有用户明确指定时才使用可选内置风格：`Holographic Glass HUD`、`Frosted Glass Packaging`、`Reference HUD Pattern`。
+6. 如果用户没有提供更强的自定义风格，默认使用 `card-style-library.md` 中的 `Dark Diagnostic HUD`，再按字幕语义选择诊断面板、扫描卡、评分仪表、终端 Agent 卡或文件输出卡。只有用户明确指定时才使用同一风格族内的变体：`Signal Desk Overlay`、`Precision HUD Cards`、`Diagnostic Glass Cards`、`Terminal Agent HUD`。
 7. HUD 卡片和关键信息文字必须按“短视频快速读取”设计，不能沿用偏小、偏装饰的科技 UI 比例。信息必须在 1 秒内能被扫读，标题、关键词、状态结果优先放大。
 8. 关键词时间戳只用于入场和强调锚点，不代表每个词都要切成一个独立动效段。动效生命周期按语义组、句子、从句、清单、对比或工作流步骤判断。
 
@@ -60,19 +60,22 @@
 
 | 组件 | 结构 | 适用 | 动效建议 |
 |---|---|---|---|
-| `RemotionModularCard` | 图标容器 + 英文短标签 + 中文关键词 + 半哑光深色卡片 | 工具名、步骤、状态、能力点 | 侧滑/上浮入场，关键词 pop，边框弱发光 |
-| `KineticTypeCard` | 大关键词 + pill 高亮 + 下划线 + 小贴纸 | 观点词、结论词、教程动作 | clip-path 揭示，pill 扩张，下划线 scaleX 绘制 |
-| `InfographicOrbitCard` | 源节点 + SVG 曲线 + 目标标签卡 | 多方向路径、流程关系、方案分支 | 路径绘制，光晕点沿线循环，目标卡点亮 |
-| `KeywordChip` | 胶囊标签 + 语义色描边 | 工具名、概念词、分类 | 弹出、变色、贴纸、吸附 |
-| `IconInfoCard` | 线性图标 + 英文标签 + 中文短说明 | 功能、模块、能力点 | 图标先入，文字后入，边框脉冲 |
-| `StepListCard` | 1/2/3 或 checkbox 列表 | 教程步骤、执行过程 | 勾选、行内高亮、短进度 |
-| `ComparisonSwapCard` | 左右两卡或旧词到新词 | 纠错、反转、认知升级 | 旧卡暗下去，箭头绘制，新卡点亮 |
+| `HudSectionLabel` | 英文大写 mono + 中文副标题 + 左侧发光条 | 章节身份、当前诊断模式 | 横向揭示，发光条点亮 |
+| `StatusChip` | 状态点 + 英文短标签 + 中文短标签 | 状态、标签、来源、阶段 | pop 入场，状态点弱脉冲 |
+| `DiagnosticPanel` | 标题 + 语义描边 + 内部 rows/cards | 体检报告、预审清单、分析结果 | 面板滑入，描边点亮，行错峰 |
+| `ScanCard` | 状态头 + 进度行 + 内部扫描线 | 扫描、检查、读取文档 | 扫描线循环，进度条增长 |
+| `ScoreGauge` | 半圆或圆形 SVG 仪表 + 大数字 | 流量评分、质量分、风险分 | path draw，数字递增，结果高亮 |
+| `ChecklistPanel` | checkbox/序号 + 文案 + 状态色 | 发布前检查、合规项、执行步骤 | 行入场，勾选或警告点亮 |
+| `DocumentPanel` | 半透明文档卡 + 高亮行 + 扫描遮罩 | 文案提取、脚本扫描、报告页面 | 文档浮入，行高亮，局部扫描 |
 | `MouseClickCallout` | 鼠标指针 + 点击光圈 + 高亮 | 操作演示、按钮、prompt | 移动、点击、光圈 6-10 帧 |
 | `MagnetFlow` | 标签吸附 + 连线节点 | 工作流、Agent、自动化链路 | 错峰飞入、磁吸、连线生长 |
-| `MiniTerminalTag` | 短命令条 + 状态 chip | prompt、命令、工具状态 | 短打字机、光标闪烁、局部加载 |
-| `HolographicGlassPanel` | 深色玻璃主卡 + 青紫双层描边 + 状态 chip + mono 短命令 | prompt、命令、AI task、生成状态、工具面板 | 角标绘制，面板滑入，chip pop，mono 打字 |
-| `FrostedGlassPanel` | 清透毛玻璃卡 + 浅色边缘光 + 图标容器 + 短标题 | 口播侧卡、focus、身份条、功能摘要 | 侧滑/弹入，一次扫光，图标文字错峰，轻微待机漂浮 |
-| `ReferenceHudInfoPanel` | 左上标题系统 + 深色玻璃面板 + SVG 图表/表格/路径 | 报告、评分、合规、流程、终端步骤 | 面板描边绘制，行/图表错峰，连线光晕点循环 |
+| `TerminalAgentCard` | mono header + 2-4 行状态 + 完成 chip | prompt、Agent、skill、导出文件 | 短打字机，状态点 pulse，完成行 check |
+| `ExportFileCard` | 文件图标 + 类型标签 + 中文说明 | SRT、REPORT、PROMPT、SKILL | 文件卡弹出，类型标签点亮 |
+| `KeyPointPopup` | 紧凑标题 + 短正文 + 语义色侧边线 | 关键结论、短提示、重点句 | 快速 pop/slide，短暂停留，轻退场 |
+| `StatPopup` | 大数字 + 单句解释 + 状态标签 | 数字、评分、效率提升 | 数字递增，标签点亮 |
+| `ProcessPopup` | 步骤列表 + 当前行高亮 | 2-4 步流程、前后变化 | 行错峰，当前步骤 pulse |
+| `SkillDropPopup` | 文件/skill 标签 + 位置提示 | 评论区、skill、文件落点提示 | 文件卡弹出，类型标签点亮 |
+| `BilingualSubtitle` | 中文主行 + 英文副行 + 阴影/描边 | 底部双语字幕 | 随字幕 timing 切换，不遮挡 |
 | `GitHubRepoCard` | GitHub 图标 + owner/repo + 功能说明 + visibility badge + 语言占比条 | GitHub 仓库、开源项目、repo、代码项目、工具仓库 | 卡片滑入，repo 高亮，badge pop，语言占比条依次增长 |
 
 组件半径优先 10-24px。除非参考风格明确要求，不要把所有卡片都做成大圆角胶囊。
@@ -81,14 +84,15 @@
 
 - 背景遮罩：`rgba(0,0,0,0.20-0.62)`，不要把人物压成死黑。
 - 主文字：白色或接近白色，阴影克制。
-- 主强调：蓝色或珊瑚色二选一；辅助强调可用绿色或黄色，但整条视频最多 2 个强调色。
+- 主强调：诊断蓝 `#2DA8FF`；辅助强调可用健康绿 `#36E07D`、琥珀 `#FFB84D` 或 Agent 紫 `#8A5CFF`，但单镜头最多 2 个强调色。
 - 卡片底：深蓝黑或黑色半透明，透明度 60%-84%。
 - 描边：1-2px，使用透明渐变边框或语义色描边。
 - 发光只服务边框、图标、连线光点或关键词落点，不要大面积糊光。
-- 禁止全屏扫光、顶部/底部整条视频进度条、全屏系统框和扫描网格。
-- 使用 `Holographic Glass HUD` 时，允许局部青紫双层描边、弱点阵和短命令面板，但仍禁止全屏扫描光和全局进度条。
-- 使用 `Frosted Glass Packaging` 时，允许清透明亮玻璃、浅蓝/淡粉边缘光和一次性扫光；禁止白点颗粒、循环扫光和灰雾厚重的玻璃层。
-- 使用 `Reference HUD Pattern` 时，允许深色信息图面板、雷达/仪表/表格/路径 SVG 组件和语义色连线；必须显式选择该风格，且仍禁止全局进度条和挡脸大面板。
+- 禁止全屏扫光、顶部/底部整条视频进度条、全屏系统框、随机粒子和无意义赛博图标。
+- 使用 `Signal Desk Overlay` 时，保持紧凑弹窗、单卡单重点和 2-4 秒停留，不做完整诊断大面板。
+- 使用 `Precision HUD Cards` 时，保持细描边、紧凑网格和清晰状态结果，不做密集桌面仪表盘。
+- 使用 `Diagnostic Glass Cards` 时，允许透明玻璃、语义色边缘光和一次性局部扫光；禁止循环扫光和厚重灰雾。
+- 使用 `Terminal Agent HUD` 时，允许短终端行、状态点和 Agent 紫强调；禁止长命令堆叠和不可读小字。
 
 ### 高级卡片材质 / Premium Card Material
 
@@ -136,7 +140,7 @@ By default, cards must not be single-layer flat rectangles. Follow `card-style-l
 每个动效段落必须额外写清：
 
 - 字体：具体 `fontFamily`、字重、字号区间。
-- 组件：从组件库选择，如 `RemotionModularCard`、`KineticTypeCard`。
+- 组件：从组件库选择，如 `DiagnosticPanel`、`ScanCard`、`TerminalAgentCard`。
 - 层级：在人物、字幕、卡片、装饰之间的前后关系。
 - 质量风险：是否可能挡脸、挡嘴、挡字幕、字太小或卡片太密。
 - 语义组生命周期：该卡片是开始、更新、共存还是结束信息组，和哪些卡片需要同时保留。
