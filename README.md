@@ -66,7 +66,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 10. Load the bundled style fidelity assets from `references/` and the matching `templates/styles/<style-name>/` directory before generating or implementing built-in overlay styles.
 11. Use `$video-use` to generate a packaging motion design draft from the final video, timing bundle, selected style, asset manifest, gesture cues, card style library, and keyword animation library.
 12. Wait for user confirmation.
-13. Implement the approved design with Remotion + GSAP, copying or adapting the bundled style pack for the selected style.
+13. Implement the approved design with Remotion + GSAP in a newly created Remotion project, copying or adapting the bundled style pack for the selected style. Do not modify existing reference files, bundled templates, source/reference videos, user reference images, or existing Remotion projects.
 14. Open Remotion Studio for preview only.
 15. Export only after the user confirms the Studio preview.
 
@@ -82,7 +82,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 10. 生成或实现内置 overlay 风格前，先加载 `references/` 和匹配的 `templates/styles/<style-name>/` 目录中的风格保真资产。
 11. 调用 `$video-use`，基于最终视频、时间包、风格、素材清单、手势 cue、卡片风格库和关键词动效库生成包装动效设计稿。
 12. 等用户确认。
-13. 用 Remotion + GSAP 实现确认后的动效；优先复制或改造已选风格对应的随 skill 打包风格包。
+13. 在新建的 Remotion 工程里用 Remotion + GSAP 实现确认后的动效；优先复制或改造已选风格对应的随 skill 打包风格包。不要修改已有参考文件、随 skill 打包模板、源视频/参考视频、用户参考图片或已有 Remotion 工程。
 14. 只打开 Remotion Studio 预览。
 15. 用户确认 Studio 效果后再导出。
 
@@ -100,6 +100,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - Do not generate global top or bottom video progress bars.
 - Do not switch away from Remotion + GSAP for animation implementation.
 - Do not ignore bundled style fidelity assets. Built-in styles must use their matching references and `templates/styles/<style-name>/` style pack.
+- Create a fresh Remotion project for each approved animation implementation. Copy needed reference/style assets into that project and modify only the copies.
 - Never commit `.env`, API keys, tokens, or local secrets.
 
 - 未到对应确认节点前，不剪辑、不包装、不渲染、不导出。
@@ -114,6 +115,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - 不生成顶部/底部整条视频进度条。
 - 动画实现不切换到 Remotion + GSAP 以外的方案。
 - 不忽略随 skill 打包的风格保真资产。内置风格必须使用匹配的 references 和 `templates/styles/<style-name>/` 风格包。
+- 每次确认动画实现后，都新建独立 Remotion 工程。把需要的参考/风格素材复制进去，只修改副本。
 - 不提交 `.env`、API key、token 或任何本地密钥。
 
 ## Style Fidelity Assets / 风格保真资产

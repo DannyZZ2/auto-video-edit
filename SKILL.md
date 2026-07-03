@@ -507,9 +507,9 @@ Present the draft to the user and wait for approval. Do not implement Remotion b
 
 ### 5. Implement Remotion + GSAP Preview / 实现 Remotion + GSAP 预览
 
-After approval, create or update a Remotion project for the video packaging.
+After approval, create a new Remotion project for the video packaging. Do not modify an existing Remotion project, source/reference video, reference image, `references/` file, `templates/` file, or bundled style asset unless the user explicitly asks to edit that exact artifact.
 
-用户确认后，创建或更新 Remotion 项目来实现视频包装。
+用户确认后，新建一个 Remotion 项目来实现视频包装。不要修改已有 Remotion 项目、源视频/参考视频、参考图片、`references/` 文件、`templates/` 文件或随 skill 打包的风格资产，除非用户明确要求编辑那个具体文件。
 
 Implementation requirements:
 
@@ -518,6 +518,8 @@ Implementation requirements:
 - Use Remotion for composition structure, video placement, timeline, Studio, and export.
 - Use GSAP for animation easing/timeline calculations or element motion logic.
 - Use the approved packaging plan as the source of truth.
+- Always create a fresh Remotion project directory for the approved packaging implementation. Prefer `<video-name>-remotion-packaging/`; if that path already exists, create a unique sibling such as `<video-name>-remotion-packaging-YYYYMMDD-HHMMSS/`. Do not reuse or patch an existing Remotion project by default.
+- Treat style references, user reference images, original videos, edited input videos, and bundled templates as read-only inputs. Copy only the needed assets into the new Remotion project, then adapt the copies.
 - Before writing new overlay components, resolve the built-in style through `templates/styles/style-index.json`, then copy or adapt the bundled implementation assets from the matching `templates/styles/<style-name>/` directory. Keep `tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md` together so spacing, radius, shadows, typography, and timing stay consistent.
 - Drive overlay entrances, highlights, bounces, clicks, card collisions, and exits from the approved subtitle keyword cue times. Convert cue seconds to Remotion frames and use those frames as animation anchors.
 - Preserve the approved semantic group lifecycle. Do not unmount or fade out a card only because the next keyword cue starts if the approved plan says the cards are related or should coexist.
@@ -538,6 +540,8 @@ Implementation requirements:
 - 用 Remotion 负责合成结构、视频放置、时间线、Studio 和导出。
 - 用 GSAP 负责动画缓动、时间线计算或元素运动逻辑。
 - 以用户确认的包装方案为唯一实现依据。
+- 每次确认包装实现后，都新建独立 Remotion 工程目录。优先使用 `<video-name>-remotion-packaging/`；如果路径已存在，创建同级唯一目录，例如 `<video-name>-remotion-packaging-YYYYMMDD-HHMMSS/`。默认不要复用或修改已有 Remotion 工程。
+- 把风格参考、用户参考图、原始视频、剪辑后输入视频和随 skill 打包模板都视为只读输入。只把需要的素材复制到新的 Remotion 工程里，然后改造副本。
 - 写新的 overlay 组件前，先通过 `templates/styles/style-index.json` 解析内置风格，再复制或改造匹配的 `templates/styles/<style-name>/` 目录中随 skill 打包的实现资产。保持 `tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md` 一起使用，避免间距、圆角、阴影、字体和动效时间漂移。
 - 按已确认方案中的字幕关键词落点驱动包装元素入场、高亮、弹跳、点击、卡片碰撞和退场。将 cue 秒数转换成 Remotion 帧，并以这些帧作为动画锚点。
 - 保留已确认方案中的语义组生命周期。如果方案说明卡片相关或需要共存，不要仅因为下一个关键词 cue 开始就卸载或淡出前一张卡。
@@ -612,7 +616,7 @@ Prefer explicit artifacts:
 - `timing/<video-name>-keyword-cues.json` for subtitle keyword cue points used by packaging animations.
 - `references/card-style-library.md` as the unified active card style library.
 - `subtitles/<video-name>.srt` for optional SRT.
-- `remotion-packaging/` or `<video-name>-remotion-packaging/` for the Remotion project.
+- `<video-name>-remotion-packaging/` for the new Remotion project. If it already exists, create `<video-name>-remotion-packaging-YYYYMMDD-HHMMSS/`; never overwrite an existing project by default.
 - `final/` or `exports/` only after the final export confirmation.
 
 ## Confirmation Gates / 确认节点
@@ -652,6 +656,7 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not fake connector glow-dot motion with endpoint blinking, straight-line shortcuts, or fixed x/y offsets; it must follow the generated SVG/path.
 - Do not silently switch from Remotion + GSAP to another tool when setup is inconvenient.
 - Do not overwrite the original or edited source video.
+- Do not modify existing reference files, bundled style templates, user reference images, or existing Remotion projects while generating a new Remotion animation. Create a fresh project and work on copied assets.
 
 - 不要在文案有多句话时只生成一个场景；每个有意义的句子或节奏点都要考虑包装。
 - 不要让卡片、终端框、标题或转场效果挡住人物脸部和嘴部。
@@ -674,3 +679,4 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 不要用端点闪烁、两点直线捷径或固定 x/y 偏移伪装连线光点运动；光点必须沿实际生成的 SVG/path 运动。
 - 不要因为环境麻烦就偷偷换掉 Remotion + GSAP。
 - 不要覆盖原始视频或剪辑后源视频。
+- 生成新的 Remotion 动画时，不要修改已有参考文件、随 skill 打包的风格模板、用户参考图片或已有 Remotion 工程。必须新建工程，并只改复制进去的素材副本。
