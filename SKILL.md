@@ -116,8 +116,8 @@ Style preservation rules:
 - When maintaining or copying this skill, run `node scripts/verify-style-assets.mjs` after any change to `templates/styles/`, `SKILL.md`, or `README.md`.
 - When implementing `Signal Desk Overlay`, use `templates/styles/signal-desk-overlay/` as the primary contract and `templates/remotion-overlay-kit/` as the shared component source.
 - When implementing `Dark Diagnostic HUD`, use `templates/styles/dark-diagnostic-hud/`, `dark-diagnostic-hud-style-system.md`, and `card-style-library.md` as the contract.
-- In `Dark Diagnostic HUD`, ordinary information cards must use continuous rounded rectangle borders from the bundled tokens: outer radius `14-18px`, inner/icon radius `10-12px`, and no corner-bracket/checkpoint frame unless the approved plan explicitly requests that harder HUD treatment.
-- For every built-in style, preserve its `tokens.json.geometry` contract: card radius, inner/chip radius, border width, border style, and forbidden drift shapes. Do not borrow geometry from another style because that is what causes cross-project style drift.
+- For every built-in style, preserve its own `tokens.json.geometry` contract: card radius, inner/chip radius, border width, border style, and forbidden drift shapes. The shared rule is to read the selected style's geometry; the actual geometry values are different for each style.
+- Apply Dark Diagnostic HUD's continuous rounded rectangle rule only to `dark-diagnostic-hud`: outer radius `16px`, inner/icon radius `12px`, and `2px` semantic border. Do not apply that shape to Signal Desk, Precision HUD, Diagnostic Glass, or Terminal Agent unless their own tokens say so.
 - If a custom style is provided, treat it as an external brief for that task only; do not overwrite the built-in style fidelity assets.
 
 - 有模板或 token 文件时，不要只凭简短文字总结实现；必须加载源文件并复用其中数值。
@@ -127,8 +127,8 @@ Style preservation rules:
 - 维护或复制本 skill 时，只要改过 `templates/styles/`、`SKILL.md` 或 `README.md`，都要运行 `node scripts/verify-style-assets.mjs`。
 - 实现 `Signal Desk Overlay / 标准重点弹窗` 时，以 `templates/styles/signal-desk-overlay/` 为主契约，并把 `templates/remotion-overlay-kit/` 作为共享组件来源。
 - 实现 `Dark Diagnostic HUD / 暗色诊断 HUD` 时，以 `templates/styles/dark-diagnostic-hud/`、`dark-diagnostic-hud-style-system.md` 和 `card-style-library.md` 为契约。
-- `Dark Diagnostic HUD / 暗色诊断 HUD` 中，普通信息卡必须使用随附 token 中的连续圆角矩形描边：外圆角 `14-18px`，内部/图标圆角 `10-12px`；除非已确认方案明确要求硬 HUD 角标，否则不要使用 corner-bracket / checkpoint 外框。
-- 每一种内置风格都必须保留自己的 `tokens.json.geometry` 几何契约：卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态。不要从其他风格借用几何形态，因为这会造成跨项目风格漂移。
+- 每一种内置风格都必须保留自己的 `tokens.json.geometry` 几何契约：卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态。共用规则只是“读取所选风格的几何”，具体几何数值必须逐风格独立。
+- `Dark Diagnostic HUD / 暗色诊断 HUD` 的连续圆角矩形规则只适用于 `dark-diagnostic-hud`：外层圆角 `16px`，内部/图标圆角 `12px`，语义描边 `2px`。不要把这套形态套到 Signal Desk、Precision HUD、Diagnostic Glass 或 Terminal Agent 上，除非它们自己的 tokens 这样定义。
 - 用户提供自定义风格时，只作为当前任务的外部 brief，不覆盖内置风格保真资产。
 
 ## Dependency Bootstrap / 依赖自举
@@ -652,8 +652,8 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not trigger every animation from generic scene starts, equal time slices, or hand-picked decorative timings; use subtitle keyword cue points.
 - Do not split every word into a separate animation segment. Use keyword cues as anchors, then decide card lifetime by semantic group completion.
 - Do not generate flat single-layer cards. Cards need glass material, gradient, semantic border, inner/outer shadows, icon container, and explicit typography hierarchy.
-- Do not generate sharp checkpoint frames or corner-bracket HUD boxes for ordinary information cards. Use the rounded-card geometry from the selected template tokens unless the approved plan explicitly requests hard HUD corner brackets.
-- Do not mix geometry between styles. For example, glass cards must not become precision HUD frames, Signal Desk popups must not become large HUD boxes, and Terminal Agent cards must not become native OS window clones.
+- Do not use a generic "HUD/card" shape across all styles. Resolve the selected style and apply only that style's `tokens.json.geometry`.
+- Do not mix geometry between styles. For example, Dark Diagnostic cards must not become checkpoint frames, glass cards must not become precision HUD frames, Signal Desk popups must not become large HUD boxes, and Terminal Agent cards must not become native OS window clones.
 - Do not use removed or unselected styles. Default to `Dark Diagnostic HUD`; use `Signal Desk Overlay`, `Precision HUD Cards`, `Diagnostic Glass Cards`, or `Terminal Agent HUD` only when explicitly selected.
 - Do not ignore bundled style fidelity files. If the built-in style is used, read `templates/styles/style-index.json`, the matching `references/` files, and copy/adapt matching `templates/styles/<style-name>/` code before inventing components.
 - Do not change, remove, or add a built-in style without running `node scripts/verify-style-assets.mjs`.
@@ -677,8 +677,8 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 不要用泛泛的场景开始时间、均分时间片或手选装饰时间触发所有动效；必须使用字幕关键词落点。
 - 不要把每个词都切成独立动效段。关键词只作为锚点，卡片生命周期要根据语义组是否完成来判断。
 - 不要生成单层扁平卡片。卡片需要玻璃材质、渐变、语义描边、内外阴影、图标容器和明确字体层级。
-- 普通信息卡不要生成尖锐 checkpoint 外框或 corner-bracket HUD 框。除非已确认方案明确要求硬 HUD 角标，否则使用已选模板 token 里的圆角卡片几何。
-- 不要混用不同风格的几何。比如玻璃卡片不要变成精密 HUD 框，Signal Desk 弹窗不要变成大 HUD 框，Terminal Agent 卡片不要变成原生系统窗口仿制。
+- 不要对所有风格套用泛化的 “HUD/card” 形态。先解析所选风格，然后只应用该风格自己的 `tokens.json.geometry`。
+- 不要混用不同风格的几何。比如 Dark Diagnostic 卡片不要变成 checkpoint 外框，玻璃卡片不要变成精密 HUD 框，Signal Desk 弹窗不要变成大 HUD 框，Terminal Agent 卡片不要变成原生系统窗口仿制。
 - 不要混用已移除或未被选择的风格。默认使用 `Dark Diagnostic HUD / 暗色诊断 HUD`；只有明确选择时才使用 `Signal Desk Overlay / 标准重点弹窗`、`Precision HUD Cards / 精密 HUD 卡片`、`Diagnostic Glass Cards / 诊断玻璃卡片` 或 `Terminal Agent HUD / 终端 Agent HUD`。
 - 不要忽略随 skill 打包的风格保真文件。使用内置风格时，先读取 `templates/styles/style-index.json`、匹配的 `references/` 文件，并先复制或改造匹配的 `templates/styles/<style-name>/` 代码，再考虑新写组件。
 - 不要在没有运行 `node scripts/verify-style-assets.mjs` 的情况下修改、删除或新增内置风格。

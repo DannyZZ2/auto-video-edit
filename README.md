@@ -100,8 +100,8 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - Do not generate global top or bottom video progress bars.
 - Do not switch away from Remotion + GSAP for animation implementation.
 - Do not ignore bundled style fidelity assets. Built-in styles must use their matching references and `templates/styles/<style-name>/` style pack.
-- Do not turn ordinary information cards into sharp checkpoint frames or corner-bracket HUD boxes. Use continuous rounded card borders from the bundled style tokens.
-- Preserve each built-in style's `tokens.json.geometry` contract. Keep card radius, inner/chip radius, border width, border style, and forbidden drift shapes with the selected style.
+- Do not use one generic card/HUD geometry for all styles. Resolve the selected built-in style and preserve that style's own `tokens.json.geometry`.
+- Keep card radius, inner/chip radius, border width, border style, and forbidden drift shapes with the selected style. Dark Diagnostic's continuous rounded card rule is not a global rule for the other four styles.
 - Create a fresh Remotion project for each approved animation implementation. Copy needed reference/style assets into that project and modify only the copies.
 - When using these styles in another project, copy a full read-only `style-contract/` folder and follow `references/external-project-style-contract.md`. Do not paste only a prompt or style description.
 - Never commit `.env`, API keys, tokens, or local secrets.
@@ -118,8 +118,8 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - 不生成顶部/底部整条视频进度条。
 - 动画实现不切换到 Remotion + GSAP 以外的方案。
 - 不忽略随 skill 打包的风格保真资产。内置风格必须使用匹配的 references 和 `templates/styles/<style-name>/` 风格包。
-- 普通信息卡不要做成尖锐 checkpoint 外框或 corner-bracket HUD 框；必须使用随附风格 token 中的连续圆角描边卡片。
-- 保留每一种内置风格自己的 `tokens.json.geometry` 几何契约。所选风格的卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态都要一起保留。
+- 不要对 5 种风格套用同一套通用卡片/HUD 几何。先解析所选内置风格，然后保留该风格自己的 `tokens.json.geometry`。
+- 所选风格的卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态都要一起保留。Dark Diagnostic 的连续圆角卡片规则不是另外 4 种风格的全局规则。
 - 每次确认动画实现后，都新建独立 Remotion 工程。把需要的参考/风格素材复制进去，只修改副本。
 - 在其他项目中使用这些风格时，复制完整的只读 `style-contract/` 目录，并遵守 `references/external-project-style-contract.md`。不要只粘贴提示词或风格描述。
 - 不提交 `.env`、API key、token 或任何本地密钥。

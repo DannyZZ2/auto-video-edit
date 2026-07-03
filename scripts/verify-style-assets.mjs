@@ -53,6 +53,13 @@ const expectedGeometry = {
     borderStyle: "terminal-rounded-panel-with-topbar",
   },
 };
+const expectedPromptSnippets = {
+  "dark-diagnostic-hud": ["16px", "12px", "2px", "corner-bracket", "checkpoint"],
+  "signal-desk-overlay": ["8px", "999px", "1px", "full-screen", "checkpoint"],
+  "precision-hud-cards": ["8px", "6px", "1px", "glass blobs", "corner brackets"],
+  "diagnostic-glass-cards": ["18px", "12px", "1px", "20px", "opaque hud", "flat solid"],
+  "terminal-agent-hud": ["8px", "6px", "1px", "top bar", "code rain", "native os"],
+};
 
 function fail(message) {
   console.error(`style asset verification failed: ${message}`);
@@ -183,6 +190,12 @@ for (const style of styleIndex.styles) {
   if (!agentPrompt.includes("Geometry contract") && !agentPrompt.includes("几何契约")) {
     fail(`${style.id}/agent-prompt.md must include a geometry contract`);
   }
+  const normalizedPrompt = agentPrompt.toLowerCase();
+  for (const snippet of expectedPromptSnippets[style.id]) {
+    if (!normalizedPrompt.includes(snippet)) {
+      fail(`${style.id}/agent-prompt.md geometry contract must mention ${snippet}`);
+    }
+  }
 
   if (style.id === "dark-diagnostic-hud") {
     if (!tokens.layout || Number(tokens.layout.radius) < 14) {
@@ -228,6 +241,11 @@ if (!styleIndexMd.includes("Geometry Contracts")) {
 const externalContract = assertFile(path.join(rootDir, "references/external-project-style-contract.md"));
 if (!externalContract.includes("External Project Style Contract") || !externalContract.includes("tokens.json.geometry")) {
   fail("external-project-style-contract.md must define external reuse and geometry rules");
+}
+for (const id of requiredStyleIds) {
+  if (!externalContract.includes(id)) {
+    fail(`external-project-style-contract.md must include a geometry lock row for ${id}`);
+  }
 }
 
 console.log(`ok: verified ${styleIndex.styles.length} built-in style packs`);

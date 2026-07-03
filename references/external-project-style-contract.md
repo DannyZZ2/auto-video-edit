@@ -40,7 +40,7 @@ The target project may copy components into its own `src/` folder, but the origi
 2. Resolve the style by `id`, display name, or alias.
 3. Read the selected style folder as a complete set:
    `tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md`.
-4. Treat `tokens.json.geometry` as hard constraints: card radius, inner/chip radius, border width, border style, and forbidden drift shapes.
+4. Treat the selected style's own `tokens.json.geometry` as hard constraints: card radius, inner/chip radius, border width, border style, and forbidden drift shapes. These values are intentionally different across the five styles.
 5. Copy or adapt `components.tsx` and `example.tsx`; do not rewrite the style from memory.
 6. Use the selected style's `agent-prompt.md` only after reading the tokens and components.
 7. Run `node style-contract/scripts/verify-style-assets.mjs` before generating or modifying Remotion scenes.
@@ -49,7 +49,7 @@ The target project may copy components into its own `src/` folder, but the origi
 2. 通过 `id`、显示名称或别名解析风格。
 3. 成套读取所选风格目录：
    `tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md`。
-4. 把 `tokens.json.geometry` 当作硬约束：卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态。
+4. 把所选风格自己的 `tokens.json.geometry` 当作硬约束：卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态。5 种风格的这些数值本来就应该不同。
 5. 复制或改造 `components.tsx` 与 `example.tsx`；不要凭记忆重写风格。
 6. 只有在读取 tokens 和组件之后，才使用所选风格的 `agent-prompt.md`。
 7. 生成或修改 Remotion 场景前，运行 `node style-contract/scripts/verify-style-assets.mjs`。
@@ -65,6 +65,18 @@ Every generated Remotion project should keep a small local style lock comment ne
 // geometry: cardRadius=16, innerRadius=12, borderWidth=2, borderStyle=continuous-rounded-rectangle
 // forbidden: corner-bracket-frame, checkpoint-frame, sharp-hud-box
 ```
+
+Replace the example values with the selected style's row:
+
+实际使用时必须用所选风格对应行替换示例数值：
+
+| Style ID | Geometry Lock |
+| --- | --- |
+| `dark-diagnostic-hud` | `cardRadius=16, innerRadius=12, borderWidth=2, borderStyle=continuous-rounded-rectangle` |
+| `signal-desk-overlay` | `cardRadius=8, chipRadius=999, borderWidth=1, borderStyle=compact-rounded-popup` |
+| `precision-hud-cards` | `cardRadius=8, innerRadius=6, borderWidth=1, borderStyle=precision-thin-rounded-rectangle` |
+| `diagnostic-glass-cards` | `cardRadius=18, innerRadius=12, borderWidth=1, borderStyle=frosted-rounded-glass-rim, blurPx=20` |
+| `terminal-agent-hud` | `cardRadius=8, innerRadius=6, borderWidth=1, borderStyle=terminal-rounded-panel-with-topbar` |
 
 This lock is not decoration. It tells future agents which shape contract must survive subtitle, text, layout, or component changes.
 
@@ -98,9 +110,9 @@ Run node style-contract/scripts/verify-style-assets.mjs before opening Studio.
 
 ## Failure Pattern To Avoid / 必须避免的失败模式
 
-The common failure is copying the words "dark HUD" but not the geometry. That turns rounded semantic cards into sharp checkpoint frames or corner-bracket boxes.
+The common failure is copying labels such as "HUD", "glass", or "popup" but not the selected style's geometry. That causes cross-style drift: Dark Diagnostic can turn into checkpoint boxes, Signal Desk can turn into a large HUD frame, Glass can turn opaque, and Terminal can turn into a native OS window clone.
 
-最常见失败是只复制 “dark HUD” 这种描述，却没有复制几何契约。这样圆角语义卡会被生成成尖锐 checkpoint 框或 corner-bracket 外框。
+最常见失败是只复制 “HUD”、“glass” 或 “popup” 这种标签，却没有复制所选风格自己的几何契约。这样会发生跨风格漂移：Dark Diagnostic 变成 checkpoint 框，Signal Desk 变成大 HUD 框，Glass 变成不透明卡，Terminal 变成原生系统窗口仿制。
 
 ## Success Criteria / 成功标准
 

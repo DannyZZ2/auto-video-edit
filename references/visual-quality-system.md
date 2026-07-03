@@ -78,7 +78,7 @@
 | `BilingualSubtitle` | 中文主行 + 英文副行 + 阴影/描边 | 底部双语字幕 | 随字幕 timing 切换，不遮挡 |
 | `GitHubRepoCard` | GitHub 图标 + owner/repo + 功能说明 + visibility badge + 语言占比条 | GitHub 仓库、开源项目、repo、代码项目、工具仓库 | 卡片滑入，repo 高亮，badge pop，语言占比条依次增长 |
 
-组件半径优先使用所选风格的 `tokens.json.geometry`。没有明确风格 token 时，普通卡片半径可在 10-24px 内选择。不要把所有卡片都做成大圆角胶囊，也不要把圆角卡片误做成 corner-bracket 或 checkpoint 框。
+组件半径优先使用所选风格自己的 `tokens.json.geometry`。没有明确风格 token 时，普通卡片半径可在 10-24px 内选择。不要把所有卡片都做成同一种大圆角胶囊，也不要把某个风格的外框形态套到另一个风格上。
 
 ## 颜色与材质 / Color and Material
 
