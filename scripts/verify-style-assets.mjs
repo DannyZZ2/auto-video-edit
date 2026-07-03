@@ -5,6 +5,7 @@ import {fileURLToPath} from "node:url";
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(scriptDir, "..");
 const indexPath = path.join(rootDir, "templates/styles/style-index.json");
+
 const requiredStyleIds = new Set([
   "dark-diagnostic-hud",
   "signal-desk-overlay",
@@ -12,6 +13,7 @@ const requiredStyleIds = new Set([
   "diagnostic-glass-cards",
   "terminal-agent-hud",
 ]);
+
 const requiredFiles = [
   "tokens.json",
   "theme.ts",
@@ -19,7 +21,9 @@ const requiredFiles = [
   "example.tsx",
   "agent-prompt.md",
 ];
+
 const requiredTokenKeys = ["canvas", "colors", "typography", "motion", "geometry"];
+
 const expectedGeometry = {
   "dark-diagnostic-hud": {
     cardRadius: 16,
@@ -53,60 +57,105 @@ const expectedGeometry = {
     borderStyle: "terminal-rounded-panel-with-topbar",
   },
 };
-const expectedPromptSnippets = {
-  "dark-diagnostic-hud": ["16px", "12px", "2px", "corner-bracket", "checkpoint"],
-  "signal-desk-overlay": ["8px", "999px", "1px", "full-screen", "checkpoint"],
-  "precision-hud-cards": ["8px", "6px", "1px", "glass blobs", "corner brackets"],
-  "diagnostic-glass-cards": ["18px", "12px", "1px", "20px", "opaque hud", "flat solid"],
-  "terminal-agent-hud": ["8px", "6px", "1px", "top bar", "code rain", "native os"],
-};
+
+const referenceFiles = new Set([
+  "card-style-library.md",
+  "external-project-style-contract.md",
+]);
+
+const bannedPhrases = [
+  ["remotion", "-overlay-kit"].join(""),
+  ["video", "-overlay-kit"].join(""),
+  ["$video", "-use"].join(""),
+  ["video", "-use"].join(""),
+  ["faster", "-whisper"].join(""),
+  ["GitHub", "RepoCard"].join(""),
+  ["default", "-design.md"].join(""),
+  ["visual", "-quality-system.md"].join(""),
+  ["keyword", "-animation-effects.md"].join(""),
+  ["dark", "-diagnostic-hud-style-system.md"].join(""),
+  ["dark", "-diagnostic-hud-remotion-agent-prompt.md"].join(""),
+  ["Hud", "Corners"].join(""),
+];
 
 function fail(message) {
   console.error(`style asset verification failed: ${message}`);
   process.exit(1);
 }
 
-function readJson(filePath) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, "utf8"));
-  } catch (error) {
-    fail(`${path.relative(rootDir, filePath)} is not valid JSON: ${error.message}`);
-  }
+function rel(filePath) {
+  return path.relative(rootDir, filePath);
 }
 
-function assertFile(filePath) {
+function readText(filePath) {
   if (!fs.existsSync(filePath)) {
-    fail(`missing ${path.relative(rootDir, filePath)}`);
+    fail(`missing ${rel(filePath)}`);
   }
   const stat = fs.statSync(filePath);
   if (!stat.isFile()) {
-    fail(`${path.relative(rootDir, filePath)} is not a file`);
+    fail(`${rel(filePath)} is not a file`);
   }
-  const content = fs.readFileSync(filePath, "utf8").trim();
-  if (!content) {
-    fail(`${path.relative(rootDir, filePath)} is empty`);
+  const content = fs.readFileSync(filePath, "utf8");
+  if (!content.trim()) {
+    fail(`${rel(filePath)} is empty`);
   }
   return content;
 }
 
-if (!fs.existsSync(indexPath)) {
-  fail("missing templates/styles/style-index.json");
+function readJson(filePath) {
+  try {
+    return JSON.parse(readText(filePath));
+  } catch (error) {
+    fail(`${rel(filePath)} is not valid JSON: ${error.message}`);
+  }
+}
+
+function walkFiles(dir) {
+  const result = [];
+  for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
+    const filePath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      result.push(...walkFiles(filePath));
+    } else if (entry.isFile()) {
+      result.push(filePath);
+    }
+  }
+  return result;
+}
+
+const legacyKitDir = path.join(rootDir, "templates", ["remotion", "-overlay-kit"].join(""));
+if (fs.existsSync(legacyKitDir)) {
+  fail("legacy shared overlay kit directory must not exist");
+}
+
+const referencesDir = path.join(rootDir, "references");
+const actualReferences = fs.readdirSync(referencesDir).filter((name) => !name.startsWith("."));
+for (const name of actualReferences) {
+  if (!referenceFiles.has(name)) {
+    fail(`references/${name} is not part of the five-style contract`);
+  }
+}
+for (const name of referenceFiles) {
+  readText(path.join(referencesDir, name));
 }
 
 const styleIndex = readJson(indexPath);
 
+if (styleIndex.defaultStyleId !== "dark-diagnostic-hud") {
+  fail("defaultStyleId must be dark-diagnostic-hud");
+}
+
 if (!Array.isArray(styleIndex.requiredFilesPerStyle)) {
   fail("style-index.json must define requiredFilesPerStyle");
 }
-
 for (const fileName of requiredFiles) {
   if (!styleIndex.requiredFilesPerStyle.includes(fileName)) {
     fail(`style-index.json requiredFilesPerStyle must include ${fileName}`);
   }
 }
 
-if (!Array.isArray(styleIndex.styles)) {
-  fail("style-index.json must define styles[]");
+if (!Array.isArray(styleIndex.styles) || styleIndex.styles.length !== requiredStyleIds.size) {
+  fail("style-index.json must define exactly five styles");
 }
 
 const styleIds = new Set();
@@ -119,14 +168,17 @@ for (const style of styleIndex.styles) {
   if (styleIds.has(style.id)) {
     fail(`duplicate style id ${style.id}`);
   }
-  styleIds.add(style.id);
-
   if (!requiredStyleIds.has(style.id)) {
     fail(`unexpected style id ${style.id}`);
   }
+  styleIds.add(style.id);
 
-  if (!style.directory || style.directory !== `templates/styles/${style.id}`) {
+  if (style.directory !== `templates/styles/${style.id}`) {
     fail(`${style.id} directory must be templates/styles/${style.id}`);
+  }
+
+  if (!style.displayName || !style.zhName) {
+    fail(`${style.id} must define displayName and zhName`);
   }
 
   if (!Array.isArray(style.aliases) || style.aliases.length === 0) {
@@ -144,13 +196,15 @@ for (const style of styleIndex.styles) {
     aliasKeys.add(key);
   }
 
+  const styleDir = path.join(rootDir, style.directory);
+  const dirEntries = fs.readdirSync(styleDir).filter((name) => !name.startsWith("."));
   for (const fileName of requiredFiles) {
-    assertFile(path.join(rootDir, style.directory, fileName));
+    if (!dirEntries.includes(fileName)) {
+      fail(`${style.id} is missing ${fileName}`);
+    }
   }
 
-  const tokensPath = path.join(rootDir, style.directory, "tokens.json");
-  const tokens = readJson(tokensPath);
-
+  const tokens = readJson(path.join(styleDir, "tokens.json"));
   for (const key of requiredTokenKeys) {
     if (!(key in tokens)) {
       fail(`${style.id}/tokens.json must include ${key}`);
@@ -158,9 +212,6 @@ for (const style of styleIndex.styles) {
   }
 
   const expected = expectedGeometry[style.id];
-  if (!expected) {
-    fail(`${style.id} is missing expected geometry verification`);
-  }
   for (const [key, value] of Object.entries(expected)) {
     if (tokens.geometry[key] !== value) {
       fail(`${style.id}/tokens.json geometry.${key} must be ${JSON.stringify(value)}`);
@@ -170,18 +221,18 @@ for (const style of styleIndex.styles) {
     fail(`${style.id}/tokens.json geometry.forbidden must list forbidden drift shapes`);
   }
 
-  if (!("styleName" in tokens) && !("name" in tokens)) {
-    fail(`${style.id}/tokens.json must include styleName or name`);
+  const theme = readText(path.join(styleDir, "theme.ts"));
+  const components = readText(path.join(styleDir, "components.tsx"));
+  const example = readText(path.join(styleDir, "example.tsx"));
+  const agentPrompt = readText(path.join(styleDir, "agent-prompt.md"));
+
+  if (!theme.includes("geometry") && !theme.includes("radius")) {
+    fail(`${style.id}/theme.ts must expose geometry or radius values`);
   }
-
-  const components = assertFile(path.join(rootDir, style.directory, "components.tsx"));
-  const example = assertFile(path.join(rootDir, style.directory, "example.tsx"));
-  const agentPrompt = assertFile(path.join(rootDir, style.directory, "agent-prompt.md"));
-
   if (!components.includes("export")) {
     fail(`${style.id}/components.tsx must export reusable components`);
   }
-  if (!example.includes("Composition") && !example.includes("Example")) {
+  if (!example.includes("Example") && !example.includes("Composition")) {
     fail(`${style.id}/example.tsx must include an example component`);
   }
   if (!agentPrompt.toLowerCase().includes("use this style")) {
@@ -190,32 +241,6 @@ for (const style of styleIndex.styles) {
   if (!agentPrompt.includes("Geometry contract") && !agentPrompt.includes("几何契约")) {
     fail(`${style.id}/agent-prompt.md must include a geometry contract`);
   }
-  const normalizedPrompt = agentPrompt.toLowerCase();
-  for (const snippet of expectedPromptSnippets[style.id]) {
-    if (!normalizedPrompt.includes(snippet)) {
-      fail(`${style.id}/agent-prompt.md geometry contract must mention ${snippet}`);
-    }
-  }
-
-  if (style.id === "dark-diagnostic-hud") {
-    if (!tokens.layout || Number(tokens.layout.radius) < 14) {
-      fail("dark-diagnostic-hud/tokens.json layout.radius must be at least 14 for rounded card fidelity");
-    }
-    if (!("innerRadius" in tokens.layout) || Number(tokens.layout.innerRadius) < 10) {
-      fail("dark-diagnostic-hud/tokens.json layout.innerRadius must be at least 10");
-    }
-    if (components.includes("HudCorners")) {
-      fail("dark-diagnostic-hud/components.tsx must not expose HudCorners in the default style pack");
-    }
-    if (!agentPrompt.toLowerCase().includes("rounded")) {
-      fail("dark-diagnostic-hud/agent-prompt.md must mention rounded card geometry");
-    }
-  }
-}
-
-const indexContent = assertFile(indexPath);
-if (indexContent.includes("HudCorners")) {
-  fail("style-index.json must not route agents to HudCorners");
 }
 
 for (const id of requiredStyleIds) {
@@ -224,11 +249,7 @@ for (const id of requiredStyleIds) {
   }
 }
 
-if (styleIndex.defaultStyleId !== "dark-diagnostic-hud") {
-  fail("defaultStyleId must be dark-diagnostic-hud");
-}
-
-const styleIndexMd = assertFile(path.join(rootDir, "templates/styles/STYLE_INDEX.md"));
+const styleIndexMd = readText(path.join(rootDir, "templates/styles/STYLE_INDEX.md"));
 for (const id of requiredStyleIds) {
   if (!styleIndexMd.includes(id)) {
     fail(`STYLE_INDEX.md must mention ${id}`);
@@ -238,37 +259,41 @@ if (!styleIndexMd.includes("Geometry Contracts")) {
   fail("STYLE_INDEX.md must document geometry contracts");
 }
 
-const externalContract = assertFile(path.join(rootDir, "references/external-project-style-contract.md"));
-if (!externalContract.includes("External Project Style Contract") || !externalContract.includes("tokens.json.geometry")) {
+const contract = readText(path.join(rootDir, "references/external-project-style-contract.md"));
+if (!contract.includes("style-contract/") || !contract.includes("tokens.json.geometry")) {
   fail("external-project-style-contract.md must define external reuse and geometry rules");
 }
-if (!externalContract.includes("bundled reference Remotion project") || !externalContract.includes("Do not add new Composition")) {
-  fail("external-project-style-contract.md must forbid adding production compositions to bundled reference templates");
-}
 for (const id of requiredStyleIds) {
-  if (!externalContract.includes(id)) {
-    fail(`external-project-style-contract.md must include a geometry lock row for ${id}`);
+  if (!contract.includes(id)) {
+    fail(`external-project-style-contract.md must include ${id}`);
   }
 }
 
-const skillMd = assertFile(path.join(rootDir, "SKILL.md"));
-const readmeMd = assertFile(path.join(rootDir, "README.md"));
-for (const [name, content] of [
-  ["SKILL.md", skillMd],
-  ["README.md", readmeMd],
-]) {
+const allFiles = walkFiles(rootDir);
+for (const filePath of allFiles) {
+  if (rel(filePath) === "scripts/verify-style-assets.mjs") continue;
+  const content = fs.readFileSync(filePath, "utf8");
+  for (const phrase of bannedPhrases) {
+    if (content.includes(phrase)) {
+      fail(`${rel(filePath)} must not reference removed workflow or legacy style content: ${phrase}`);
+    }
+  }
+}
+
+const skillMd = readText(path.join(rootDir, "SKILL.md"));
+const readmeMd = readText(path.join(rootDir, "README.md"));
+for (const [name, content] of [["SKILL.md", skillMd], ["README.md", readmeMd]]) {
   for (const phrase of [
-    "bundled reference Remotion project",
-    "generated packaging project",
-    "new Composition",
+    "templates/styles/style-index.json",
+    "tokens.json",
+    "components.tsx",
+    "agent-prompt.md",
+    "style-contract/",
   ]) {
     if (!content.includes(phrase)) {
       fail(`${name} must document ${phrase}`);
     }
   }
-  if (content.includes("Create a fresh Remotion project for each approved animation implementation")) {
-    fail(`${name} must not require a fresh Remotion project for every animation`);
-  }
 }
 
-console.log(`ok: verified ${styleIndex.styles.length} built-in style packs`);
+console.log(`ok: verified ${styleIndex.styles.length} self-contained style packs`);

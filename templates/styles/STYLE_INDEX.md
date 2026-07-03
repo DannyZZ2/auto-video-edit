@@ -30,14 +30,13 @@ Use `style-index.json` as the routing manifest before selecting or implementing 
 | `diagnostic-glass-cards` | Diagnostic Glass Cards | 诊断玻璃卡片 | Soft translucent key-point cards |
 | `terminal-agent-hud` | Terminal Agent HUD | 终端 Agent HUD | Prompt, command, generation, verification, export |
 
-## Compatibility Rules / 兼容规则
+## Routing Rules / 路由规则
 
 - The default style is `dark-diagnostic-hud`.
 - If the user says HUD without more detail, prefer `dark-diagnostic-hud`; if they mention metrics or comparison, prefer `precision-hud-cards`.
 - If the user says glass, translucent, or soft card, prefer `diagnostic-glass-cards`.
 - If the user says terminal, command, agent, verification, or export, prefer `terminal-agent-hud`.
 - If the user says popup, overlay demo, card popup, or key-point popup, prefer `signal-desk-overlay`.
-- `signal-desk-overlay` may also use `templates/remotion-overlay-kit/` as its shared component source.
 - Before implementing, read `tokens.json.geometry` for the selected style and keep its card radius, inner/chip radius, border width, border style, and forbidden shapes.
 
 - 默认风格是 `dark-diagnostic-hud`。
@@ -45,7 +44,6 @@ Use `style-index.json` as the routing manifest before selecting or implementing 
 - 用户说玻璃、半透明、柔和卡片时，优先用 `diagnostic-glass-cards`。
 - 用户说终端、命令、agent、校验或导出时，优先用 `terminal-agent-hud`。
 - 用户说弹窗、overlay demo、卡片弹窗或重点弹窗时，优先用 `signal-desk-overlay`。
-- `signal-desk-overlay` 可以同时使用 `templates/remotion-overlay-kit/` 作为共享组件来源。
 - 实现前先读取所选风格的 `tokens.json.geometry`，并保持卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用形态。
 
 ## Geometry Contracts / 几何契约

@@ -10,7 +10,7 @@ Use this style for general keyword popups, process callouts, quote cards, skill/
 
 硬性规则：
 
-1. 优先使用 `theme.ts` 和 `components/` 中已有组件。
+1. 优先使用 `theme.ts` 和 `components.tsx` 中已有组件。
 2. 只做视频上方的关键内容弹窗，不要改成整屏 PPT 或完整栏目包装。
 3. 每个弹窗只表达一个重点：一句结论、一个数字、一个步骤或一个提示。
 4. 动画只能使用 Remotion 的 `useCurrentFrame()`、`interpolate()`、`spring()` 和 `Sequence`。

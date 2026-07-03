@@ -1,4 +1,4 @@
 interface:
   display_name: "auto-video-edit"
-  short_description: "剪辑确认到暗色诊断 HUD 动画包装预览"
-  default_prompt: "Use $auto-video-edit to edit, subtitle, visually package with the 5-style Dark Diagnostic HUD family, preview, and export my video with Remotion and GSAP."
+  short_description: "五种 Remotion overlay 风格保真复用"
+  default_prompt: "Use $auto-video-edit to generate a Remotion overlay with one of the five bundled style packs, preserving the selected style's tokens, components, and geometry."
