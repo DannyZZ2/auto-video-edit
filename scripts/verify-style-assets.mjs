@@ -242,9 +242,32 @@ const externalContract = assertFile(path.join(rootDir, "references/external-proj
 if (!externalContract.includes("External Project Style Contract") || !externalContract.includes("tokens.json.geometry")) {
   fail("external-project-style-contract.md must define external reuse and geometry rules");
 }
+if (!externalContract.includes("bundled reference Remotion project") || !externalContract.includes("Do not add new Composition")) {
+  fail("external-project-style-contract.md must forbid adding production compositions to bundled reference templates");
+}
 for (const id of requiredStyleIds) {
   if (!externalContract.includes(id)) {
     fail(`external-project-style-contract.md must include a geometry lock row for ${id}`);
+  }
+}
+
+const skillMd = assertFile(path.join(rootDir, "SKILL.md"));
+const readmeMd = assertFile(path.join(rootDir, "README.md"));
+for (const [name, content] of [
+  ["SKILL.md", skillMd],
+  ["README.md", readmeMd],
+]) {
+  for (const phrase of [
+    "bundled reference Remotion project",
+    "generated packaging project",
+    "new Composition",
+  ]) {
+    if (!content.includes(phrase)) {
+      fail(`${name} must document ${phrase}`);
+    }
+  }
+  if (content.includes("Create a fresh Remotion project for each approved animation implementation")) {
+    fail(`${name} must not require a fresh Remotion project for every animation`);
   }
 }
 

@@ -30,9 +30,9 @@ style-contract/
   scripts/verify-style-assets.mjs
 ```
 
-The target project may copy components into its own `src/` folder, but the original contract files should stay unchanged.
+The target project may copy components into its own generated packaging project `src/` folder, but the original contract files should stay unchanged. The `style-contract/` folder and bundled reference Remotion project/templates are not the production Remotion project. Do not add new Composition files inside them.
 
-目标项目可以把组件复制到自己的 `src/` 目录中改造，但原始契约文件应保持不变。
+目标项目可以把组件复制到自己的 generated packaging project 的 `src/` 目录中改造，但原始契约文件应保持不变。`style-contract/` 目录和随附参考 Remotion 项目/模板不是正式生产用 Remotion 工程。不要在里面添加 new Composition 文件。
 
 ## Required Use Order / 必需使用顺序
 

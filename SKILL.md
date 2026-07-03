@@ -511,9 +511,9 @@ Present the draft to the user and wait for approval. Do not implement Remotion b
 
 ### 5. Implement Remotion + GSAP Preview / 实现 Remotion + GSAP 预览
 
-After approval, create a new Remotion project for the video packaging. Do not modify an existing Remotion project, source/reference video, reference image, `references/` file, `templates/` file, or bundled style asset unless the user explicitly asks to edit that exact artifact.
+After approval, implement in a generated packaging project, not in the bundled reference Remotion project/templates that ship with this skill. On the first run for a target video/workspace, create the generated packaging project. On later runs, reuse that generated packaging project and add a new Composition. Do not modify source/reference video, reference image, `references/` file, `templates/` file, bundled style asset, or existing Composition unless the user explicitly asks to edit that exact artifact.
 
-用户确认后，新建一个 Remotion 项目来实现视频包装。不要修改已有 Remotion 项目、源视频/参考视频、参考图片、`references/` 文件、`templates/` 文件或随 skill 打包的风格资产，除非用户明确要求编辑那个具体文件。
+用户确认后，在生成用包装工程里实现，不要在 skill 随附的参考 Remotion 项目/模板上添加或修改。某个目标视频/工作区首次运行时，创建 generated packaging project；后续运行复用这个生成用工程，只新增一个 new Composition。不要修改源视频/参考视频、参考图片、`references/` 文件、`templates/` 文件、随 skill 打包的风格资产或已有 Composition，除非用户明确要求编辑那个具体文件。
 
 Implementation requirements:
 
@@ -522,8 +522,11 @@ Implementation requirements:
 - Use Remotion for composition structure, video placement, timeline, Studio, and export.
 - Use GSAP for animation easing/timeline calculations or element motion logic.
 - Use the approved packaging plan as the source of truth.
-- Always create a fresh Remotion project directory for the approved packaging implementation. Prefer `<video-name>-remotion-packaging/`; if that path already exists, create a unique sibling such as `<video-name>-remotion-packaging-YYYYMMDD-HHMMSS/`. Do not reuse or patch an existing Remotion project by default.
-- Treat style references, user reference images, original videos, edited input videos, and bundled templates as read-only inputs. Copy only the needed assets into the new Remotion project, then adapt the copies.
+- Treat the bundled reference Remotion project/templates in this skill as read-only style examples. Never add production Compositions to those bundled reference files.
+- If no generated packaging project exists yet, create `<video-name>-remotion-packaging/` or the user-designated Remotion project directory. If that generated packaging project already exists, do not create a timestamp sibling project; add a new Composition inside the existing generated project.
+- Name every new Composition uniquely and semantically, for example `<style-id>-<short-topic>-<YYYYMMDD-HHMMSS>`. Register it in the Remotion root without changing existing Composition IDs or behavior.
+- Put new implementation files in a composition-scoped folder such as `src/compositions/<composition-id>/`, or follow the existing generated project's equivalent convention. Shared helpers may be added only when needed and must not break existing Compositions.
+- Treat style references, user reference images, original videos, edited input videos, bundled templates, and the existing `style-contract/` folder as read-only inputs. Copy only the needed assets into the generated packaging project when they are not already present, then adapt composition-local copies.
 - Before writing new overlay components, resolve the built-in style through `templates/styles/style-index.json`, then copy or adapt the bundled implementation assets from the matching `templates/styles/<style-name>/` directory. Keep `tokens.json`, `theme.ts`, `components.tsx`, `example.tsx`, and `agent-prompt.md` together so spacing, radius, shadows, typography, and timing stay consistent.
 - When implementing inside another project, copy the full read-only style contract described in `references/external-project-style-contract.md` into that project before generating Remotion scenes. Do not paste only the prompt, and do not recreate a style from words like `HUD`, `glass`, or `popup`.
 - Drive overlay entrances, highlights, bounces, clicks, card collisions, and exits from the approved subtitle keyword cue times. Convert cue seconds to Remotion frames and use those frames as animation anchors.
@@ -545,8 +548,11 @@ Implementation requirements:
 - 用 Remotion 负责合成结构、视频放置、时间线、Studio 和导出。
 - 用 GSAP 负责动画缓动、时间线计算或元素运动逻辑。
 - 以用户确认的包装方案为唯一实现依据。
-- 每次确认包装实现后，都新建独立 Remotion 工程目录。优先使用 `<video-name>-remotion-packaging/`；如果路径已存在，创建同级唯一目录，例如 `<video-name>-remotion-packaging-YYYYMMDD-HHMMSS/`。默认不要复用或修改已有 Remotion 工程。
-- 把风格参考、用户参考图、原始视频、剪辑后输入视频和随 skill 打包模板都视为只读输入。只把需要的素材复制到新的 Remotion 工程里，然后改造副本。
+- 把 skill 随附的参考 Remotion 项目/模板视为只读风格示例。永远不要把正式 Composition 添加到这些随附参考文件中。
+- 如果还没有生成用包装工程，创建 `<video-name>-remotion-packaging/` 或用户指定的 Remotion 工程目录。如果这个生成用工程已存在，不要创建带时间戳的同级新工程；在现有生成工程里新增 Composition。
+- 每个新增 Composition 都必须唯一且语义化命名，例如 `<style-id>-<short-topic>-<YYYYMMDD-HHMMSS>`。在 Remotion root 中注册它，但不要改变已有 Composition 的 ID 或行为。
+- 新实现文件放在 Composition 作用域目录，例如 `src/compositions/<composition-id>/`，或遵循现有生成工程的等价约定。只有确实需要时才新增 shared helper，并且不能破坏已有 Composition。
+- 把风格参考、用户参考图、原始视频、剪辑后输入视频、随 skill 打包模板和已有 `style-contract/` 目录都视为只读输入。需要的素材如果生成工程中还不存在，再复制到生成用包装工程里，然后只改 Composition 局部副本。
 - 写新的 overlay 组件前，先通过 `templates/styles/style-index.json` 解析内置风格，再复制或改造匹配的 `templates/styles/<style-name>/` 目录中随 skill 打包的实现资产。保持 `tokens.json`、`theme.ts`、`components.tsx`、`example.tsx` 和 `agent-prompt.md` 一起使用，避免间距、圆角、阴影、字体和动效时间漂移。
 - 在其他项目内部实现时，先按 `references/external-project-style-contract.md` 把完整只读风格契约复制进目标项目，再生成 Remotion 场景。不要只粘贴 prompt，也不要根据 `HUD`、`glass` 或 `popup` 这些词重新创造风格。
 - 按已确认方案中的字幕关键词落点驱动包装元素入场、高亮、弹跳、点击、卡片碰撞和退场。将 cue 秒数转换成 Remotion 帧，并以这些帧作为动画锚点。
@@ -622,7 +628,8 @@ Prefer explicit artifacts:
 - `timing/<video-name>-keyword-cues.json` for subtitle keyword cue points used by packaging animations.
 - `references/card-style-library.md` as the unified active card style library.
 - `subtitles/<video-name>.srt` for optional SRT.
-- `<video-name>-remotion-packaging/` for the new Remotion project. If it already exists, create `<video-name>-remotion-packaging-YYYYMMDD-HHMMSS/`; never overwrite an existing project by default.
+- `<video-name>-remotion-packaging/` for the generated packaging project. Create it only on the first run for that target video/workspace; later runs add a new Composition inside it.
+- `src/compositions/<composition-id>/` or the generated project's equivalent directory for each new Composition implementation.
 - `final/` or `exports/` only after the final export confirmation.
 
 ## Confirmation Gates / 确认节点
@@ -664,7 +671,9 @@ Never skip these gates, but present them progressively. Show only the current ga
 - Do not fake connector glow-dot motion with endpoint blinking, straight-line shortcuts, or fixed x/y offsets; it must follow the generated SVG/path.
 - Do not silently switch from Remotion + GSAP to another tool when setup is inconvenient.
 - Do not overwrite the original or edited source video.
-- Do not modify existing reference files, bundled style templates, user reference images, or existing Remotion projects while generating a new Remotion animation. Create a fresh project and work on copied assets.
+- Do not add production Compositions to the bundled reference Remotion project/templates shipped with the skill.
+- Do not create a new generated packaging project every time after the first run for the same target video/workspace. Reuse the existing generated project and add a new uniquely named Composition.
+- Do not modify existing reference files, bundled style templates, user reference images, `style-contract/`, or existing Compositions while generating a new Remotion animation. Work in the new Composition's local files and copied assets.
 
 - 不要在文案有多句话时只生成一个场景；每个有意义的句子或节奏点都要考虑包装。
 - 不要让卡片、终端框、标题或转场效果挡住人物脸部和嘴部。
@@ -689,4 +698,6 @@ Never skip these gates, but present them progressively. Show only the current ga
 - 不要用端点闪烁、两点直线捷径或固定 x/y 偏移伪装连线光点运动；光点必须沿实际生成的 SVG/path 运动。
 - 不要因为环境麻烦就偷偷换掉 Remotion + GSAP。
 - 不要覆盖原始视频或剪辑后源视频。
-- 生成新的 Remotion 动画时，不要修改已有参考文件、随 skill 打包的风格模板、用户参考图片或已有 Remotion 工程。必须新建工程，并只改复制进去的素材副本。
+- 不要把正式 Composition 添加到 skill 随附的参考 Remotion 项目/模板里。
+- 同一个目标视频/工作区首次运行后，不要每次都新建生成用包装工程。复用已有生成工程，并新增一个唯一命名的 Composition。
+- 生成新的 Remotion 动画时，不要修改已有参考文件、随 skill 打包的风格模板、用户参考图片、`style-contract/` 或已有 Composition。只在新 Composition 的局部文件和复制素材里工作。

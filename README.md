@@ -66,7 +66,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 10. Load the bundled style fidelity assets from `references/` and the matching `templates/styles/<style-name>/` directory before generating or implementing built-in overlay styles.
 11. Use `$video-use` to generate a packaging motion design draft from the final video, timing bundle, selected style, asset manifest, gesture cues, card style library, and keyword animation library.
 12. Wait for user confirmation.
-13. Implement the approved design with Remotion + GSAP in a newly created Remotion project, copying or adapting the bundled style pack for the selected style. Do not modify existing reference files, bundled templates, source/reference videos, user reference images, or existing Remotion projects.
+13. Implement the approved design with Remotion + GSAP in a generated packaging project, never in the bundled reference Remotion project/templates shipped with the skill. Create the generated packaging project only on first run; on later runs, reuse it and add a new Composition. Do not modify existing reference files, bundled templates, source/reference videos, user reference images, `style-contract/`, or existing Compositions.
 14. Open Remotion Studio for preview only.
 15. Export only after the user confirms the Studio preview.
 
@@ -82,7 +82,7 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 10. 生成或实现内置 overlay 风格前，先加载 `references/` 和匹配的 `templates/styles/<style-name>/` 目录中的风格保真资产。
 11. 调用 `$video-use`，基于最终视频、时间包、风格、素材清单、手势 cue、卡片风格库和关键词动效库生成包装动效设计稿。
 12. 等用户确认。
-13. 在新建的 Remotion 工程里用 Remotion + GSAP 实现确认后的动效；优先复制或改造已选风格对应的随 skill 打包风格包。不要修改已有参考文件、随 skill 打包模板、源视频/参考视频、用户参考图片或已有 Remotion 工程。
+13. 在 generated packaging project 里用 Remotion + GSAP 实现确认后的动效，永远不要在 skill 随附的参考 Remotion 项目/模板里实现。首次运行时创建生成用包装工程；后续运行复用它，只新增一个 new Composition。不要修改已有参考文件、随 skill 打包模板、源视频/参考视频、用户参考图片、`style-contract/` 或已有 Composition。
 14. 只打开 Remotion Studio 预览。
 15. 用户确认 Studio 效果后再导出。
 
@@ -102,7 +102,8 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - Do not ignore bundled style fidelity assets. Built-in styles must use their matching references and `templates/styles/<style-name>/` style pack.
 - Do not use one generic card/HUD geometry for all styles. Resolve the selected built-in style and preserve that style's own `tokens.json.geometry`.
 - Keep card radius, inner/chip radius, border width, border style, and forbidden drift shapes with the selected style. Dark Diagnostic's continuous rounded card rule is not a global rule for the other four styles.
-- Create a fresh Remotion project for each approved animation implementation. Copy needed reference/style assets into that project and modify only the copies.
+- Do not add production Compositions to the bundled reference Remotion project/templates shipped with the skill.
+- Create the generated packaging project only on the first run for a target video/workspace. For later approved animation implementations, reuse that generated project and add a new uniquely named Composition.
 - When using these styles in another project, copy a full read-only `style-contract/` folder and follow `references/external-project-style-contract.md`. Do not paste only a prompt or style description.
 - Never commit `.env`, API keys, tokens, or local secrets.
 
@@ -120,7 +121,8 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - 不忽略随 skill 打包的风格保真资产。内置风格必须使用匹配的 references 和 `templates/styles/<style-name>/` 风格包。
 - 不要对 5 种风格套用同一套通用卡片/HUD 几何。先解析所选内置风格，然后保留该风格自己的 `tokens.json.geometry`。
 - 所选风格的卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态都要一起保留。Dark Diagnostic 的连续圆角卡片规则不是另外 4 种风格的全局规则。
-- 每次确认动画实现后，都新建独立 Remotion 工程。把需要的参考/风格素材复制进去，只修改副本。
+- 不要把正式 Composition 添加到 skill 随附的参考 Remotion 项目/模板里。
+- 同一个目标视频/工作区只在首次运行时创建 generated packaging project。后续每次确认动画实现时，复用这个生成用工程并新增一个唯一命名的 new Composition。
 - 在其他项目中使用这些风格时，复制完整的只读 `style-contract/` 目录，并遵守 `references/external-project-style-contract.md`。不要只粘贴提示词或风格描述。
 - 不提交 `.env`、API key、token 或任何本地密钥。
 
