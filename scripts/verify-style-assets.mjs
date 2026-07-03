@@ -19,7 +19,40 @@ const requiredFiles = [
   "example.tsx",
   "agent-prompt.md",
 ];
-const requiredTokenKeys = ["canvas", "colors", "typography", "motion"];
+const requiredTokenKeys = ["canvas", "colors", "typography", "motion", "geometry"];
+const expectedGeometry = {
+  "dark-diagnostic-hud": {
+    cardRadius: 16,
+    innerRadius: 12,
+    borderWidth: 2,
+    borderStyle: "continuous-rounded-rectangle",
+  },
+  "signal-desk-overlay": {
+    cardRadius: 8,
+    chipRadius: 999,
+    borderWidth: 1,
+    borderStyle: "compact-rounded-popup",
+  },
+  "precision-hud-cards": {
+    cardRadius: 8,
+    innerRadius: 6,
+    borderWidth: 1,
+    borderStyle: "precision-thin-rounded-rectangle",
+  },
+  "diagnostic-glass-cards": {
+    cardRadius: 18,
+    innerRadius: 12,
+    borderWidth: 1,
+    borderStyle: "frosted-rounded-glass-rim",
+    blurPx: 20,
+  },
+  "terminal-agent-hud": {
+    cardRadius: 8,
+    innerRadius: 6,
+    borderWidth: 1,
+    borderStyle: "terminal-rounded-panel-with-topbar",
+  },
+};
 
 function fail(message) {
   console.error(`style asset verification failed: ${message}`);
@@ -117,6 +150,19 @@ for (const style of styleIndex.styles) {
     }
   }
 
+  const expected = expectedGeometry[style.id];
+  if (!expected) {
+    fail(`${style.id} is missing expected geometry verification`);
+  }
+  for (const [key, value] of Object.entries(expected)) {
+    if (tokens.geometry[key] !== value) {
+      fail(`${style.id}/tokens.json geometry.${key} must be ${JSON.stringify(value)}`);
+    }
+  }
+  if (!Array.isArray(tokens.geometry.forbidden) || tokens.geometry.forbidden.length < 2) {
+    fail(`${style.id}/tokens.json geometry.forbidden must list forbidden drift shapes`);
+  }
+
   if (!("styleName" in tokens) && !("name" in tokens)) {
     fail(`${style.id}/tokens.json must include styleName or name`);
   }
@@ -134,6 +180,29 @@ for (const style of styleIndex.styles) {
   if (!agentPrompt.toLowerCase().includes("use this style")) {
     fail(`${style.id}/agent-prompt.md must explain when to use the style`);
   }
+  if (!agentPrompt.includes("Geometry contract") && !agentPrompt.includes("几何契约")) {
+    fail(`${style.id}/agent-prompt.md must include a geometry contract`);
+  }
+
+  if (style.id === "dark-diagnostic-hud") {
+    if (!tokens.layout || Number(tokens.layout.radius) < 14) {
+      fail("dark-diagnostic-hud/tokens.json layout.radius must be at least 14 for rounded card fidelity");
+    }
+    if (!("innerRadius" in tokens.layout) || Number(tokens.layout.innerRadius) < 10) {
+      fail("dark-diagnostic-hud/tokens.json layout.innerRadius must be at least 10");
+    }
+    if (components.includes("HudCorners")) {
+      fail("dark-diagnostic-hud/components.tsx must not expose HudCorners in the default style pack");
+    }
+    if (!agentPrompt.toLowerCase().includes("rounded")) {
+      fail("dark-diagnostic-hud/agent-prompt.md must mention rounded card geometry");
+    }
+  }
+}
+
+const indexContent = assertFile(indexPath);
+if (indexContent.includes("HudCorners")) {
+  fail("style-index.json must not route agents to HudCorners");
 }
 
 for (const id of requiredStyleIds) {
@@ -151,6 +220,14 @@ for (const id of requiredStyleIds) {
   if (!styleIndexMd.includes(id)) {
     fail(`STYLE_INDEX.md must mention ${id}`);
   }
+}
+if (!styleIndexMd.includes("Geometry Contracts")) {
+  fail("STYLE_INDEX.md must document geometry contracts");
+}
+
+const externalContract = assertFile(path.join(rootDir, "references/external-project-style-contract.md"));
+if (!externalContract.includes("External Project Style Contract") || !externalContract.includes("tokens.json.geometry")) {
+  fail("external-project-style-contract.md must define external reuse and geometry rules");
 }
 
 console.log(`ok: verified ${styleIndex.styles.length} built-in style packs`);

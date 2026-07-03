@@ -69,3 +69,9 @@ Animate with `useCurrentFrame()`, `interpolate()`, `spring()`, and `Sequence`.
 Do not use CSS transitions, CSS animations, CSS keyframes, or Tailwind animation classes.
 
 不要使用 CSS transition、CSS animation、CSS keyframes 或 Tailwind animation class。
+
+## Geometry Contract / 几何契约
+
+Signal Desk cards must keep the compact popup geometry: `8px` card radius, `999px` chip radius, about `1px` border, and a small accent rail. Do not convert ordinary popups into full-screen PPT pages, large HUD frames, corner-bracket frames, or checkpoint boxes.
+
+Signal Desk 卡片必须保持紧凑弹窗几何：卡片圆角 `8px`、chip 圆角 `999px`、约 `1px` 描边和小面积强调侧边线。不要把普通弹窗改成整屏 PPT、大 HUD 框、corner-bracket 外框或 checkpoint 框。

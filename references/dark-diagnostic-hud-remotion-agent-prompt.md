@@ -18,6 +18,7 @@
 8. 动画只能使用 Remotion 的 `useCurrentFrame()`、`interpolate()`、`spring()` 和 `Sequence`。不要使用 CSS transition、CSS animation、keyframes 或 Tailwind animation class。
 9. 不要使用随机赛博装饰、粒子、无意义图标或过多发光。所有 HUD 元素都必须像工具界面的一部分。
 10. 不要照搬某个具体视频的品牌名、专有文案或 logo。复用视觉方法，不复用具体身份。
+11. 几何契约必须保留：普通信息卡是连续圆角矩形，外层圆角 `16px`，内部/图标圆角 `12px`，语义描边 `2px`。不要把普通卡片替换成 corner-bracket 外框、checkpoint 框或尖锐 HUD 大框。
 
 建议组件：
 
@@ -67,6 +68,7 @@ Hard rules:
 8. Animate only with Remotion `useCurrentFrame()`, `interpolate()`, `spring()`, and `Sequence`. Do not use CSS transitions, CSS animations, keyframes, or Tailwind animation classes.
 9. Avoid random cyberpunk decoration, particles, meaningless icons, and excessive glow. Every HUD element must feel like part of a tool interface.
 10. Do not copy a specific video's brand name, proprietary wording, or logo. Reuse the visual method, not the specific identity.
+11. Preserve the geometry contract: ordinary information cards are continuous rounded rectangles with `16px` outer radius, `12px` inner/icon radius, and `2px` semantic border. Do not replace ordinary cards with corner-bracket frames, checkpoint frames, or sharp HUD boxes.
 
 Suggested components:
 

@@ -189,11 +189,21 @@ Mono: SF Mono / JetBrains Mono / Menlo
 
 ## 材质 / Material
 
-- 主面板：暗色半透明底、1px 语义描边、弱外发光、内阴影。
+- 主面板：暗色半透明底、连续圆角矩形、1.5-2px 语义描边、弱外发光、内阴影。普通卡片外圆角保持 `14-18px`，内部图标/小框圆角保持 `10-12px`。
 - 玻璃变体：透明玻璃底、边缘高光、一次性局部扫光。
 - 终端变体：暗色面板、mono 标签、状态点、短命令行。
 - 连线：SVG path + 圆头线帽 + 弱 `drop-shadow` + 沿实际路径移动的光点。
 - 进度条：只存在于卡片内部，表示内容状态，不表示整条视频播放进度。
+
+## 几何契约 / Geometry Contracts
+
+| 风格 / Style | 圆角 / Radius | 描边 / Border | 必须避免 / Avoid |
+| --- | --- | --- | --- |
+| Dark Diagnostic HUD | 外层 `16px`，内部 `12px` | `2px` 连续语义圆角描边 | checkpoint 框、corner bracket、尖锐 HUD 大框 |
+| Signal Desk Overlay | 卡片 `8px`，chip `999px` | `1px` 弹窗描边 + 小面积强调侧边线 | 整屏 PPT、大 HUD 框、checkpoint 框 |
+| Precision HUD Cards | 外层 `8px`，内部 `6px` | `1px` 精密细描边 | 玻璃泡泡、大圆角枕形卡、corner bracket |
+| Diagnostic Glass Cards | 外层 `18px`，内部 `12px` | `1px` 玻璃边缘高光 + 约 `20px` 模糊 | 不透明 HUD 框、纯色扁平卡、corner bracket |
+| Terminal Agent HUD | 外层 `8px`，内部 `6px` | `1px` 终端面板描边 + 顶栏 | 全屏代码雨、原生系统窗口仿制、corner bracket |
 
 ## 动效规则 / Motion Rules
 
@@ -212,6 +222,7 @@ Mono: SF Mono / JetBrains Mono / Menlo
 - 不生成顶部或底部整条视频全局进度条。
 - 不生成全屏系统框、随机粒子、无意义赛博图标或强扫描光。
 - 不把卡片做成纯色扁平矩形。
+- 不把普通信息卡做成尖锐大 HUD 外框、checkpoint 框或 corner bracket 角标框。除非用户明确要求“硬核 HUD 角标”，否则默认使用连续圆角描边卡片。
 - 不把完整口播句子作为大字卡片。
 - 不按每个词机械切换卡片；相关卡片必须按信息组共存。
 - 不让连线光点停在终点，必须沿实际生成的线/path 循环运动。

@@ -201,6 +201,21 @@ Use for document analysis, health report, audit checklist, and tool output.
 
 用于文档分析、体检报告、预审清单和工具输出。
 
+Geometry contract:
+
+几何契约：
+
+- Ordinary cards use one continuous rounded rectangle border, not separated corner brackets.
+- 普通卡片使用连续圆角矩形描边，不使用分离式 corner bracket。
+- Outer card radius: `14-18px`.
+- 外层卡片圆角：`14-18px`。
+- Inner/icon box radius: `10-12px`.
+- 内部/图标框圆角：`10-12px`。
+- Border: `1.5-2px` semantic color, with weak glow only.
+- 描边：`1.5-2px` 语义色，只允许弱发光。
+- Corner bracket decoration is allowed only when the approved plan explicitly says `corner bracket` or `hard HUD frame`.
+- 只有确认方案明确写了 `corner bracket` 或 `hard HUD frame` 时，才允许使用角标装饰。
+
 ### `ScanCard`
 
 Layered card showing scanning state.
@@ -362,6 +377,8 @@ Do:
 - 保持一致的左侧 HUD 身份系统。
 - Use blue/green/amber as semantic colors.
 - 使用蓝/绿/琥珀作为语义颜色。
+- Use continuous rounded card borders for ordinary information cards.
+- 普通信息卡使用连续圆角描边。
 - Keep subtitles clear and central.
 - 字幕保持清晰居中。
 - Make panels feel layered over real footage.
@@ -379,6 +396,8 @@ Do not:
 - 不要遮挡人脸，除非是有意转场。
 - Mix unrelated colors beyond the system palette.
 - 不要混入系统色板之外的无关颜色。
+- Turn ordinary information cards into sharp checkpoint frames or corner-bracket HUD boxes.
+- 不要把普通信息卡做成尖锐 checkpoint 外框或 corner-bracket HUD 框。
 - Use decorative icons without meaning.
 - 不要使用没有语义的装饰图标。
 

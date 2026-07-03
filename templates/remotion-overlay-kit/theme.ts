@@ -58,6 +58,13 @@ export const theme = {
     card: 8,
     chip: 999,
   },
+  geometry: {
+    cardRadius: 8,
+    chipRadius: 999,
+    borderWidth: 1,
+    borderStyle: "compact-rounded-popup",
+    forbidden: ["full-screen-ppt", "hard-hud-corner-bracket", "checkpoint-frame"],
+  },
   shadow: {
     popup: "0 20px 56px rgba(20, 22, 26, 0.18)",
     lift: "0 30px 90px rgba(20, 22, 26, 0.24)",

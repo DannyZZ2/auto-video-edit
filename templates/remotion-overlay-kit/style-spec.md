@@ -51,6 +51,19 @@ Default values:
 - Padding: `28px` to `36px`
 - Width: `520px` to `760px`
 
+Geometry contract:
+
+几何契约：
+
+- Keep the compact rounded popup shape: `8px` outer card radius.
+- 保持紧凑圆角弹窗形态：外层卡片圆角 `8px`。
+- Keep chip radius at `999px`.
+- chip 圆角保持 `999px`。
+- Keep borders around `1px`; use accent rails or labels instead of large frames.
+- 描边保持约 `1px`；使用强调侧边线或标签，不使用大外框。
+- Never convert ordinary popups into corner-bracket frames, checkpoint frames, or hard HUD boxes.
+- 不要把普通弹窗改成 corner-bracket 外框、checkpoint 框或硬 HUD 大框。
+
 ## 5. Typography / 字体
 
 Use system-first fonts so the kit stays portable.

@@ -14,6 +14,8 @@
 6. 弹窗必须避开字幕、人脸和关键 UI。默认使用 `top-right`、`top-left`、`bottom-right`、`bottom-left`、`center-right` 等位置预设。
 7. 中文优先保证可读性，不要压缩字距，不要让文字溢出卡片。
 8. 强调色只能小面积使用，不能把整个画面做成大色块。
+9. 几何契约：保持 `8px` 卡片圆角、`999px` chip 圆角、约 `1px` 描边和小面积强调侧边线。
+10. 不要改成整屏 PPT、大 HUD 框、corner-bracket 外框或 checkpoint 框。
 
 目标：让弹窗像一套稳定的短视频知识点包装，而不是随机出现的装饰卡片。
 
@@ -31,5 +33,7 @@ Hard rules:
 6. Popups must avoid subtitles, faces, and important UI. Prefer position presets such as `top-right`, `top-left`, `bottom-right`, `bottom-left`, and `center-right`.
 7. Chinese text readability comes first. Do not compress letter spacing or let text overflow.
 8. Accent colors should be small-area highlights, not large color blocks.
+9. Geometry contract: keep `8px` card radius, `999px` chip radius, about `1px` border, and a small accent rail.
+10. Do not turn this into a full-screen presentation, large HUD frame, corner-bracket frame, or checkpoint box.
 
 Goal: make the popups feel like a stable short-video knowledge overlay system, not random decorative cards.

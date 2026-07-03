@@ -85,7 +85,6 @@ export const DiagnosticPanel = ({
   return (
     <HudLayer position={position} visibleFrames={visibleFrames}>
       <div style={panelStyle}>
-        <HudCorners />
         <div style={labelRowStyle}>
           <span>{label}</span>
           <span style={{color: theme.colors.amber}}>{status}</span>
@@ -101,7 +100,7 @@ export const DiagnosticPanel = ({
 export const StatusChip = ({text, tone = "cyan"}: {text: string; tone?: "cyan" | "blue" | "amber" | "danger"}) => {
   const color = theme.colors[tone];
   return (
-    <span style={{display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 12px", border: `1px solid ${color}`, color, fontFamily: theme.typography.mono, fontSize: 16}}>
+    <span style={{display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 12px", border: `1px solid ${color}`, borderRadius: theme.layout.innerRadius, color, fontFamily: theme.typography.mono, fontSize: 16}}>
       <span style={{width: 7, height: 7, borderRadius: 999, background: color, boxShadow: `0 0 14px ${color}`}} />
       {text}
     </span>
@@ -111,7 +110,6 @@ export const StatusChip = ({text, tone = "cyan"}: {text: string; tone?: "cyan" |
 export const ScoreCard = ({label, value, detail, visibleFrames = 86}: {label: string; value: string; detail: string; visibleFrames?: number}) => (
   <HudLayer position="top-right" width={520} visibleFrames={visibleFrames}>
     <div style={{...panelStyle, borderColor: "rgba(91,108,255,0.72)"}}>
-      <HudCorners accent={theme.colors.blue} />
       <div style={{fontFamily: theme.typography.mono, color: "#8FA0FF", fontSize: 17, fontWeight: 740}}>{label}</div>
       <div style={{marginTop: 8, fontFamily: theme.typography.display, fontSize: 76, lineHeight: 0.92, fontWeight: 900}}>{value}</div>
       <div style={bodyStyle}>{detail}</div>
@@ -122,7 +120,7 @@ export const ScoreCard = ({label, value, detail, visibleFrames = 86}: {label: st
 const panelStyle: CSSProperties = {
   position: "relative",
   padding: "30px 34px 32px",
-  border: `1px solid ${theme.colors.border}`,
+  border: `2px solid ${theme.colors.border}`,
   borderRadius: theme.layout.radius,
   background: theme.colors.panel,
   boxShadow: "0 26px 80px rgba(0, 0, 0, 0.30), inset 0 0 0 1px rgba(255,255,255,0.06)",
@@ -157,16 +155,3 @@ const bodyStyle: CSSProperties = {
   color: theme.colors.textMuted,
   fontWeight: 600,
 };
-
-export const HudCorners = ({accent = theme.colors.cyan}: {accent?: string}) => (
-  <>
-    {[
-      {position: {left: 10, top: 10}, border: {borderLeftWidth: 2, borderTopWidth: 2}},
-      {position: {right: 10, top: 10}, border: {borderRightWidth: 2, borderTopWidth: 2}},
-      {position: {left: 10, bottom: 10}, border: {borderLeftWidth: 2, borderBottomWidth: 2}},
-      {position: {right: 10, bottom: 10}, border: {borderRightWidth: 2, borderBottomWidth: 2}},
-    ].map((corner, index) => (
-      <div key={index} style={{position: "absolute", width: 26, height: 26, borderColor: accent, borderStyle: "solid", borderWidth: 0, ...corner.border, ...corner.position}} />
-    ))}
-  </>
-);

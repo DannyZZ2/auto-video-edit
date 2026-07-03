@@ -142,6 +142,10 @@ Left-side or panel-adjacent status chips. Each chip includes a status dot, short
 
 Main diagnostic panel for document scans, health reports, audit checklists, automation results, and tool output. It must include a dark translucent fill, thin border, inner shadow, weak glow, and readable title.
 
+几何契约：普通信息卡必须是连续圆角矩形，外层圆角 `16px`，内部/图标圆角 `12px`，语义描边 `2px`。不要把它做成 corner-bracket 外框、checkpoint 框或尖锐 HUD 大框。
+
+Geometry contract: ordinary information cards must be continuous rounded rectangles with `16px` outer radius, `12px` inner/icon radius, and `2px` semantic border. Do not turn them into corner-bracket frames, checkpoint frames, or sharp HUD boxes.
+
 ### `ScanCard`
 
 扫描态卡片。包含 `SCANNING`、`CHECKING`、`READY` 等状态、2-4 行进度条和一条移动扫描线。扫描线只在卡片内部移动。

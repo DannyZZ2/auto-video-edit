@@ -17,8 +17,8 @@
       "directory": "templates/styles/dark-diagnostic-hud",
       "useWhen": "AI analysis, diagnostic review, publishing checks, scoring, workflow automation, and tool-running moments.",
       "avoidWhen": "The segment only needs a soft lightweight note or a non-technical emotional caption.",
-      "primaryComponents": ["HudLayer", "DiagnosticPanel", "StatusChip", "ScoreCard", "HudCorners"],
-      "motionProfile": "Precise panel entrance, weak glow pulse, status chip update, restrained scan/progress effects inside cards only.",
+      "primaryComponents": ["HudLayer", "DiagnosticPanel", "StatusChip", "ScoreCard"],
+      "motionProfile": "Precise panel entrance, weak glow pulse, status chip update, restrained scan/progress effects inside continuous rounded cards only.",
       "safeZoneRule": "Keep panels outside face, mouth, active hand gestures, and subtitle-safe area."
     },
     {

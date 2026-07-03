@@ -78,7 +78,7 @@
 | `BilingualSubtitle` | 中文主行 + 英文副行 + 阴影/描边 | 底部双语字幕 | 随字幕 timing 切换，不遮挡 |
 | `GitHubRepoCard` | GitHub 图标 + owner/repo + 功能说明 + visibility badge + 语言占比条 | GitHub 仓库、开源项目、repo、代码项目、工具仓库 | 卡片滑入，repo 高亮，badge pop，语言占比条依次增长 |
 
-组件半径优先 10-24px。除非参考风格明确要求，不要把所有卡片都做成大圆角胶囊。
+组件半径优先使用所选风格的 `tokens.json.geometry`。没有明确风格 token 时，普通卡片半径可在 10-24px 内选择。不要把所有卡片都做成大圆角胶囊，也不要把圆角卡片误做成 corner-bracket 或 checkpoint 框。
 
 ## 颜色与材质 / Color and Material
 
@@ -93,6 +93,7 @@
 - 使用 `Precision HUD Cards` 时，保持细描边、紧凑网格和清晰状态结果，不做密集桌面仪表盘。
 - 使用 `Diagnostic Glass Cards` 时，允许透明玻璃、语义色边缘光和一次性局部扫光；禁止循环扫光和厚重灰雾。
 - 使用 `Terminal Agent HUD` 时，允许短终端行、状态点和 Agent 紫强调；禁止长命令堆叠和不可读小字。
+- 所有内置风格都必须保留自身几何契约：Dark Diagnostic 是 `16px/12px/2px` 连续圆角语义卡，Signal Desk 是 `8px` 紧凑弹窗，Precision HUD 是 `8px/6px/1px` 精密细描边，Diagnostic Glass 是 `18px/12px/1px` 磨砂玻璃，Terminal Agent 是 `8px/6px/1px` 终端面板。不要跨风格借用外框形态。
 
 ### 高级卡片材质 / Premium Card Material
 

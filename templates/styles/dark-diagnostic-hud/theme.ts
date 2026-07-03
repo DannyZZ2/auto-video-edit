@@ -20,7 +20,8 @@ export const darkDiagnosticHudTheme = {
   layout: {
     safeX: 88,
     safeY: 72,
-    radius: 8,
+    radius: 16,
+    innerRadius: 12,
     panelWidth: 680,
   },
   motion: {

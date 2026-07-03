@@ -373,6 +373,7 @@ const HudPopup = ({
       style={{
         padding: "30px 34px 32px",
         border: "1px solid rgba(24, 169, 153, 0.72)",
+        borderRadius: 16,
         background: "rgba(8, 16, 26, 0.82)",
         boxShadow: "0 26px 80px rgba(0, 0, 0, 0.30), inset 0 0 0 1px rgba(255,255,255,0.06)",
         color: "#EAF7F4",
@@ -380,7 +381,6 @@ const HudPopup = ({
         overflow: "hidden",
       }}
     >
-      <HudCorners />
       <div
         style={{
           display: "flex",
@@ -491,12 +491,12 @@ const HudProcessPanel = ({
         padding: "30px 34px",
         background: "rgba(8, 16, 26, 0.86)",
         border: "1px solid rgba(255, 176, 0, 0.72)",
+        borderRadius: 16,
         boxShadow: "0 26px 80px rgba(0,0,0,0.30)",
         color: "#FFF7E7",
         fontFamily: theme.typography.body,
       }}
     >
-      <HudCorners accent="#FFB000" />
       <div
         style={{
           fontFamily: theme.typography.mono,
@@ -610,12 +610,12 @@ const HudStat = ({
         padding: "28px 34px",
         background: "rgba(8, 16, 26, 0.84)",
         border: "1px solid rgba(91,108,255,0.72)",
+        borderRadius: 16,
         boxShadow: "0 26px 80px rgba(0,0,0,0.30)",
         color: "#E8ECFF",
         fontFamily: theme.typography.body,
       }}
     >
-      <HudCorners accent="#5B6CFF" />
       <div style={{fontFamily: theme.typography.mono, color: "#8FA0FF", fontSize: 17, fontWeight: 740}}>
         {label}
       </div>
@@ -643,31 +643,6 @@ const HudStat = ({
     </AnchoredLayer>
   );
 };
-
-const HudCorners = ({accent = "#18A999"}: {accent?: string}) => (
-  <>
-    {[
-      {position: {left: 10, top: 10}, border: {borderLeftWidth: 2, borderTopWidth: 2}},
-      {position: {right: 10, top: 10}, border: {borderRightWidth: 2, borderTopWidth: 2}},
-      {position: {left: 10, bottom: 10}, border: {borderLeftWidth: 2, borderBottomWidth: 2}},
-      {position: {right: 10, bottom: 10}, border: {borderRightWidth: 2, borderBottomWidth: 2}},
-    ].map((corner, index) => (
-      <div
-        key={index}
-        style={{
-          position: "absolute",
-          width: 26,
-          height: 26,
-          borderColor: accent,
-          borderStyle: "solid",
-          borderWidth: 0,
-          ...corner.border,
-          ...corner.position,
-        }}
-      />
-    ))}
-  </>
-);
 
 const GlassEnvironment = () => {
   const frame = useCurrentFrame();

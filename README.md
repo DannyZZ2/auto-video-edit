@@ -100,7 +100,10 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - Do not generate global top or bottom video progress bars.
 - Do not switch away from Remotion + GSAP for animation implementation.
 - Do not ignore bundled style fidelity assets. Built-in styles must use their matching references and `templates/styles/<style-name>/` style pack.
+- Do not turn ordinary information cards into sharp checkpoint frames or corner-bracket HUD boxes. Use continuous rounded card borders from the bundled style tokens.
+- Preserve each built-in style's `tokens.json.geometry` contract. Keep card radius, inner/chip radius, border width, border style, and forbidden drift shapes with the selected style.
 - Create a fresh Remotion project for each approved animation implementation. Copy needed reference/style assets into that project and modify only the copies.
+- When using these styles in another project, copy a full read-only `style-contract/` folder and follow `references/external-project-style-contract.md`. Do not paste only a prompt or style description.
 - Never commit `.env`, API keys, tokens, or local secrets.
 
 - 未到对应确认节点前，不剪辑、不包装、不渲染、不导出。
@@ -115,7 +118,10 @@ The workflow is progressive: ask only one decision or unblocker at a time. Do no
 - 不生成顶部/底部整条视频进度条。
 - 动画实现不切换到 Remotion + GSAP 以外的方案。
 - 不忽略随 skill 打包的风格保真资产。内置风格必须使用匹配的 references 和 `templates/styles/<style-name>/` 风格包。
+- 普通信息卡不要做成尖锐 checkpoint 外框或 corner-bracket HUD 框；必须使用随附风格 token 中的连续圆角描边卡片。
+- 保留每一种内置风格自己的 `tokens.json.geometry` 几何契约。所选风格的卡片圆角、内部/chip 圆角、描边宽度、描边样式和禁用跑偏形态都要一起保留。
 - 每次确认动画实现后，都新建独立 Remotion 工程。把需要的参考/风格素材复制进去，只修改副本。
+- 在其他项目中使用这些风格时，复制完整的只读 `style-contract/` 目录，并遵守 `references/external-project-style-contract.md`。不要只粘贴提示词或风格描述。
 - 不提交 `.env`、API key、token 或任何本地密钥。
 
 ## Style Fidelity Assets / 风格保真资产
@@ -128,6 +134,7 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `references/dark-diagnostic-hud-style-system.md`: complete Dark Diagnostic HUD style system.
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`: Remotion implementation prompt for the Dark Diagnostic HUD style.
 - `references/visual-quality-system.md`: typography, material, hierarchy, safe-zone, and QA standards.
+- `references/external-project-style-contract.md`: required contract for using these styles in other Remotion projects.
 - `references/keyword-animation-effects.md`: keyword-triggered motion options.
 - `templates/styles/style-index.json` and `templates/styles/STYLE_INDEX.md`: built-in style IDs, aliases, routing rules, required files, and compatibility notes.
 - `templates/styles/dark-diagnostic-hud/`: complete default style pack with tokens, theme, components, example, and agent prompt.
@@ -141,6 +148,7 @@ The repository includes the assets needed to preserve the built-in visual style 
 - `references/dark-diagnostic-hud-style-system.md`：完整 Dark Diagnostic HUD 风格系统。
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`：Dark Diagnostic HUD 的 Remotion 实现提示。
 - `references/visual-quality-system.md`：字体、材质、层级、安全区和 QA 标准。
+- `references/external-project-style-contract.md`：在其他 Remotion 项目中使用这些风格的必需契约。
 - `references/keyword-animation-effects.md`：按关键词触发的动效选项。
 - `templates/styles/style-index.json` 和 `templates/styles/STYLE_INDEX.md`：内置风格 ID、别名、路由规则、必需文件和兼容说明。
 - `templates/styles/dark-diagnostic-hud/`：完整默认风格包，包含 tokens、theme、components、example 和 agent prompt。
@@ -160,9 +168,9 @@ Run this after changing `templates/styles/`, `SKILL.md`, or `README.md`:
 node scripts/verify-style-assets.mjs
 ```
 
-The verifier checks the style index, the 5 canonical style IDs, aliases, required files, non-empty component/example/prompt files, and parseable tokens.
+The verifier checks the style index, the 5 canonical style IDs, aliases, required files, geometry contracts, non-empty component/example/prompt files, parseable tokens, and external-project reuse guide.
 
-校验脚本会检查风格索引、5 个标准风格 ID、别名、必需文件、非空组件/示例/prompt 文件，以及可解析的 tokens。
+校验脚本会检查风格索引、5 个标准风格 ID、别名、必需文件、几何契约、非空组件/示例/prompt 文件、可解析 tokens 和外部项目复用指南。
 
 ## Included Files / 包含文件
 
@@ -175,6 +183,7 @@ The verifier checks the style index, the 5 canonical style IDs, aliases, require
 - `references/dark-diagnostic-hud-remotion-agent-prompt.md`
 - `references/keyword-animation-effects.md`
 - `references/visual-quality-system.md`
+- `references/external-project-style-contract.md`
 - `templates/remotion-overlay-kit/README.md`
 - `templates/remotion-overlay-kit/style-spec.md`
 - `templates/remotion-overlay-kit/agent-prompt.md`
